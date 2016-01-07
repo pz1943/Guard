@@ -7,39 +7,14 @@
 //
 
 import UIKit
-import AVFoundation
 
-class ViewController: UIViewController ,AVCaptureMetadataOutputObjectsDelegate{
+class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
-        let input = try! AVCaptureDeviceInput.init(device: device)
-        let output = AVCaptureMetadataOutput.init()
-        output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-        session = AVCaptureSession()
-        session?.sessionPreset = AVCaptureSessionPresetHigh
-        session?.addInput(input)
-        session?.addOutput(output)
-        output.metadataObjectTypes = [AVMetadataObjectTypeQRCode,
-            AVMetadataObjectTypeEAN13Code,
-            AVMetadataObjectTypeEAN8Code,
-            AVMetadataObjectTypeCode128Code]
-        let layer = AVCaptureVideoPreviewLayer(session: session)
-        layer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        layer.frame = self.view.layer.bounds
-        self.view.layer.insertSublayer(layer, atIndex: 0)
-        session?.startRunning()
+        DB = DBModel.sharedInstance()
     }
-
-
-    var session: AVCaptureSession?
-
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
-        let metadaObject = metadataObjects.first
-        print(metadaObject?.stringValue)
-    }
+    var DB: DBModel?
     
 }
 
