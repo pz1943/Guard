@@ -36,7 +36,6 @@ class QRCodeViewController: UIViewController ,AVCaptureMetadataOutputObjectsDele
         layer.frame = self.view.layer.bounds
         self.view.layer.insertSublayer(layer, atIndex: 0)
         session.startRunning()
-        
     }
     
     

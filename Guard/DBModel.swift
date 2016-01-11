@@ -26,10 +26,11 @@ class DBModel {
     
     struct Constants {
         static let defaultRoom = ["信息北机房","传输机房","电源室","信息南机房"]
-        static let defaultEquipmentInRoom1 = ["史图斯空调1","史图斯空调2","史图斯空调3"]
-        static let defaultEquipmentInRoom2 = ["艾默生空调1","艾默生空调2","艾默生空调3"]
-        static let defaultEquipmentInRoom3 = ["史图斯空调1","史图斯空调2"]
-        static let defaultEquipmentInRoom4 = ["史图斯空调1","史图斯空调2","海洛斯空调3"]
+        static let defaultEquipmentInRoom = [
+            ["史图斯空调1","史图斯空调2","史图斯空调3"],
+            ["艾默生空调1","艾默生空调2","艾默生空调3"],
+            ["史图斯空调1","史图斯空调2"],
+            ["史图斯空调1","史图斯空调2","海洛斯空调3"]]
     }
     
     struct Static {
@@ -48,26 +49,25 @@ class DBModel {
         let path = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true
             ).first!
-        
+        print("DB at \(path)")
+
         DB = try! Connection("\(path)/db.sqlite3")
         self.roomTable = Table("roomTable")
         self.equipmentTable = Table("equipmentTable")
         self.recordTable = Table("recordTable")
         
         try! DB.run(roomTable.create(ifNotExists: true) { t in
-            print("creat room DB at \(path)")
             t.column(roomId, primaryKey: true)
             t.column(roomName)
             })
         
         try! DB.run(equipmentTable.create(ifNotExists: true) { t in
-            print("creat room EQ DB at \(path)")
             t.column(equipmentId, primaryKey: true)
+            t.column(roomName)
             t.column(equipmentName)
         })
         
         try! DB.run(recordTable.create(ifNotExists: true) { t in
-            print("creat room record DB at \(path)")
             t.column(recordId, primaryKey: true)
             t.column(equipmentId)
             t.column(recordMessage)
@@ -77,28 +77,74 @@ class DBModel {
    }
     
     func initDefaultData() {
-        let result = (try! DB.prepare(equipmentTable.count))
+        var result = try! DB.prepare(roomTable.count)
         for row: Row in result {
             let countExpression = count(*)
-            print(row.get(countExpression))
+            if row.get(countExpression) == 0 {
+                for name in Constants.defaultRoom {
+                    let insert = roomTable.insert(self.roomName <- name)
+                    do {
+                        try DB.run(insert)
+                    } catch let error as NSError {
+                        print(error)
+                    }
+                }
+            }
         }
         
-//        for _ in DB.prepare(settingTable) {
-//            rowExist = true
-//        }
-//        if !rowExist {
-//            let insert = settingTable.insert(
-//                self.selectedChannelIndex <- 0,
-//                self.mode <- PlayerMode.FMMode.rawValue)
-//            do {
-//                try DB.run(insert)
-//            } catch let error as NSError {
-//                print(error)
-//            }
-//        }
-
+        result = try! DB.prepare(equipmentTable.count)
+        for row: Row in result {
+            for var roomIndex = 0; roomIndex < Constants.defaultRoom.count; roomIndex++ {
+                let countExpression = count(*)
+                if row.get(countExpression) == 0 {
+                    for var i = 0; i < Constants.defaultEquipmentInRoom[roomIndex].count; i++ {
+                        let insert = equipmentTable.insert(
+                            self.roomName <- Constants.defaultRoom[roomIndex],
+                            self.equipmentName <- Constants.defaultEquipmentInRoom[roomIndex][i])
+                        do {
+                            try DB.run(insert)
+                        } catch let error as NSError {
+                            print(error)
+                        }
+                    }
+                }
+            }
+        }
     }
     
+    func loadRoomTable() -> [String]{
+        let rows = Array(try! DB.prepare(roomTable))
+        return rows.map({ (row) -> String in
+            return row[roomName]
+        })
+    }
+    
+    func loadEquipmentTable(room: String) -> [String]{
+        let rows = Array(try! DB.prepare(equipmentTable.filter(roomName == room)))
+        return rows.map({ (row) -> String in
+            return row[equipmentName]
+        })
+    }
+    
+    func addRoom(roomName: String) {
+        let insert = roomTable.insert(self.roomName <- roomName)
+        do {
+            try DB.run(insert)
+        } catch let error as NSError {
+            print(error)
+        }
+
+    }
+
+    func delRoom(roomName: String) {
+        let alice = roomTable.filter(self.roomName == roomName)
+        do {
+            try DB.run(alice.delete())
+        } catch let error as NSError {
+            print(error)
+        }
+
+    }
     
 //    func loadSettings() -> [String :Int]?{
 //        for setting in DB.prepare(settingTable) {
