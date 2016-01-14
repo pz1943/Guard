@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		183008881C43D32500AEC0A6 /* EquipmentAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183008871C43D32500AEC0A6 /* EquipmentAddTableViewCell.swift */; };
+		1830088A1C4531F000AEC0A6 /* EquipmentDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183008891C4531F000AEC0A6 /* EquipmentDetailTableViewCell.swift */; };
 		18A390FA1C3AAA680032363A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A390F91C3AAA680032363A /* AppDelegate.swift */; };
 		18A390FF1C3AAA680032363A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18A390FD1C3AAA680032363A /* Main.storyboard */; };
 		18A391021C3AAA680032363A /* Guard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18A391001C3AAA680032363A /* Guard.xcdatamodeld */; };
@@ -20,7 +22,11 @@
 		18FB271D1C3EA5CD005D9BB3 /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB271C1C3EA5CD005D9BB3 /* RoomTableViewCell.swift */; };
 		18FB271F1C3EA9F6005D9BB3 /* EquipmentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB271E1C3EA9F6005D9BB3 /* EquipmentTableViewController.swift */; };
 		18FB27231C428D39005D9BB3 /* EquipmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB27221C428D39005D9BB3 /* EquipmentTableViewCell.swift */; };
+<<<<<<< HEAD
+		18FB27251C429CFC005D9BB3 /* RoomAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB27241C429CFC005D9BB3 /* RoomAddTableViewCell.swift */; };
+=======
 		18FB27251C429CFC005D9BB3 /* roomAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB27241C429CFC005D9BB3 /* roomAddTableViewCell.swift */; };
+>>>>>>> origin/master
 		666B1D4C2F2249B3044ED785 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 782EE7C943B21B4AA339D80B /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		183008871C43D32500AEC0A6 /* EquipmentAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentAddTableViewCell.swift; sourceTree = "<group>"; };
+		183008891C4531F000AEC0A6 /* EquipmentDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentDetailTableViewCell.swift; sourceTree = "<group>"; };
 		18A390F61C3AAA680032363A /* Guard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Guard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18A390F91C3AAA680032363A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18A390FE1C3AAA680032363A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -61,7 +69,11 @@
 		18FB271C1C3EA5CD005D9BB3 /* RoomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
 		18FB271E1C3EA9F6005D9BB3 /* EquipmentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTableViewController.swift; sourceTree = "<group>"; };
 		18FB27221C428D39005D9BB3 /* EquipmentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTableViewCell.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
+		18FB27241C429CFC005D9BB3 /* RoomAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomAddTableViewCell.swift; sourceTree = "<group>"; };
+=======
 		18FB27241C429CFC005D9BB3 /* roomAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = roomAddTableViewCell.swift; sourceTree = "<group>"; };
+>>>>>>> origin/master
 		4A76CFB1DD00C19CEB8364D8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		4A7BBB6479E1B9D3A1D2AC0D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		782EE7C943B21B4AA339D80B /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +105,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		183008831C43CF4700AEC0A6 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				18FB27171C3BFDC0005D9BB3 /* DBModel.swift */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
+		183008841C43CF5500AEC0A6 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				18A390F91C3AAA680032363A /* AppDelegate.swift */,
+				18A391031C3AAA680032363A /* Assets.xcassets */,
+				18A391051C3AAA680032363A /* LaunchScreen.storyboard */,
+				18A391081C3AAA680032363A /* Info.plist */,
+				18A391001C3AAA680032363A /* Guard.xcdatamodeld */,
+			);
+			name = "Support Files";
+			sourceTree = "<group>";
+		};
+		183008851C43CF7A00AEC0A6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				18FB27151C3BFC3D005D9BB3 /* QRCodeViewController.swift */,
+				18FB271A1C3E9F0A005D9BB3 /* RoomTableViewController.swift */,
+				18FB271E1C3EA9F6005D9BB3 /* EquipmentTableViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		183008861C43CF8D00AEC0A6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18FB27241C429CFC005D9BB3 /* RoomAddTableViewCell.swift */,
+				183008871C43D32500AEC0A6 /* EquipmentAddTableViewCell.swift */,
+				18FB27221C428D39005D9BB3 /* EquipmentTableViewCell.swift */,
+				18FB271C1C3EA5CD005D9BB3 /* RoomTableViewCell.swift */,
+				183008891C4531F000AEC0A6 /* EquipmentDetailTableViewCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		18A390ED1C3AAA680032363A = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +172,13 @@
 		18A390F81C3AAA680032363A /* Guard */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
+				18A390FD1C3AAA680032363A /* Main.storyboard */,
+				183008841C43CF5500AEC0A6 /* Support Files */,
+				183008851C43CF7A00AEC0A6 /* Controller */,
+				183008831C43CF4700AEC0A6 /* model */,
+				183008861C43CF8D00AEC0A6 /* View */,
+=======
 				18A390F91C3AAA680032363A /* AppDelegate.swift */,
 				18FB27151C3BFC3D005D9BB3 /* QRCodeViewController.swift */,
 				18FB27171C3BFDC0005D9BB3 /* DBModel.swift */,
@@ -131,6 +192,7 @@
 				18A391051C3AAA680032363A /* LaunchScreen.storyboard */,
 				18A391081C3AAA680032363A /* Info.plist */,
 				18A391001C3AAA680032363A /* Guard.xcdatamodeld */,
+>>>>>>> origin/master
 			);
 			path = Guard;
 			sourceTree = "<group>";
@@ -356,10 +418,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				18FB271D1C3EA5CD005D9BB3 /* RoomTableViewCell.swift in Sources */,
+<<<<<<< HEAD
+				1830088A1C4531F000AEC0A6 /* EquipmentDetailTableViewCell.swift in Sources */,
+				18FB271B1C3E9F0A005D9BB3 /* RoomTableViewController.swift in Sources */,
+				18FB27231C428D39005D9BB3 /* EquipmentTableViewCell.swift in Sources */,
+				18A391021C3AAA680032363A /* Guard.xcdatamodeld in Sources */,
+				183008881C43D32500AEC0A6 /* EquipmentAddTableViewCell.swift in Sources */,
+				18FB27251C429CFC005D9BB3 /* RoomAddTableViewCell.swift in Sources */,
+=======
 				18FB271B1C3E9F0A005D9BB3 /* RoomTableViewController.swift in Sources */,
 				18FB27231C428D39005D9BB3 /* EquipmentTableViewCell.swift in Sources */,
 				18A391021C3AAA680032363A /* Guard.xcdatamodeld in Sources */,
 				18FB27251C429CFC005D9BB3 /* roomAddTableViewCell.swift in Sources */,
+>>>>>>> origin/master
 				18FB27181C3BFDC0005D9BB3 /* DBModel.swift in Sources */,
 				18FB271F1C3EA9F6005D9BB3 /* EquipmentTableViewController.swift in Sources */,
 				18FB27161C3BFC3D005D9BB3 /* QRCodeViewController.swift in Sources */,

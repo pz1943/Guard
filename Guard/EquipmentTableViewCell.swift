@@ -14,13 +14,20 @@ class EquipmentTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+<<<<<<< HEAD
+    @IBOutlet weak var equipmentTitle: UILabel!
+=======
 
     @IBOutlet weak var equipmentTitle: UILabel!
     @IBOutlet weak var equipmentDetail: UILabel!
+>>>>>>> origin/master
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
     }
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/master
 }
