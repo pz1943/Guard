@@ -19,10 +19,13 @@ class ImageViewController: UIViewController , UIScrollViewDelegate
         }
     }
     
+<<<<<<< HEAD
     @IBAction func needANewPhoto(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
         NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)
     }
+=======
+>>>>>>> origin/master
     @IBOutlet weak var actityIndicator: UIActivityIndicatorView!
     
     private func fetchImage()
@@ -66,7 +69,11 @@ class ImageViewController: UIViewController , UIScrollViewDelegate
         didSet{
             scrollView.contentSize = imageView.frame.size
             scrollView.delegate = self
+<<<<<<< HEAD
             scrollView.minimumZoomScale = 0.1
+=======
+            scrollView.minimumZoomScale = 0.3
+>>>>>>> origin/master
             scrollView.maximumZoomScale = 10
         }
     }
