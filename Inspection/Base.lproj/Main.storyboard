@@ -7,7 +7,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Room Table View Controller-->
+        <!--机房信息-->
         <scene sceneID="rY8-ZR-Qpy">
             <objects>
                 <tableViewController id="4zb-Gm-C0H" customClass="RoomTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
@@ -27,7 +27,7 @@
                                             <rect key="frame" x="15" y="0.0" width="570" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -82,7 +82,7 @@
                             <outlet property="delegate" destination="4zb-Gm-C0H" id="xRl-Nf-VWs"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="xyC-fa-z5M"/>
+                    <navigationItem key="navigationItem" title="机房信息" id="xyC-fa-z5M"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="egE-id-Acb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -124,7 +124,7 @@
             </objects>
             <point key="canvasLocation" x="1235" y="278"/>
         </scene>
-        <!--Equipment Table View Controller-->
+        <!--设备信息-->
         <scene sceneID="Ekd-5n-Mgy">
             <objects>
                 <tableViewController id="xXY-xo-8Fh" customClass="EquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
@@ -144,7 +144,7 @@
                                             <rect key="frame" x="15" y="0.0" width="538" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -152,7 +152,7 @@
                                 <connections>
                                     <outlet property="equipmentTitle" destination="c8m-ED-zzr" id="Rtf-QS-g5L"/>
                                     <segue destination="aL5-pX-p4e" kind="showDetail" identifier="equipmentDetail" trigger="accessoryAction" id="Xgf-WS-s7D"/>
-                                    <segue destination="W3h-Bd-GIJ" kind="presentation" id="zLC-gN-JRf"/>
+                                    <segue destination="6xR-Wn-DIh" kind="presentation" id="325-0e-hTu"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentAddCell" id="lGl-uZ-fRG" customClass="EquipmentTableViewCell" customModule="Inspection" customModuleProvider="target">
@@ -201,7 +201,7 @@
                             <outlet property="delegate" destination="xXY-xo-8Fh" id="Nh9-RN-Whw"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="hMZ-ae-h2O">
+                    <navigationItem key="navigationItem" title="设备信息" id="hMZ-ae-h2O">
                         <barButtonItem key="leftBarButtonItem" title="返回" id="Ed2-WG-0GV">
                             <connections>
                                 <segue destination="fAq-R6-2N4" kind="unwind" unwindAction="backToRoomTable:" id="J4S-cu-RTX"/>
@@ -214,7 +214,25 @@
             </objects>
             <point key="canvasLocation" x="3426" y="278"/>
         </scene>
-        <!--Equipment Detail Table View Controller-->
+        <!--Code View Controller-->
+        <scene sceneID="364-bZ-aNE">
+            <objects>
+                <viewController id="6xR-Wn-DIh" customClass="QRCodeViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UfV-ml-wiv"/>
+                        <viewControllerLayoutGuide type="bottom" id="87v-hO-bK3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xwR-Vq-5GE">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lBb-JV-bCu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3523" y="1264"/>
+        </scene>
+        <!--设备详情-->
         <scene sceneID="gP2-wk-9S9">
             <objects>
                 <tableViewController id="zvv-Vg-eWu" customClass="EquipmentDetailTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
@@ -233,13 +251,13 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设备名称" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pLb-cA-8l4">
                                             <rect key="frame" x="8" y="11" width="68" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="251" text="机房精密空调1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UUQ-Jl-hTz">
                                             <rect key="frame" x="96" y="11" width="496" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -277,7 +295,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="增加照片" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACK-rU-qiD">
                                             <rect key="frame" x="8" y="11" width="68" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nfo-ad-USg">
@@ -303,25 +321,22 @@
                                     <outlet property="equipmentInfoTitleLabel" destination="ACK-rU-qiD" id="0WV-9v-a8T"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentImageCell" rowHeight="353" id="2Uf-zb-8pz" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="180" width="600" height="353"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentImageCell" rowHeight="141" id="2Uf-zb-8pz" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="180" width="600" height="141"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2Uf-zb-8pz" id="fxm-OG-34I">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="352"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="140"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="laZ-f2-coW">
-                                            <rect key="frame" x="8" y="8" width="584" height="336"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="336" id="gqA-d0-SM5"/>
-                                            </constraints>
+                                            <rect key="frame" x="8" y="8" width="584" height="124"/>
                                         </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="laZ-f2-coW" secondAttribute="bottom" id="8nl-24-wSG"/>
-                                        <constraint firstItem="laZ-f2-coW" firstAttribute="centerX" secondItem="fxm-OG-34I" secondAttribute="centerX" id="Vxe-fw-QiD"/>
-                                        <constraint firstItem="laZ-f2-coW" firstAttribute="centerY" secondItem="fxm-OG-34I" secondAttribute="centerY" id="jdo-wh-8dw"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="laZ-f2-coW" secondAttribute="leading" id="P8t-Z5-41f"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="laZ-f2-coW" secondAttribute="trailing" id="vUT-iv-wqT"/>
+                                        <constraint firstAttribute="topMargin" secondItem="laZ-f2-coW" secondAttribute="top" id="zzM-MX-Huv"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -335,7 +350,7 @@
                             <outlet property="delegate" destination="zvv-Vg-eWu" id="D0f-PP-8kA"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="7hc-oN-XQ8">
+                    <navigationItem key="navigationItem" title="设备详情" id="7hc-oN-XQ8">
                         <barButtonItem key="leftBarButtonItem" title="返回" id="JJc-bu-Sfv">
                             <connections>
                                 <segue destination="Rph-8B-WeQ" kind="unwind" unwindAction="backToEquipmentTable:" id="Yso-p8-f0C"/>
@@ -389,17 +404,17 @@
             </objects>
             <point key="canvasLocation" x="4137" y="278"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Code Record Table View Controller-->
         <scene sceneID="LUB-if-FxT">
             <objects>
-                <tableViewController id="W3h-Bd-GIJ" sceneMemberID="viewController">
+                <tableViewController id="W3h-Bd-GIJ" customClass="QRCodeRecordTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="vne-dS-8ES">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="InspectionTypeCell" id="CqU-3V-fy5" customClass="QRCodeTableViewCell" customModule="Inspection" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CqU-3V-fy5" id="Crq-wm-VEw">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -407,7 +422,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecordCell" id="QeY-c9-CjH" customClass="QRCodeTableViewCell" customModule="Inspection" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QeY-c9-CjH" id="Bna-f5-XaM">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -438,10 +453,18 @@
                             <outlet property="delegate" destination="W3h-Bd-GIJ" id="u0J-lJ-J4R"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="B0W-C9-shw">
+                        <barButtonItem key="leftBarButtonItem" title="取消" id="Am5-jV-OB3">
+                            <connections>
+                                <segue destination="Fx5-Mt-chg" kind="unwind" unwindAction="backToEquipmentTable:" id="QyS-H4-RLt"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bKq-Re-HB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Fx5-Mt-chg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4137" y="984"/>
+            <point key="canvasLocation" x="4997" y="1264"/>
         </scene>
         <!--Image View Controller-->
         <scene sceneID="rmR-wJ-iOp">
@@ -458,7 +481,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ge-uc-mWG">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
-                                    <navigationItem title="Title" id="c1f-N7-ohi">
+                                    <navigationItem title="设备图片" id="c1f-N7-ohi">
                                         <barButtonItem key="leftBarButtonItem" id="iK5-8Y-mgq">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BLy-bg-Wns">
                                                 <rect key="frame" x="20" y="7" width="60" height="30"/>
@@ -476,10 +499,10 @@
                                                 <rect key="frame" x="520" y="7" width="60" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="更换"/>
+                                                <connections>
+                                                    <action selector="needANewPhoto:" destination="gTg-3v-9qk" eventType="touchUpInside" id="1ad-xU-1SO"/>
+                                                </connections>
                                             </button>
-                                            <connections>
-                                                <action selector="neewANewPhoto:" destination="gTg-3v-9qk" id="XYn-DK-LJr"/>
-                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -506,9 +529,9 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d2x-Vs-iFO" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="pDC-6y-KxR" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5614" y="278"/>
+            <point key="canvasLocation" x="5770" y="278"/>
         </scene>
-        <!--Equipment Edit Table View Controller-->
+        <!--编辑设备-->
         <scene sceneID="ci2-eX-xeY">
             <objects>
                 <tableViewController id="3rP-gI-wwN" customClass="EquipmentEditTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
@@ -527,7 +550,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设备名称" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jv2-5a-bfF">
                                             <rect key="frame" x="8" y="11" width="68" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hx1-KB-Vxk">
@@ -558,7 +581,7 @@
                             <outlet property="delegate" destination="3rP-gI-wwN" id="0e9-RS-9Oi"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Jq1-eu-bFG">
+                    <navigationItem key="navigationItem" title="编辑设备" id="Jq1-eu-bFG">
                         <barButtonItem key="leftBarButtonItem" title="返回" id="QiY-mu-x8K">
                             <connections>
                                 <segue destination="3hM-7p-MMl" kind="unwind" animates="NO" unwindAction="backToEquipmentDetailTable:" id="Oys-Wl-soN"/>
@@ -569,7 +592,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ucs-7q-eTl" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="3hM-7p-MMl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6426" y="996"/>
+            <point key="canvasLocation" x="6582" y="1264"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wMJ-lp-WKb">
@@ -587,7 +610,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uqS-9V-2Xq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5614" y="996"/>
+            <point key="canvasLocation" x="5770" y="1264"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="3wt-AY-AHB">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VIK-iq-cxc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Fyb-09-fFX" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZU-RD-OuX">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="W3h-Bd-GIJ" kind="relationship" relationship="rootViewController" id="jJV-WA-aJu"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="4185" y="1264"/>
         </scene>
     </scenes>
     <resources>

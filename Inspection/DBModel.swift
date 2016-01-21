@@ -268,12 +268,14 @@ class DBModel {
         }
     }
     
-    func addInspectionRecord(record: String, equipmentID: Int) {
-        let insert = recordTable.insert(self.recordMessage <- record, self.equipmentID <- equipmentID)
-        do {
-            try DB.run(insert)
-        } catch let error as NSError {
-            print(error)
+    func addInspectionRecord(record: String?, equipmentID: Int?) {
+        if record != nil && equipmentID != nil {
+            let insert = recordTable.insert(self.recordMessage <- record!, self.equipmentID <- equipmentID!)
+            do {
+                try DB.run(insert)
+            } catch let error as NSError {
+                print(error)
+            }
         }
     }
     

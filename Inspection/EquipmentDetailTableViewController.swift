@@ -12,8 +12,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.estimatedRowHeight = tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
+//        tableView.estimatedRowHeight = tableView.rowHeight
+//        tableView.rowHeight = UITableViewAutomaticDimension
         DB = DBModel.sharedInstance()
         NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: nil) { (notification) -> Void in
             self.takeANewPhoto()
@@ -33,7 +33,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var equipment: Equipment?
     var equipmentID: Int?
     var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
-    var imageAspectRatio: CGFloat = 0.0
+    var imageHeight: CGFloat = 0
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             let x = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)
@@ -61,7 +61,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(fileName).path {
                 let jpg = UIImageJPEGRepresentation(image, 0.5)
                 jpg?.writeToFile(path, atomically: true)
-                imageAspectRatio = image.size.width/image.size.height
                 DB?.editEquipment(self.equipment!.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
             }
         }
@@ -106,7 +105,10 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             if equipment?.imageName != nil {
                 let cell = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
                 if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
-                    cell.equipmentImageView.image = UIImage(data: data)
+                    if let image = UIImage(data: data) {
+                        cell.imageView?.image = image
+                        imageHeight = (cell.contentView.bounds.width - 32 ) / image.size.width * image.size.height
+                    }
                 }
                 return cell
             } else {
@@ -141,14 +143,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 1 {
-//            if let _ = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as? EquipmentDetailTableViewCell {
-////                return CGFloat(Double(UIScreen.mainScreen().applicationFrame.width) / cell.imageView!.image.as)
-//                return imageHight
-//            } else { return 40}
-            
-            
             if equipment?.imageName != nil {
-                return CGFloat(UIScreen.mainScreen().bounds.width) / imageAspectRatio
+                return imageHeight
             } else { return 40 }
         } else { return 40 }
     }
