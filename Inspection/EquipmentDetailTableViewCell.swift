@@ -18,10 +18,16 @@ class EquipmentDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var equipmentInfoTitleLabel: UILabel!
     @IBOutlet weak var equipmentInfoContentLabel: UILabel!
     
+    @IBOutlet weak var equipmentImageView: UIImageView!
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
 
+    @IBAction func photo(sender: UIButton) {
+        NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)
+
+    }
 }

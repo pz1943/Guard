@@ -16,24 +16,23 @@ class DBModel {
     var equipmentTable: Table
     var recordTable: Table
 
-    let roomID = Expression<Int>("roomId")
-    let equipmentID = Expression<Int>("equipmentId")
-    let recordId = Expression<Int>("recordId")
+    let roomID = Expression<Int>("roomID")
     let roomName = Expression<String>("roomName")
-    let equipmentName = Expression<String>("equipmentName")
     
+    let equipmentID = Expression<Int>(EquipmentTableColumn.ID.rawValue)
+    let equipmentName = Expression<String>(EquipmentTableColumn.Name.rawValue)
+    let equipmentBrand = Expression<String?>(EquipmentTableColumn.Brand.rawValue)
+    let equipmentModel = Expression<String?>(EquipmentTableColumn.Model.rawValue)
+    let equipmentCapacity = Expression<String?>(EquipmentTableColumn.Capacity.rawValue)
+    let equipmentCommissionTime = Expression<String?>(EquipmentTableColumn.CommissionTime.rawValue)
+    let equipmentSN = Expression<String?>(EquipmentTableColumn.SN.rawValue)
+    let equipmentImageName = Expression<String?>(EquipmentTableColumn.ImageName.rawValue)
+    
+    let recordId = Expression<Int>("recordID")
     let recordMessage = Expression<String?>("recordMessage")
-    
-    let equipmentBrand = Expression<String?>("equipmentBrand")
-    let equipmentModel = Expression<String?>("equipmentModel")
-    let equipmentCapacity = Expression<String?>("equipmentCapacity")
-    let equipmentCommissionTime = Expression<String?>("equipmentCommissionTime")
-    let equipmentSN = Expression<String?>("equipmentSN")
 
     
-    
-//    let x = count(*)
-    
+   
     struct Constants {
         static let defaultRoom = ["信息北机房","传输机房","电源室","信息南机房"]
         static let defaultEquipmentInRoom = [
@@ -81,6 +80,7 @@ class DBModel {
             t.column(equipmentCapacity)
             t.column(equipmentCommissionTime)
             t.column(equipmentSN)
+            t.column(equipmentImageName)
             })
         
         try! DB.run(recordTable.create(ifNotExists: true) { t in
@@ -146,28 +146,81 @@ class DBModel {
         return equipments
     }
     
-    func loadEquipment(equipmentID: Int) -> [(String, String?)]{
-        var equipmentDetail: [(String, String?)] = [ ]
-        let row = Array(try! DB.prepare(equipmentTable.filter(self.equipmentID == equipmentID))).first
-        equipmentDetail.append(("equipmentName", row?[equipmentName]))
-        equipmentDetail.append(("equipmentBrand", row?[equipmentBrand]))
-        equipmentDetail.append(("equipmentCapacity", row?[equipmentCapacity]))
-        equipmentDetail.append(("equipmentCommissionTime", row?[equipmentCommissionTime]))
-        equipmentDetail.append(("equipmentSN", row?[equipmentSN]))
-        return equipmentDetail
-    }
     
-    func editEquipment(equipmentID: Int,equipmentDetail: [(String, String)]) {
-        let alice = equipmentTable.filter(self.equipmentID == equipmentID)
-        for (key, value) in equipmentDetail {
+    func loadEquipment(equipmentID: Int) -> Equipment? {
+        let row = Array(try! DB.prepare(equipmentTable.filter(self.equipmentID == equipmentID))).first
+        if let name =  row?[equipmentName] {
+            let locatedRoomID = row?[roomID]
+            let locatedRoomName = row?[roomName]
+            let brand = row?[equipmentBrand]
+            let model = row?[equipmentModel]
+            let capacity = row?[equipmentCapacity]
+            let commissionTime = row?[equipmentCommissionTime]
+            let SN = row?[equipmentSN]
+            let ImageName = row?[equipmentImageName]
+            
+            return Equipment(ID: equipmentID, name: name, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
+
+        } else {
+            return nil
+        }
+    }
+
+    func editEquipment(equipment: Equipment) {
+        let alice = equipmentTable.filter(self.equipmentID == equipment.ID)
+        for equipmentDetail in equipment.editableDetailArray {
             do {
-                try DB.run(alice.update(Expression<String>("\(key)") <- value))
+                try DB.run(alice.update(Expression<String>("\(equipmentDetail.title.rawValue)") <- equipmentDetail.info))
             } catch let error as NSError {
                 print(error)
             }
         }
     }
 
+    func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
+        let alice = equipmentTable.filter(self.equipmentID == equipmentID)
+        do {
+            if let expressionString = titleStringToExpressionString(equipmentDetailTitleString) {
+                if expressionString != EquipmentTableColumn.Name.rawValue {
+                    try DB.run(alice.update(Expression<String?>(expressionString) <- newValue))
+                    print("\(equipmentID),\(equipmentDetailTitleString),\(newValue)")
+                } else {
+                    try DB.run(alice.update(Expression<String>(expressionString) <- newValue))
+                    print("\(equipmentID),\(equipmentDetailTitleString),\(newValue)")
+                }
+            }
+        } catch let error as NSError {
+            print(error)
+            print("\(equipmentID),\(equipmentDetailTitleString),\(newValue)")
+        }
+    }
+    
+    func titleStringToExpressionString(title: String) -> String? {
+        switch title {
+        case "设备 ID":
+            return EquipmentTableColumn.ID.rawValue
+        case "设备名称":
+            return EquipmentTableColumn.Name.rawValue
+        case "机房 ID":
+            return EquipmentTableColumn.RoomID.rawValue
+        case "机房名称":
+            return EquipmentTableColumn.RoomName.rawValue
+        case "设备品牌":
+            return EquipmentTableColumn.Brand.rawValue
+        case "设备型号":
+            return EquipmentTableColumn.Model.rawValue
+        case "设备容量":
+            return EquipmentTableColumn.Capacity.rawValue
+        case "投运时间":
+            return EquipmentTableColumn.CommissionTime.rawValue
+        case "设备 SN":
+            return EquipmentTableColumn.SN.rawValue
+        case "图片名称":
+            return EquipmentTableColumn.ImageName.rawValue
+        default:
+            return nil
+        }
+    }
     
     func addRoom(roomName: String) {
         let insert = roomTable.insert(self.roomName <- roomName)
@@ -219,6 +272,32 @@ class DBModel {
 //        
 //    }
 //    
+}
+
+enum EquipmentTableColumn: String{
+    case ID = "equipmentID"
+    case Name = "equipmentName"
+    case RoomID = "roomID"
+    case RoomName = "roomName"
+    case Brand = "equipmentBrand"
+    case Model = "equipmentModel"
+    case Capacity = "equipmentCapacity"
+    case CommissionTime = "equipmentCommissionTime"
+    case SN = "equipmentSN"
+    case ImageName = "equipmentImageName"
+}
+
+enum EquipmentTableColumnTitle: String{
+    case ID = "设备 ID"
+    case Name = "设备名称"
+    case RoomID = "机房 ID"
+    case RoomName = "机房名称"
+    case Brand = "设备品牌"
+    case Model = "设备型号"
+    case Capacity = "设备容量"
+    case CommissionTime = "投运时间"
+    case SN = "设备 SN"
+    case ImageName = "图片名称"
 }
 
 enum InspectionType {

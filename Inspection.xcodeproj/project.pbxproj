@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843F2571C49EFB4002BB69A /* Equipment.swift */; };
+		184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184616871C49DEE00047E3EE /* ImageViewController.swift */; };
+		187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */; };
+		187BA6A31C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */; };
 		18933E2D1C47D8E100357F74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E2C1C47D8E100357F74 /* AppDelegate.swift */; };
 		18933E321C47D8E100357F74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18933E301C47D8E100357F74 /* Main.storyboard */; };
 		18933E351C47D8E100357F74 /* Inspection.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18933E331C47D8E100357F74 /* Inspection.xcdatamodeld */; };
@@ -44,6 +48,10 @@
 
 /* Begin PBXFileReference section */
 		068C45D85E3F38A700E259C0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1843F2571C49EFB4002BB69A /* Equipment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Equipment.swift; sourceTree = "<group>"; };
+		184616871C49DEE00047E3EE /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentEditTableViewController.swift; sourceTree = "<group>"; };
+		187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentEditTableViewCell.swift; sourceTree = "<group>"; };
 		18933E291C47D8E100357F74 /* Inspection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Inspection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18933E2C1C47D8E100357F74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18933E311C47D8E100357F74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -151,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				18933E5D1C47DA5200357F74 /* DBModel.swift */,
+				1843F2571C49EFB4002BB69A /* Equipment.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -159,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				18933E601C47DA5200357F74 /* EquipmentTableViewCell.swift */,
+				187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */,
 				18933E5F1C47DA5200357F74 /* EquipmentDetailTableViewCell.swift */,
 				18933E641C47DA5200357F74 /* RoomTableViewCell.swift */,
 			);
@@ -168,10 +178,12 @@
 		18933E711C47DAED00357F74 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				18933E651C47DA5200357F74 /* RoomTableViewController.swift */,
+				187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */,
 				18933E611C47DA5200357F74 /* EquipmentTableViewController.swift */,
 				18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */,
 				18933E621C47DA5200357F74 /* QRCodeViewController.swift */,
-				18933E651C47DA5200357F74 /* RoomTableViewController.swift */,
+				184616871C49DEE00047E3EE /* ImageViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -391,14 +403,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
+				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
 				18933E351C47D8E100357F74 /* Inspection.xcdatamodeld in Sources */,
+				1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */,
 				18933E2D1C47D8E100357F74 /* AppDelegate.swift in Sources */,
 				18933E6A1C47DA5200357F74 /* EquipmentTableViewController.swift in Sources */,
+				187BA6A31C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift in Sources */,
 				18933E661C47DA5200357F74 /* DBModel.swift in Sources */,
 				18933E6D1C47DA5200357F74 /* RoomTableViewCell.swift in Sources */,
 				18933E6B1C47DA5200357F74 /* QRCodeViewController.swift in Sources */,
 				18933E741C47F0B500357F74 /* EquipmentDetailTableViewController.swift in Sources */,
 				18933E691C47DA5200357F74 /* EquipmentTableViewCell.swift in Sources */,
+				184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */,
 				18933E681C47DA5200357F74 /* EquipmentDetailTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

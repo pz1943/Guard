@@ -8,20 +8,64 @@
 
 import UIKit
 
-class EquipmentDetailTableViewController: UITableViewController {
+class EquipmentDetailTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
         DB = DBModel.sharedInstance()
+        NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: nil) { (notification) -> Void in
+            self.takeANewPhoto()
+        }
+    }
+
+    override func viewWillAppear(animated: Bool) {
         if equipmentID != nil {
-            equipmentDetail = DB!.loadEquipment(equipmentID!)
+            equipment = DB!.loadEquipment(equipmentID!)
+            if equipment != nil {
+                equipmentDetail = equipment!.detailArray
+                tableView.reloadData()
+            }
         }
     }
     var DB: DBModel?
-    var equipmentDetail: [(String, String?)] = [ ]
+    var equipment: Equipment?
     var equipmentID: Int?
-    // MARK: - Table view data source
+    var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
+    var imageAspectRatio: CGFloat = 0.0
+    func takeANewPhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            let x = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)
+            print(x)
 
+            if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
+                let imagePicker = UIImagePickerController()
+                imagePicker.sourceType = .Camera
+                imagePicker.mediaTypes = ["public.image"]
+                imagePicker.delegate = self
+                self.presentViewController(imagePicker, animated: false, completion: nil)
+            }
+        }
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent("/newPic").path {
+                let jpg = UIImageJPEGRepresentation(image, 0.5)
+                jpg?.writeToFile(path, atomically: true)
+                imageAspectRatio = image.size.width/image.size.height
+                DB?.editEquipment(self.equipment!.ID, equipmentDetailTitleString: "图片名称", newValue: "/newPic")
+            }
+        }
+    }
+    
+    
+    
+    
+    // MARK: - Table view data source
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 4
     }
@@ -29,14 +73,16 @@ class EquipmentDetailTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return equipmentDetail.count
+            if equipment != nil {
+                return equipment!.detailArray.count
+            } else { return 0 }
         case 1:
             return 1
-        case 2:
-            return 6
-        case 3:
-            //MARK: TODO Change to record count?
-            return 100
+//        case 2:
+//            return 6
+//        case 3:
+//            //MARK: TODO Change to record count?
+//            return 100
         default:
             return 0
         }
@@ -44,66 +90,96 @@ class EquipmentDetailTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
 
         switch indexPath.section {
         case 0:
-            cell.equipmentInfoContentLabel.text = equipmentDetail[indexPath.row].0
-            cell.equipmentInfoTitleLabel.text = equipmentDetail[indexPath.row].1
+            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+            cell.equipmentInfoTitleLabel.text = equipmentDetail[indexPath.row].title.rawValue
+            cell.equipmentInfoContentLabel.text = equipmentDetail[indexPath.row].info
             return cell
+            
+        case 1:
+            if equipment?.imageName != nil {
+                let cell = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+                if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
+                    cell.equipmentImageView.image = UIImage(data: data)
+                }
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+                return cell
+            }
 //        case 2:
 //            return 6
 //        case 3:
 //            //MARK: TODO Change to record count?
 //            return 100
         default:
+            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             return cell
         }
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return "  设备信息"
+        case 1:
+            return "  设备图片"
+        case 2:
+            return "  维护周期"
+        case 3:
+            return "  工作记录"
+        default:
+            return nil
+        }
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 1 {
+//            if let _ = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as? EquipmentDetailTableViewCell {
+////                return CGFloat(Double(UIScreen.mainScreen().applicationFrame.width) / cell.imageView!.image.as)
+//                return imageHight
+//            } else { return 40}
+            
+            
+            if equipment?.imageName != nil {
+                return CGFloat(UIScreen.mainScreen().bounds.width) / imageAspectRatio
+            } else { return 40 }
+        } else { return 40 }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        switch indexPath.section{ //应该分别定义0，1，2，3，懒了
+        case 1 :
+            return indexPath
+        default :
+            return nil
+        }
     }
-    */
 
-    /*
+    @IBAction func backToEquipmentDetailTable(segue: UIStoryboardSegue) {
+        
+    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "showEquipmentView" {
+            if let DVC = segue.destinationViewController as? ImageViewController {
+                DVC.imageURL = equipment?.imageAbsoluteFilePath
+            }
+        } else if segue.identifier == "equipmentEditSegue" {
+            if let NVC = segue.destinationViewController as?  UINavigationController {
+                if let DVC = NVC.childViewControllers.first as? EquipmentEditTableViewController {
+                    DVC.equipment = self.equipment
+                }
+            }
+        }
     }
-    */
 
 }
