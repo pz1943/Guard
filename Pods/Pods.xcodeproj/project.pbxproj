@@ -287,6 +287,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					F47EF93570A7B95B56C05711A7BD8B8E = {
+						DevelopmentTeam = UU98GL3RUD;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -357,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 45380D5DB5A0BE51434881FE0F5F0468 /* SQLite.swift.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -372,6 +378,7 @@
 				MODULEMAP_FILE = "Target Support Files/SQLite.swift/SQLite.swift.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = SQLite;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -424,6 +431,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 45380D5DB5A0BE51434881FE0F5F0468 /* SQLite.swift.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -439,6 +447,7 @@
 				MODULEMAP_FILE = "Target Support Files/SQLite.swift/SQLite.swift.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = SQLite;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

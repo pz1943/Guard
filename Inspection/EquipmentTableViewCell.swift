@@ -17,7 +17,6 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
         // Initialization code
     }
 
-    @IBOutlet weak var equipmentTitle: UILabel!
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -29,7 +28,8 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
     var roomName: String?
     var equipmentID: Int?
     @IBOutlet weak var equipmentAddTextField: UITextField!
-    
+    @IBOutlet weak var equipmentTitle: UILabel!
+
     @IBAction func addNew(sender: UIButton) {
         equipmentAddTextField.resignFirstResponder()
         if let equipmentName = equipmentAddTextField.text {
@@ -47,5 +47,6 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
         equipmentAddTextField.resignFirstResponder()
         return true
     }
+    
 
 }

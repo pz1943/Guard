@@ -22,6 +22,7 @@ class EquipmentTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem?.title = "编辑"
     }
     
     // MARK: - Table view data source
