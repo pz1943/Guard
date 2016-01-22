@@ -14,6 +14,12 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     override func viewDidLoad() {
         super.viewDidLoad()
         loadQRCode()
+        qrCodeFrameView = UIView()
+        qrCodeFrameView?.layer.borderColor = UIColor.greenColor().CGColor
+        qrCodeFrameView?.layer.borderWidth = 2
+        view.addSubview(qrCodeFrameView!)
+        view.bringSubviewToFront(qrCodeFrameView!)
+
         // Do any additional setup after loading the view.
     }
 
@@ -25,43 +31,47 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     var QRResult: String?
     var QRLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
-
+    var session: AVCaptureSession?
     func loadQRCode() {
         let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         let input = try! AVCaptureDeviceInput.init(device: device)
         let output = AVCaptureMetadataOutput.init()
+        output.rectOfInterest = CGRect(x: 0.25, y: 0.2, width: 0.5, height: 0.6)
         output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
-        let session = AVCaptureSession()
-        session.sessionPreset = AVCaptureSessionPresetHigh
-        session.addInput(input)
-        session.addOutput(output)
+        session = AVCaptureSession()
+        session?.sessionPreset = AVCaptureSessionPresetHigh
+        session?.addInput(input)
+        session?.addOutput(output)
         output.metadataObjectTypes = [AVMetadataObjectTypeQRCode,
             AVMetadataObjectTypeEAN13Code,
             AVMetadataObjectTypeEAN8Code,
             AVMetadataObjectTypeCode128Code]
-        let QRLayer = AVCaptureVideoPreviewLayer(session: session)
-        QRLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        QRLayer.frame = self.view.layer.bounds
-        self.view.layer.insertSublayer(QRLayer, atIndex: 0)
+        QRLayer = AVCaptureVideoPreviewLayer(session: session)
+        QRLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
+        QRLayer!.frame = self.view.layer.bounds
+        self.view.layer.insertSublayer(QRLayer!, atIndex: 0)
         
-        qrCodeFrameView = UIView()
-        qrCodeFrameView?.layer.borderColor = UIColor.greenColor().CGColor
-        qrCodeFrameView?.layer.borderWidth = 2
-        view.addSubview(qrCodeFrameView!)
-        view.bringSubviewToFront(qrCodeFrameView!)
         
-        session.startRunning()
+        session?.startRunning()
     }
     
     
     func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
-        if let metadataObj = metadataObjects.first as? AVMetadataMachineReadableCodeObject {
-                qrCodeFrameView?.frame = metadataObj.bounds;
-                QRResult = metadataObj.stringValue
-                print(QRResult)
+        if metadataObjects == nil || metadataObjects.count == 0{
+            qrCodeFrameView?.frame=CGRectZero
+            return
+        }
+        if let metadataObj = QRLayer?.transformedMetadataObjectForMetadataObject(
+            metadataObjects.first! as! AVMetadataMachineReadableCodeObject)
+            as? AVMetadataMachineReadableCodeObject
+        {
+            qrCodeFrameView?.frame = metadataObj.bounds;
+            QRResult = metadataObj.stringValue
+            session?.stopRunning()
+            qrCodeFrameView?.frame = metadataObj.bounds
+
         }
     }
-
 
     /*
     // MARK: - Navigation

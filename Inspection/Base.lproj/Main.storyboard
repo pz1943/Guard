@@ -11,7 +11,7 @@
         <scene sceneID="rY8-ZR-Qpy">
             <objects>
                 <tableViewController id="4zb-Gm-C0H" customClass="RoomTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Hew-SU-Ny4">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Hew-SU-Ny4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -34,7 +34,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="roomTitle" destination="9UP-au-Vmg" id="df4-4D-0MF"/>
-                                    <segue destination="W2F-Wd-0ft" kind="presentation" identifier="showEquipment" id="b48-bs-6Tm"/>
+                                    <segue destination="W2F-Wd-0ft" kind="show" identifier="showEquipment" action="showDetailViewController:sender:" id="b48-bs-6Tm"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomAddCell" id="KbT-R8-aPr" customClass="RoomTableViewCell" customModule="Inspection" customModuleProvider="target">
@@ -128,7 +128,7 @@
         <scene sceneID="Ekd-5n-Mgy">
             <objects>
                 <tableViewController id="xXY-xo-8Fh" customClass="EquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7HT-dQ-lfm">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7HT-dQ-lfm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -151,7 +151,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="equipmentTitle" destination="c8m-ED-zzr" id="Rtf-QS-g5L"/>
-                                    <segue destination="aL5-pX-p4e" kind="showDetail" identifier="equipmentDetail" trigger="accessoryAction" id="Xgf-WS-s7D"/>
+                                    <segue destination="aL5-pX-p4e" kind="show" identifier="equipmentDetail" trigger="accessoryAction" action="showDetailViewController:sender:" id="Xgf-WS-s7D"/>
                                     <segue destination="6xR-Wn-DIh" kind="presentation" id="325-0e-hTu"/>
                                 </connections>
                             </tableViewCell>
@@ -227,6 +227,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="Fyb-09-fFX" kind="presentation" identifier="RecordSegue" id="6oN-Nv-dad"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lBb-JV-bCu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -236,7 +239,7 @@
         <scene sceneID="gP2-wk-9S9">
             <objects>
                 <tableViewController id="zvv-Vg-eWu" customClass="EquipmentDetailTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VmJ-zy-pYY">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VmJ-zy-pYY">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -341,7 +344,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="equipmentImageView" destination="laZ-f2-coW" id="Ba4-3w-cDT"/>
-                                    <segue destination="gTg-3v-9qk" kind="showDetail" identifier="showEquipmentView" id="adg-vx-AwU"/>
+                                    <segue destination="gTg-3v-9qk" kind="show" identifier="showEquipmentView" action="showDetailViewController:sender:" id="adg-vx-AwU"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -358,7 +361,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="编辑" id="TnP-Hl-zfy">
                             <connections>
-                                <segue destination="kdw-g4-8Ob" kind="showDetail" identifier="equipmentEditSegue" animates="NO" id="rsL-Yw-oJu"/>
+                                <segue destination="kdw-g4-8Ob" kind="show" identifier="equipmentEditSegue" animates="NO" action="showDetailViewController:sender:" id="rsL-Yw-oJu"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -478,7 +481,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ge-uc-mWG">
+                            <navigationBar contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Ge-uc-mWG">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="设备图片" id="c1f-N7-ohi">
@@ -507,7 +510,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tcx-9C-9Gq">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tcx-9C-9Gq">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                             </scrollView>
                         </subviews>
@@ -615,7 +618,6 @@
         <!--Navigation Controller-->
         <scene sceneID="3wt-AY-AHB">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VIK-iq-cxc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Fyb-09-fFX" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZU-RD-OuX">
@@ -627,6 +629,7 @@
                         <segue destination="W3h-Bd-GIJ" kind="relationship" relationship="rootViewController" id="jJV-WA-aJu"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VIK-iq-cxc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4185" y="1264"/>
         </scene>
