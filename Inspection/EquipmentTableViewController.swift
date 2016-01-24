@@ -98,6 +98,12 @@ class EquipmentTableViewController: UITableViewController {
                     }
                 }
             }
+        } else if segue.identifier == "ToQRCodeSegue" {
+            if let DVC = segue.destinationViewController as? QRCodeViewController {
+                if let equipmentID = (sender as? EquipmentTableViewCell)?.equipmentID {
+                    DVC.equipmentID = equipmentID
+                }
+            }
         }
 
     }

@@ -19,9 +19,10 @@ class ImageViewController: UIViewController , UIScrollViewDelegate
         }
     }
     
-    @IBAction func needANewPhoto(sender: UIButton) {
+    @IBAction func needANewPhoto(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil)
         NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)
+
     }
     @IBOutlet weak var actityIndicator: UIActivityIndicatorView!
     

@@ -18,11 +18,13 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: nil) { (notification) -> Void in
             self.takeANewPhoto()
         }
+        prototypeCell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell") as? EquipmentDetailTableViewCell
     }
 
     override func viewWillAppear(animated: Bool) {
         if equipmentID != nil {
             equipment = DB!.loadEquipment(equipmentID!)
+            equipmentRecordArray = DB!.loadInstectionRecord(equipmentID!)
             if equipment != nil {
                 equipmentDetail = equipment!.detailArray
                 tableView.reloadData()
@@ -34,6 +36,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var equipmentID: Int?
     var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
     var imageHeight: CGFloat = 0
+    var equipmentRecordArray: [InspectionRecord] = []
+    var prototypeCell: EquipmentDetailTableViewCell?
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             let x = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)
@@ -83,9 +87,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return 1
 //        case 2:
 //            return 6
-//        case 3:
-//            //MARK: TODO Change to record count?
-//            return 100
+        case 3:
+            return equipmentRecordArray.count
         default:
             return 0
         }
@@ -117,9 +120,15 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             }
 //        case 2:
 //            return 6
-//        case 3:
-//            //MARK: TODO Change to record count?
-//            return 100
+        case 3:
+            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+            let record = equipmentRecordArray[indexPath.row]
+            if record.message != nil {
+                cell.recordMessageLabel.text = record.message
+            }
+            cell.recordTimeLabel.text = record.date
+            cell.recordTypeLabel.text = record.recordType
+            return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             return cell
@@ -141,12 +150,24 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         }
     }
     
+//    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//    }
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 1 {
             if equipment?.imageName != nil {
                 return imageHeight
-            } else { return 40 }
-        } else { return 40 }
+            } else { return UITableViewAutomaticDimension }
+        } else if indexPath.section == 3 {
+            let record = equipmentRecordArray[indexPath.row]
+            if record.message != nil {
+                prototypeCell?.recordMessageLabel.text = record.message!
+                prototypeCell?.recordTimeLabel.text = record.date
+                prototypeCell?.recordTypeLabel.text = record.recordType
+                let size = prototypeCell!.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+                return size.height
+            } else { return UITableViewAutomaticDimension}
+        } else { return UITableViewAutomaticDimension}
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

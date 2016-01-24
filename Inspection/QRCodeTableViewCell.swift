@@ -12,13 +12,10 @@ class QRCodeTableViewCell: UITableViewCell, UITextFieldDelegate{
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        DB = DBModel.sharedInstance()
 
-        // Initialization code
     }
-    var DB: DBModel?
-    var equipment: Equipment?
     @IBOutlet weak var recordTextField: UITextField!
+    @IBOutlet weak var recordType: UILabel!
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -26,9 +23,9 @@ class QRCodeTableViewCell: UITableViewCell, UITextFieldDelegate{
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         recordTextField.resignFirstResponder()
-        DB?.addInspectionRecord(textField.text, equipmentID: equipment?.ID)
+        if textField.text != nil {
+            NSNotificationCenter.defaultCenter().postNotificationName("newRecordGotNotification", object: nil, userInfo: ["recordMessage": textField.text!])
+        }
         return true
     }
-    
-
 }

@@ -32,6 +32,8 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     var QRLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
     var session: AVCaptureSession?
+    var equipmentID: Int?
+    
     func loadQRCode() {
         let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         let input = try! AVCaptureDeviceInput.init(device: device)
@@ -69,18 +71,22 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             QRResult = metadataObj.stringValue
             session?.stopRunning()
             qrCodeFrameView?.frame = metadataObj.bounds
-
+            self.performSegueWithIdentifier("RecordSegue", sender: self)
         }
     }
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "RecordSegue" {
+            if let NVC = segue.destinationViewController as? UINavigationController {
+                if let DVC = NVC.viewControllers.first as? QRCodeRecordTableViewController{
+                    DVC.QRResult = self.QRResult
+                    DVC.equipmentID = self.equipmentID
+                }
+            }
+        }
     }
-    */
 
 }

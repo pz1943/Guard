@@ -25,6 +25,13 @@ class EquipmentDetailTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    @IBOutlet weak var recordMessageLabel: UILabel! {
+        didSet{
+            recordMessageLabel.numberOfLines = 0
+        }
+    }
+    @IBOutlet weak var recordTimeLabel: UILabel!
+    @IBOutlet weak var recordTypeLabel: UILabel!
 
     @IBAction func photo(sender: UIButton) {
         NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)

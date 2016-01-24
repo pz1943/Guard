@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2FS-8b-ZXJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2FS-8b-ZXJ">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -128,7 +128,7 @@
         <scene sceneID="Ekd-5n-Mgy">
             <objects>
                 <tableViewController id="xXY-xo-8Fh" customClass="EquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7HT-dQ-lfm">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7HT-dQ-lfm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -152,7 +152,7 @@
                                 <connections>
                                     <outlet property="equipmentTitle" destination="c8m-ED-zzr" id="Rtf-QS-g5L"/>
                                     <segue destination="aL5-pX-p4e" kind="show" identifier="equipmentDetail" trigger="accessoryAction" action="showDetailViewController:sender:" id="Xgf-WS-s7D"/>
-                                    <segue destination="6xR-Wn-DIh" kind="presentation" id="325-0e-hTu"/>
+                                    <segue destination="6xR-Wn-DIh" kind="presentation" identifier="ToQRCodeSegue" id="325-0e-hTu"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentAddCell" id="lGl-uZ-fRG" customClass="EquipmentTableViewCell" customModule="Inspection" customModuleProvider="target">
@@ -239,7 +239,7 @@
         <scene sceneID="gP2-wk-9S9">
             <objects>
                 <tableViewController id="zvv-Vg-eWu" customClass="EquipmentDetailTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VmJ-zy-pYY">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VmJ-zy-pYY">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -344,7 +344,70 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="equipmentImageView" destination="laZ-f2-coW" id="Ba4-3w-cDT"/>
-                                    <segue destination="gTg-3v-9qk" kind="show" identifier="showEquipmentView" action="showDetailViewController:sender:" id="adg-vx-AwU"/>
+                                    <segue destination="gTg-3v-9qk" kind="presentation" identifier="showEquipmentView" id="adg-vx-AwU"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentRecordCell" rowHeight="83" id="0dl-98-6eh" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="321" width="600" height="83"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0dl-98-6eh" id="MNq-ew-Oik">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="82"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="251" text="记录类型" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d6o-pN-CXV">
+                                            <rect key="frame" x="8" y="8" width="496" height="20"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="记录时间" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uE5-Hp-mvd">
+                                            <rect key="frame" x="524" y="8" width="68" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="255" verticalHuggingPriority="251" horizontalCompressionResistancePriority="755" text="记录内容" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ewv-9v-lXr">
+                                            <rect key="frame" x="8" y="45" width="68" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="无" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFG-x4-M25">
+                                            <rect key="frame" x="84" y="45" width="508" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="uE5-Hp-mvd" firstAttribute="top" secondItem="MNq-ew-Oik" secondAttribute="topMargin" id="9Iq-Dm-TTr"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="NFG-x4-M25" secondAttribute="bottom" constant="8" id="9hu-Pg-fjk"/>
+                                        <constraint firstItem="d6o-pN-CXV" firstAttribute="top" secondItem="MNq-ew-Oik" secondAttribute="topMargin" id="DMb-sq-pai"/>
+                                        <constraint firstItem="NFG-x4-M25" firstAttribute="top" secondItem="uE5-Hp-mvd" secondAttribute="bottom" constant="16" id="EqJ-8A-BG1"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="Ewv-9v-lXr" secondAttribute="leading" id="bxd-dI-EAz"/>
+                                        <constraint firstItem="Ewv-9v-lXr" firstAttribute="centerY" secondItem="NFG-x4-M25" secondAttribute="centerY" id="eHe-yd-yOR"/>
+                                        <constraint firstItem="uE5-Hp-mvd" firstAttribute="leading" secondItem="d6o-pN-CXV" secondAttribute="trailing" constant="20" id="fDJ-Ha-eQL"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="uE5-Hp-mvd" secondAttribute="trailing" id="grQ-LK-yTe"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="uE5-Hp-mvd" secondAttribute="trailing" id="gtR-iu-Pdk"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="NFG-x4-M25" secondAttribute="trailing" id="iRS-DD-ito"/>
+                                        <constraint firstItem="NFG-x4-M25" firstAttribute="leading" secondItem="Ewv-9v-lXr" secondAttribute="trailing" constant="8" symbolic="YES" id="o6r-ck-alH"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="d6o-pN-CXV" secondAttribute="leading" id="wGm-R1-ggu"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="gtR-iu-Pdk"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=regular">
+                                        <mask key="constraints">
+                                            <include reference="gtR-iu-Pdk"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="recordMessageLabel" destination="NFG-x4-M25" id="dua-fL-Mt1"/>
+                                    <outlet property="recordTimeLabel" destination="uE5-Hp-mvd" id="1bC-UQ-6wH"/>
+                                    <outlet property="recordTypeLabel" destination="d6o-pN-CXV" id="TMh-Hb-qjd"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -431,19 +494,27 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="khV-T4-k5R">
-                                            <rect key="frame" x="8" y="13" width="584" height="17"/>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="输入工作内容" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="khV-T4-k5R">
+                                            <rect key="frame" x="84" y="13" width="508" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                             <connections>
                                                 <outlet property="delegate" destination="QeY-c9-CjH" id="XnP-M2-zTU"/>
                                             </connections>
                                         </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="记录类型" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3kH-YH-AeI">
+                                            <rect key="frame" x="8" y="11" width="68" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="khV-T4-k5R" firstAttribute="centerY" secondItem="Bna-f5-XaM" secondAttribute="centerY" id="6V4-Ju-som"/>
-                                        <constraint firstItem="khV-T4-k5R" firstAttribute="leading" secondItem="Bna-f5-XaM" secondAttribute="leadingMargin" id="Nxe-J7-lwe"/>
+                                        <constraint firstItem="3kH-YH-AeI" firstAttribute="centerY" secondItem="khV-T4-k5R" secondAttribute="centerY" id="AOB-cy-RqZ"/>
+                                        <constraint firstItem="3kH-YH-AeI" firstAttribute="leading" secondItem="Bna-f5-XaM" secondAttribute="leadingMargin" id="Itu-DK-Bi6"/>
                                         <constraint firstItem="khV-T4-k5R" firstAttribute="trailing" secondItem="Bna-f5-XaM" secondAttribute="trailingMargin" id="SJN-fl-Jpu"/>
+                                        <constraint firstItem="khV-T4-k5R" firstAttribute="leading" secondItem="3kH-YH-AeI" secondAttribute="trailing" constant="8" symbolic="YES" id="sg5-LJ-YKn"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -459,7 +530,12 @@
                     <navigationItem key="navigationItem" id="B0W-C9-shw">
                         <barButtonItem key="leftBarButtonItem" title="取消" id="Am5-jV-OB3">
                             <connections>
-                                <segue destination="Fx5-Mt-chg" kind="unwind" unwindAction="backToEquipmentTable:" id="QyS-H4-RLt"/>
+                                <segue destination="Fx5-Mt-chg" kind="unwind" identifier="QRChancel" unwindAction="backToEquipmentTable:" id="QyS-H4-RLt"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="完成" id="YM6-Ed-Jav">
+                            <connections>
+                                <segue destination="Fx5-Mt-chg" kind="unwind" identifier="QRDone" unwindAction="backToEquipmentTable:" id="CJU-3S-aBo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -481,45 +557,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Ge-uc-mWG">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tcx-9C-9Gq">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                            </scrollView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ge-uc-mWG">
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="设备图片" id="c1f-N7-ohi">
-                                        <barButtonItem key="leftBarButtonItem" id="iK5-8Y-mgq">
-                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BLy-bg-Wns">
-                                                <rect key="frame" x="20" y="7" width="60" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="返回">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="pDC-6y-KxR" kind="unwind" unwindAction="backToEquipmentDetailTable:" id="v83-E2-58C"/>
-                                                </connections>
-                                            </button>
+                                        <barButtonItem key="leftBarButtonItem" title="返回" id="Rjo-9D-OgJ">
+                                            <connections>
+                                                <segue destination="pDC-6y-KxR" kind="unwind" unwindAction="backToEquipmentDetailTable:" id="RNa-k1-t0q"/>
+                                            </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" id="AVG-hX-4ux">
-                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1fn-jp-LZx">
-                                                <rect key="frame" x="520" y="7" width="60" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="更换"/>
-                                                <connections>
-                                                    <action selector="needANewPhoto:" destination="gTg-3v-9qk" eventType="touchUpInside" id="1ad-xU-1SO"/>
-                                                </connections>
-                                            </button>
+                                        <barButtonItem key="rightBarButtonItem" title="更换" id="b7W-or-n3A">
+                                            <connections>
+                                                <action selector="needANewPhoto:" destination="gTg-3v-9qk" id="FMq-i3-GuF"/>
+                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tcx-9C-9Gq">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="tcx-9C-9Gq" firstAttribute="top" secondItem="CTE-Dc-aPf" secondAttribute="bottom" constant="44" id="BJr-d8-Nbt"/>
+                            <constraint firstItem="tcx-9C-9Gq" firstAttribute="top" secondItem="CTE-Dc-aPf" secondAttribute="bottom" constant="44" id="1X3-oS-mzS"/>
+                            <constraint firstItem="0Ge-uc-mWG" firstAttribute="top" secondItem="CTE-Dc-aPf" secondAttribute="bottom" id="8sN-IV-Okz"/>
                             <constraint firstItem="0Ge-uc-mWG" firstAttribute="trailing" secondItem="tcx-9C-9Gq" secondAttribute="trailing" id="Ixn-wU-wJS"/>
                             <constraint firstAttribute="trailing" secondItem="tcx-9C-9Gq" secondAttribute="trailing" id="UcK-hD-3Ye"/>
-                            <constraint firstItem="0Ge-uc-mWG" firstAttribute="top" secondItem="CTE-Dc-aPf" secondAttribute="bottom" symbolic="YES" id="btc-yf-nne"/>
                             <constraint firstItem="0Ge-uc-mWG" firstAttribute="leading" secondItem="tcx-9C-9Gq" secondAttribute="leading" id="cMg-Fi-gts"/>
                             <constraint firstItem="tcx-9C-9Gq" firstAttribute="leading" secondItem="sy6-JO-O5k" secondAttribute="leading" id="kbF-DH-I6a"/>
                             <constraint firstItem="tcx-9C-9Gq" firstAttribute="bottom" secondItem="flm-OS-c8G" secondAttribute="top" id="ywv-Vj-QQo"/>

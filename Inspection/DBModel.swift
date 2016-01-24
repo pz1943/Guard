@@ -30,7 +30,8 @@ class DBModel {
     
     let recordID = Expression<Int>("recordID")
     let recordMessage = Expression<String?>("recordMessage")
-
+    let recordType = Expression<String>("recordType")
+    let recordDate = Expression<String>("recordDate")
     
    
     struct Constants {
@@ -86,7 +87,9 @@ class DBModel {
         try! DB.run(recordTable.create(ifNotExists: true) { t in
             t.column(recordID, primaryKey: true)
             t.column(equipmentID)
+            t.column(recordType)
             t.column(recordMessage)
+            t.column(recordDate)
             })
         initDefaultData()
    }
@@ -268,15 +271,16 @@ class DBModel {
         }
     }
     
-    func addInspectionRecord(record: String?, equipmentID: Int?) {
-        if record != nil && equipmentID != nil {
-            let insert = recordTable.insert(self.recordMessage <- record!, self.equipmentID <- equipmentID!)
+    func addInspectionRecord(record: InspectionRecord) {
+            let insert = recordTable.insert(self.recordMessage <- record.message,
+                self.recordType <- record.recordType,
+                self.equipmentID <- record.equipmentID,
+                self.recordDate <- record.date)
             do {
                 try DB.run(insert)
             } catch let error as NSError {
                 print(error)
             }
-        }
     }
     
     func delInspectionRecord(recordID: Int) {
@@ -286,6 +290,23 @@ class DBModel {
         } catch let error as NSError {
             print(error)
         }
+    }
+    
+    func loadInstectionRecord(equipmentID: Int) -> [InspectionRecord]{
+        let alice = recordTable.filter(self.equipmentID == equipmentID)
+        var array: [Row] = []
+        var recordArray: [InspectionRecord] = []
+        do {
+            let rows = try DB.prepare(alice)
+            array = Array(rows)
+        } catch let error as NSError {
+            print(error)
+        }
+        for row in array {
+            let record = InspectionRecord(ID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
+            recordArray.append(record)
+        }
+        return recordArray
     }
 }
 
@@ -329,4 +350,27 @@ struct Inspection {
     }
     
     static let typeCount = [Daily, Weekly, Quarterly, FilterChanging, Cleaning, BeltChanging, HumidifyingCansChanging].count
+}
+
+struct InspectionRecord {
+    var equipmentID: Int
+    var date: String
+    var recordType: String
+    var message: String?
+    init(ID: Int, date: String?, type: String, recordData: String?) {
+        self.equipmentID = ID
+        self.recordType = type
+        self.message = recordData
+        if date != nil {
+            self.date = date!
+        } else {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateStyle = .ShortStyle
+            dateFormatter.timeStyle = .ShortStyle
+            //        dateFormatter.weekdaySymbols = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+            //        dateFormatter.monthSymbols = ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
+            self.date = dateFormatter.stringFromDate(NSDate())
+
+        }
+    }
 }

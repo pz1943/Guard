@@ -5,10 +5,8 @@
 //  Created by apple on 16/1/7.
 //  Copyright © 2016年 pz1943. All rights reserved.
 //
-// 21日修改
-//修改图片命名规则
-//增加更换图片
 //
+//MARK: - 做好后深入学习一下 segue，优化一下 storyboard
 
 import UIKit
 
@@ -24,7 +22,6 @@ class RoomTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.navigationItem.rightBarButtonItem?.title = "编辑"
     }
-    
     override func viewWillAppear(animated: Bool) {
         rooms = DB!.loadRoomTable()
         tableView.reloadData()
@@ -82,7 +79,6 @@ class RoomTableViewController: UITableViewController {
             DB?.delRoom(rooms[indexPath.row].0)
             rooms.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            //MARK: TODO add notification to del
         }
     }
 
