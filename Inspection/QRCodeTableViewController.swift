@@ -15,11 +15,10 @@ class QRCodeRecordTableViewController: UITableViewController {
 
         record = InspectionRecord(ID: equipment!.ID, date: nil, type: Inspection.Daily, recordData: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
+        selectFirst()
+        self.clearsSelectionOnViewWillAppear = false
+        self.navigationItem.title = equipment!.roomName + equipment!.name
     }
     
     
@@ -40,14 +39,28 @@ class QRCodeRecordTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+    func selectFirst() {
+        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: false, scrollPosition: UITableViewScrollPosition.None)
+    }
     func getNewMessage(notification: NSNotification) {
         if let recordMessage = notification.userInfo?["recordMessage"] {
             record?.message = recordMessage as? String
         }
-        
     }
     
+    func changeRecordType(notification: NSNotification) {
+        if let newType = notification.userInfo?["recordType"] as? String {
+            record?.recordType = newType
+        }
+        print("changed")
+        reloadTableView()
+    }
+    func reloadTableView() {
+        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "timerReloadTableView", userInfo: nil, repeats: false)
+    }
+    func timerReloadTableView() {
+        tableView.reloadData()
+    }
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -70,6 +83,7 @@ class QRCodeRecordTableViewController: UITableViewController {
 
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("RecordCell", forIndexPath: indexPath) as! QRCodeTableViewCell
+            cell.recordType.text = record?.recordType
             return cell
         }
     }
@@ -97,6 +111,7 @@ class QRCodeRecordTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         record?.recordType = Inspection.getType()[indexPath.row]
+        reloadTableView()
     }
     
     /*

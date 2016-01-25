@@ -33,6 +33,7 @@ class EquipmentDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var recordTimeLabel: UILabel!
     @IBOutlet weak var recordTypeLabel: UILabel!
 
+    @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
     @IBAction func photo(sender: UIButton) {
         NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)
 

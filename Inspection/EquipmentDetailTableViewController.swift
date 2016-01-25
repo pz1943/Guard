@@ -12,13 +12,14 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        tableView.estimatedRowHeight = tableView.rowHeight
-//        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = tableView.rowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
+        print(tableView.rowHeight)
+
         DB = DBModel.sharedInstance()
         NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: nil) { (notification) -> Void in
             self.takeANewPhoto()
         }
-        prototypeCell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell") as? EquipmentDetailTableViewCell
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -35,9 +36,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var equipment: Equipment?
     var equipmentID: Int?
     var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
-    var imageHeight: CGFloat = 0
     var equipmentRecordArray: [InspectionRecord] = []
-    var prototypeCell: EquipmentDetailTableViewCell?
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             let x = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)
@@ -96,7 +95,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
@@ -110,7 +108,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
                     if let image = UIImage(data: data) {
                         cell.imageView?.image = image
-                        imageHeight = (cell.contentView.bounds.width - 32 ) / image.size.width * image.size.height
+                        print((UIScreen.mainScreen().bounds.width - 44) / image.size.width * image.size.height)
+                        cell.imageHeightConstraint.constant = (UIScreen.mainScreen().bounds.width - 44) / image.size.width * image.size.height
                     }
                 }
                 return cell
@@ -150,25 +149,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         }
     }
     
-//    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//    }
-    
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            if equipment?.imageName != nil {
-                return imageHeight
-            } else { return UITableViewAutomaticDimension }
-        } else if indexPath.section == 3 {
-            let record = equipmentRecordArray[indexPath.row]
-            if record.message != nil {
-                prototypeCell?.recordMessageLabel.text = record.message!
-                prototypeCell?.recordTimeLabel.text = record.date
-                prototypeCell?.recordTypeLabel.text = record.recordType
-                let size = prototypeCell!.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
-                return size.height
-            } else { return UITableViewAutomaticDimension}
-        } else { return UITableViewAutomaticDimension}
-    }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
