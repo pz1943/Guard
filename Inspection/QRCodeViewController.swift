@@ -68,13 +68,31 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             as? AVMetadataMachineReadableCodeObject
         {
             qrCodeFrameView?.frame = metadataObj.bounds;
-            QRResult = metadataObj.stringValue
-            session?.stopRunning()
-            qrCodeFrameView?.frame = metadataObj.bounds
-            self.performSegueWithIdentifier("RecordSegue", sender: self)
+            if let QRResult = metadataObj.stringValue {
+                session?.stopRunning()
+                qrCodeFrameView?.frame = metadataObj.bounds
+                if IsEquipmentCorrect(QRResult) {
+                    self.performSegueWithIdentifier("RecordSegue", sender: self)
+                } else {
+                    let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert)
+                    let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
+                        self.dismissViewControllerAnimated(false, completion: nil)
+                    })
+                    alertController.addAction(alert)
+                    self.presentViewController(alertController, animated: false, completion: nil)
+                }
+            }
         }
     }
 
+    func IsEquipmentCorrect(result: String) -> Bool {
+        if result == "\(self.equipmentID!)" { return true}
+        else {
+            print(result)
+            print(self.equipmentID)
+            return false
+        }
+    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
