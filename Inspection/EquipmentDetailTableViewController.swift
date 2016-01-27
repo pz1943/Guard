@@ -1,4 +1,4 @@
-//
+ //
 //  EquipmentDetailTableViewController.swift
 //  Inspection
 //
@@ -14,7 +14,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        print(tableView.rowHeight)
 
         DB = DBModel.sharedInstance()
         NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: nil) { (notification) -> Void in
@@ -26,6 +25,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         if equipmentID != nil {
             equipment = DB!.loadEquipment(equipmentID!)
             equipmentRecordArray = DB!.loadInstectionRecord(equipmentID!)
+            recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
             if equipment != nil {
                 equipmentDetail = equipment!.detailArray
                 tableView.reloadData()
@@ -37,11 +37,9 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var equipmentID: Int?
     var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
     var equipmentRecordArray: [InspectionRecord] = []
+    var recentInspectionTime: [String: String] = [: ]
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
-            let x = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)
-            print(x)
-
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
                 let imagePicker = UIImagePickerController()
                 imagePicker.sourceType = .Camera
@@ -84,8 +82,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             } else { return 0 }
         case 1:
             return 1
-//        case 2:
-//            return 6
+        case 2:
+            return Inspection.getType().count
         case 3:
             return equipmentRecordArray.count
         default:
@@ -108,7 +106,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
                     if let image = UIImage(data: data) {
                         cell.imageView?.image = image
-                        print((UIScreen.mainScreen().bounds.width - 44) / image.size.width * image.size.height)
                         cell.imageHeightConstraint.constant = (UIScreen.mainScreen().bounds.width - 44) / image.size.width * image.size.height
                     }
                 }
@@ -117,8 +114,12 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 let cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
                 return cell
             }
-//        case 2:
-//            return 6
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+            cell.equipmentInfoTitleLabel.text = Inspection.getType()[indexPath.row]
+            let inspectionType = Inspection.getType()[indexPath.row]
+            cell.equipmentInfoContentLabel.text = recentInspectionTime[inspectionType]
+            return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             let record = equipmentRecordArray[indexPath.row]
@@ -162,6 +163,23 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return nil
         }
     }
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        
+        if indexPath.section == 3 {
+            return true
+        } else {
+            return false
+        }
+    }
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            print(indexPath)
+            DB?.delInspectionRecord(equipmentRecordArray[indexPath.row].ID)
+            equipmentRecordArray.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
+    }
 
     @IBAction func backToEquipmentDetailTable(segue: UIStoryboardSegue) {
         
@@ -175,10 +193,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 DVC.imageURL = equipment?.imageAbsoluteFilePath
             }
         } else if segue.identifier == "equipmentEditSegue" {
-            if let NVC = segue.destinationViewController as?  UINavigationController {
-                if let DVC = NVC.childViewControllers.first as? EquipmentEditTableViewController {
+            if let DVC = segue.destinationViewController as?  EquipmentEditTableViewController {
                     DVC.equipment = self.equipment
-                }
             }
         }
     }

@@ -179,22 +179,19 @@ class DBModel {
             }
         }
     }
-
+// to edit one singel Detail
     func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
         let alice = equipmentTable.filter(self.equipmentID == equipmentID)
         do {
             if let expressionString = titleStringToExpressionString(equipmentDetailTitleString) {
                 if expressionString != EquipmentTableColumn.Name.rawValue {
                     try DB.run(alice.update(Expression<String?>(expressionString) <- newValue))
-                    print("\(equipmentID),\(equipmentDetailTitleString),\(newValue)")
                 } else {
                     try DB.run(alice.update(Expression<String>(expressionString) <- newValue))
-                    print("\(equipmentID),\(equipmentDetailTitleString),\(newValue)")
                 }
             }
         } catch let error as NSError {
             print(error)
-            print("\(equipmentID),\(equipmentDetailTitleString),\(newValue)")
         }
     }
     
@@ -284,7 +281,7 @@ class DBModel {
     }
     
     func delInspectionRecord(recordID: Int) {
-        let alice = equipmentTable.filter(self.recordID == recordID)
+        let alice = recordTable.filter(self.recordID == recordID)
         do {
             try DB.run(alice.delete())
         } catch let error as NSError {
@@ -303,11 +300,27 @@ class DBModel {
             print(error)
         }
         for row in array {
-            let record = InspectionRecord(ID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
+            let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
             recordArray.append(record)
         }
         return recordArray
     }
+    
+    func loadRecentInspectionTime(equipmentID: Int) -> [String: String] {
+        var inspectionTime: [String: String] = [: ]
+        for type in Inspection.getType() {
+            let aTime = loadRecentInspectionTimeForType(equipmentID, inspectionType: type)
+            inspectionTime[type] = aTime
+        }
+        return inspectionTime
+    }
+    
+    func loadRecentInspectionTimeForType(equipmentID: Int, inspectionType: String) -> String? {
+        let alice = recordTable.filter(self.equipmentID == equipmentID && self.recordType == inspectionType)
+        let row = DB.pluck(alice)
+        return row?[recordDate]
+    }
+    
 }
 
 enum EquipmentTableColumn: String{
@@ -353,24 +366,34 @@ struct Inspection {
 }
 
 struct InspectionRecord {
+    var ID: Int {
+        get {
+            return recordID!
+        }
+    }
+    private var recordID: Int?
     var equipmentID: Int
     var date: String
     var recordType: String
     var message: String?
-    init(ID: Int, date: String?, type: String, recordData: String?) {
-        self.equipmentID = ID
+    //add a new Record
+    init(equipmentID: Int, type: String, recordData: String?) {
+        self.equipmentID = equipmentID
         self.recordType = type
         self.message = recordData
-        if date != nil {
-            self.date = date!
-        } else {
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = .ShortStyle
-            dateFormatter.timeStyle = .ShortStyle
-            //        dateFormatter.weekdaySymbols = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
-            //        dateFormatter.monthSymbols = ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
-            self.date = dateFormatter.stringFromDate(NSDate())
-
-        }
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .ShortStyle
+        dateFormatter.timeStyle = .ShortStyle
+        //        dateFormatter.weekdaySymbols = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+        //        dateFormatter.monthSymbols = ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
+        self.date = dateFormatter.stringFromDate(NSDate())
+    }
+    //load a exist record
+    init(recordID: Int, equipmentID: Int, date: String, type: String, recordData: String?) {
+        self.recordID = recordID
+        self.equipmentID = equipmentID
+        self.date = date
+        self.recordType = type
+        self.message = recordData
     }
 }

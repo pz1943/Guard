@@ -28,7 +28,6 @@ class ImageViewController: UIViewController , UIScrollViewDelegate
     
     private func fetchImage()
     {
- //       println(
         if let url = imageURL{
             actityIndicator?.startAnimating()
             let qos = Int( QOS_CLASS_USER_INITIATED.rawValue )

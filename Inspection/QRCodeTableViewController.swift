@@ -13,7 +13,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        record = InspectionRecord(ID: equipment!.ID, date: nil, type: Inspection.Daily, recordData: nil)
+        record = InspectionRecord(equipmentID: equipment!.ID, type: Inspection.Daily, recordData: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
         selectFirst()
@@ -52,7 +52,6 @@ class QRCodeRecordTableViewController: UITableViewController {
         if let newType = notification.userInfo?["recordType"] as? String {
             record?.recordType = newType
         }
-        print("changed")
         reloadTableView()
     }
     func reloadTableView() {

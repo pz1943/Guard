@@ -6,7 +6,11 @@
 //  Copyright © 2016年 pz1943. All rights reserved.
 //
 //
-//MARK: - 做好后深入学习一下 segue，优化一下 storyboard
+//MARK: TODO 最近巡视记录按照设定时间提醒需执行工作。做设置页面，设置各项工作周期。
+//做页面提示明日代办。
+//巡检类型里增加其他，并可以通过文本单独标注。
+//
+//当前 机房和设备页面提示巡检情况。日测试和周测试
 
 import UIKit
 
@@ -28,10 +32,9 @@ class RoomTableViewController: UITableViewController {
     }
 
     @IBAction func backToRoomTable(segue: UIStoryboardSegue) {
-    
+        
     }
-    
-    
+        
     // MARK: - Table view data source
 
     var rooms: [(Int, String)] = [ ]
@@ -103,12 +106,10 @@ class RoomTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showEquipment" {
-            if let NVC = segue.destinationViewController as? UINavigationController {
-                if let DVC = NVC.viewControllers.first as? EquipmentTableViewController{
-                    if let cell = sender as? RoomTableViewCell {
-                        DVC.selectRoomID = cell.roomID
-                        DVC.selectRoomName = cell.roomTitle.text
-                    }
+            if let DVC = segue.destinationViewController as? EquipmentTableViewController{
+                if let cell = sender as? RoomTableViewCell {
+                    DVC.selectRoomID = cell.roomID
+                    DVC.selectRoomName = cell.roomTitle.text
                 }
             }
         }

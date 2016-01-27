@@ -84,18 +84,15 @@ class EquipmentTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        print(indexPath)
     }
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "equipmentDetail" {
-            if let NVC = segue.destinationViewController as? UINavigationController {
-                if let DVC = NVC.viewControllers.first as? EquipmentDetailTableViewController {
-                    if let cell = sender as? EquipmentTableViewCell {
-                        DVC.equipmentID = cell.equipmentID
-                    }
+            if let DVC = segue.destinationViewController as? EquipmentDetailTableViewController {
+                if let cell = sender as? EquipmentTableViewCell {
+                    DVC.equipmentID = cell.equipmentID
                 }
             }
         } else if segue.identifier == "ToQRCodeSegue" {
