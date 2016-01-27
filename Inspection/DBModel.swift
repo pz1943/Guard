@@ -363,7 +363,17 @@ struct Inspection {
     }
     
     static let typeCount = [Daily, Weekly, Quarterly, FilterChanging, Cleaning, BeltChanging, HumidifyingCansChanging].count
+    
+    static let timeCycle: [(String, Int)] = [ (Daily, 1),
+        (Weekly, 7),
+        (FilterChanging, 90),
+        (Cleaning, 90),
+        (BeltChanging, 180),
+        (HumidifyingCansChanging, 90),
+        (Quarterly, 90)]
+    
 }
+
 
 struct InspectionRecord {
     var ID: Int {

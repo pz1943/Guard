@@ -11,6 +11,7 @@
 		184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184616871C49DEE00047E3EE /* ImageViewController.swift */; };
 		187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */; };
 		187BA6A31C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */; };
+		188AE13F1C592D97005A99C8 /* InspectionCycleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188AE13E1C592D97005A99C8 /* InspectionCycleTableViewCell.swift */; };
 		18933E2D1C47D8E100357F74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E2C1C47D8E100357F74 /* AppDelegate.swift */; };
 		18933E321C47D8E100357F74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18933E301C47D8E100357F74 /* Main.storyboard */; };
 		18933E351C47D8E100357F74 /* Inspection.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18933E331C47D8E100357F74 /* Inspection.xcdatamodeld */; };
@@ -26,6 +27,9 @@
 		18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E651C47DA5200357F74 /* RoomTableViewController.swift */; };
 		18933E741C47F0B500357F74 /* EquipmentDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */; };
 		18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E42D631C512BDA004A9015 /* QRCodeViewController.swift */; };
+		18E8B67D1C5920EB00CE2325 /* QRCodeForAnyEquipmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B67C1C5920EB00CE2325 /* QRCodeForAnyEquipmentViewController.swift */; };
+		18E8B67F1C59218100CE2325 /* QRCodeForAnyEquipmentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B67E1C59218100CE2325 /* QRCodeForAnyEquipmentTableViewController.swift */; };
+		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
 		590CC1FC8F8F9C4BD07DF375 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C45D85E3F38A700E259C0 /* Pods.framework */; };
@@ -54,6 +58,7 @@
 		184616871C49DEE00047E3EE /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentEditTableViewController.swift; sourceTree = "<group>"; };
 		187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentEditTableViewCell.swift; sourceTree = "<group>"; };
+		188AE13E1C592D97005A99C8 /* InspectionCycleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewCell.swift; sourceTree = "<group>"; };
 		18933E291C47D8E100357F74 /* Inspection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Inspection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18933E2C1C47D8E100357F74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18933E311C47D8E100357F74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -75,6 +80,9 @@
 		18933E651C47DA5200357F74 /* RoomTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewController.swift; sourceTree = "<group>"; };
 		18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentDetailTableViewController.swift; sourceTree = "<group>"; };
 		18E42D631C512BDA004A9015 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
+		18E8B67C1C5920EB00CE2325 /* QRCodeForAnyEquipmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeForAnyEquipmentViewController.swift; sourceTree = "<group>"; };
+		18E8B67E1C59218100CE2325 /* QRCodeForAnyEquipmentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeForAnyEquipmentTableViewController.swift; sourceTree = "<group>"; };
+		18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewController.swift; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
 		7988BE7B4F86F30202425F39 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -176,6 +184,7 @@
 				18933E5F1C47DA5200357F74 /* EquipmentDetailTableViewCell.swift */,
 				18933E641C47DA5200357F74 /* RoomTableViewCell.swift */,
 				49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */,
+				188AE13E1C592D97005A99C8 /* InspectionCycleTableViewCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -185,11 +194,14 @@
 			children = (
 				49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */,
 				18E42D631C512BDA004A9015 /* QRCodeViewController.swift */,
+				18E8B67C1C5920EB00CE2325 /* QRCodeForAnyEquipmentViewController.swift */,
+				18E8B67E1C59218100CE2325 /* QRCodeForAnyEquipmentTableViewController.swift */,
 				18933E651C47DA5200357F74 /* RoomTableViewController.swift */,
 				187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */,
 				18933E611C47DA5200357F74 /* EquipmentTableViewController.swift */,
 				18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */,
 				184616871C49DEE00047E3EE /* ImageViewController.swift */,
+				18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -411,19 +423,23 @@
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
 				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
 				18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */,
+				18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */,
 				18933E351C47D8E100357F74 /* Inspection.xcdatamodeld in Sources */,
 				1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */,
+				18E8B67D1C5920EB00CE2325 /* QRCodeForAnyEquipmentViewController.swift in Sources */,
 				18933E2D1C47D8E100357F74 /* AppDelegate.swift in Sources */,
 				18933E6A1C47DA5200357F74 /* EquipmentTableViewController.swift in Sources */,
 				187BA6A31C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift in Sources */,
 				49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */,
 				18933E661C47DA5200357F74 /* DBModel.swift in Sources */,
+				188AE13F1C592D97005A99C8 /* InspectionCycleTableViewCell.swift in Sources */,
 				18933E6D1C47DA5200357F74 /* RoomTableViewCell.swift in Sources */,
 				18933E741C47F0B500357F74 /* EquipmentDetailTableViewController.swift in Sources */,
 				18933E691C47DA5200357F74 /* EquipmentTableViewCell.swift in Sources */,
 				184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */,
 				18933E681C47DA5200357F74 /* EquipmentDetailTableViewCell.swift in Sources */,
 				49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */,
+				18E8B67F1C59218100CE2325 /* QRCodeForAnyEquipmentTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

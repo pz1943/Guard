@@ -29,6 +29,7 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
     var equipmentID: Int?
     @IBOutlet weak var equipmentAddTextField: UITextField!
     @IBOutlet weak var equipmentTitle: UILabel!
+    @IBOutlet weak var DoneFlagImageView: UIImageView!
 
     @IBAction func addNew(sender: UIButton) {
         equipmentAddTextField.resignFirstResponder()

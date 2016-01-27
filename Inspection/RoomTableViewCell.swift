@@ -16,6 +16,7 @@ class RoomTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     }
     
+    @IBOutlet weak var DoneFlagImageView: UIView!
     @IBOutlet weak var roomTitle: UILabel!
     @IBOutlet weak var roomAddTextField: UITextField! 
     @IBAction func addNewRoom(sender: UIButton) {

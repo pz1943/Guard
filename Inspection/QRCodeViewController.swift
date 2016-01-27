@@ -19,16 +19,21 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         qrCodeFrameView?.layer.borderWidth = 2
         view.addSubview(qrCodeFrameView!)
         view.bringSubviewToFront(qrCodeFrameView!)
+        DB = DBModel.sharedInstance()
 
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        session?.startRunning()
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    var QRResult: String?
+    var DB: DBModel?
     var QRLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
     var session: AVCaptureSession?
@@ -52,9 +57,6 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         QRLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         QRLayer!.frame = self.view.layer.bounds
         self.view.layer.insertSublayer(QRLayer!, atIndex: 0)
-        
-        
-        session?.startRunning()
     }
     
     
@@ -68,29 +70,35 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             as? AVMetadataMachineReadableCodeObject
         {
             qrCodeFrameView?.frame = metadataObj.bounds;
-            if let QRResult = metadataObj.stringValue {
-                session?.stopRunning()
-                qrCodeFrameView?.frame = metadataObj.bounds
-                if IsEquipmentCorrect(QRResult) {
-                    self.performSegueWithIdentifier("RecordSegue", sender: self)
-                } else {
-                    let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert)
+            let QRResult = metadataObj.stringValue
+            session?.stopRunning()
+            qrCodeFrameView?.frame = metadataObj.bounds
+            if equipmentID != nil {
+                if "\(equipmentID!)" != QRResult {
+                    let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，提示后返回
                     let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
                         self.dismissViewControllerAnimated(false, completion: nil)
                     })
                     alertController.addAction(alert)
                     self.presentViewController(alertController, animated: false, completion: nil)
+                } else {
+                    self.performSegueWithIdentifier("RecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
+                }
+            } else {   //无指定设备
+                let QREquipmentID = NSString(string: QRResult).integerValue
+                if let _ = DB?.loadEquipment(QREquipmentID) {  //扫描结果是设备 ID，进入记录页面。
+                    self.equipmentID = QREquipmentID
+                    self.performSegueWithIdentifier("RecordSegue", sender: self)
+                } else {  // 不是设备 ID，提示后返回
+                    let alertController = UIAlertController(title: "错误的二维码", message: "扫描的二维码不是管理的设备，请确认后重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，重新开始搜索
+                    let alert = UIAlertAction(title: "重试", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
+                        self.session?.startRunning()
+                    })
+                    alertController.addAction(alert)
+                    self.presentViewController(alertController, animated: false, completion: nil)
+
                 }
             }
-        }
-    }
-
-    func IsEquipmentCorrect(result: String) -> Bool {
-        if result == "\(self.equipmentID!)" { return true}
-        else {
-            print(result)
-            print(self.equipmentID)
-            return false
         }
     }
     // MARK: - Navigation
@@ -100,11 +108,9 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         if segue.identifier == "RecordSegue" {
             if let NVC = segue.destinationViewController as? UINavigationController {
                 if let DVC = NVC.viewControllers.first as? QRCodeRecordTableViewController{
-                    DVC.QRResult = self.QRResult
                     DVC.equipmentID = self.equipmentID
                 }
             }
         }
     }
-
 }

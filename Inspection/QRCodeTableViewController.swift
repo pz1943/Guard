@@ -30,7 +30,6 @@ class QRCodeRecordTableViewController: UITableViewController {
             }
         }
     }
-    var QRResult: String?
     var equipment: Equipment?
     var DB: DBModel?
     var record: InspectionRecord?
