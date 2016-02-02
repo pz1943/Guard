@@ -10,7 +10,7 @@
         <!--机房信息-->
         <scene sceneID="rY8-ZR-Qpy">
             <objects>
-                <tableViewController id="4zb-Gm-C0H" customClass="RoomTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="机房信息" id="4zb-Gm-C0H" customClass="RoomTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Hew-SU-Ny4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -101,10 +101,10 @@
             </objects>
             <point key="canvasLocation" x="2675" y="278"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--主页面-->
         <scene sceneID="J8v-90-duJ">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="2FS-8b-ZXJ" sceneMemberID="viewController">
+                <tabBarController title="主页面" automaticallyAdjustsScrollViewInsets="NO" id="2FS-8b-ZXJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="BEP-A4-LrY">
                         <autoresizingMask key="autoresizingMask"/>
@@ -120,10 +120,10 @@
             </objects>
             <point key="canvasLocation" x="1011" y="1514"/>
         </scene>
-        <!--Item-->
+        <!--机房信息导航-->
         <scene sceneID="6SC-h9-m3d">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="PvT-ct-yAo" sceneMemberID="viewController">
+                <navigationController title="机房信息导航" automaticallyAdjustsScrollViewInsets="NO" id="PvT-ct-yAo" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="UQS-gL-cGs"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="EFu-1o-1Mj">
@@ -142,7 +142,7 @@
         <!--设备信息-->
         <scene sceneID="Ekd-5n-Mgy">
             <objects>
-                <tableViewController id="xXY-xo-8Fh" customClass="EquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="设备信息" id="xXY-xo-8Fh" customClass="EquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="7HT-dQ-lfm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -242,10 +242,10 @@
             </objects>
             <point key="canvasLocation" x="3426" y="278"/>
         </scene>
-        <!--Item-->
+        <!--设备扫码-->
         <scene sceneID="364-bZ-aNE">
             <objects>
-                <viewController id="6xR-Wn-DIh" customClass="QRCodeViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="设备扫码" id="6xR-Wn-DIh" customClass="QRCodeViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UfV-ml-wiv"/>
                         <viewControllerLayoutGuide type="bottom" id="87v-hO-bK3"/>
@@ -255,7 +255,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="ETG-Zn-Rn6"/>
                     <navigationItem key="navigationItem" id="8kf-bw-Ylz">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ebL-WR-hyz">
                             <connections>
@@ -275,7 +274,7 @@
         <!--设备详情-->
         <scene sceneID="gP2-wk-9S9">
             <objects>
-                <tableViewController id="zvv-Vg-eWu" customClass="EquipmentDetailTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="设备详情" id="zvv-Vg-eWu" customClass="EquipmentDetailTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="VmJ-zy-pYY">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -470,10 +469,10 @@
             </objects>
             <point key="canvasLocation" x="4099" y="276"/>
         </scene>
-        <!--Code Record Table View Controller-->
+        <!--任意设备扫码记录-->
         <scene sceneID="LUB-if-FxT">
             <objects>
-                <tableViewController id="W3h-Bd-GIJ" customClass="QRCodeRecordTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="任意设备扫码记录" id="W3h-Bd-GIJ" customClass="QRCodeRecordTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="vne-dS-8ES">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -549,10 +548,10 @@
             </objects>
             <point key="canvasLocation" x="5561" y="1190"/>
         </scene>
-        <!--Image View Controller-->
+        <!--设备图片-->
         <scene sceneID="rmR-wJ-iOp">
             <objects>
-                <viewController id="gTg-3v-9qk" customClass="ImageViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="设备图片" id="gTg-3v-9qk" customClass="ImageViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CTE-Dc-aPf"/>
                         <viewControllerLayoutGuide type="bottom" id="flm-OS-c8G"/>
@@ -605,7 +604,7 @@
         <!--编辑设备-->
         <scene sceneID="ci2-eX-xeY">
             <objects>
-                <tableViewController id="3rP-gI-wwN" customClass="EquipmentEditTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="编辑设备" id="3rP-gI-wwN" customClass="EquipmentEditTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="t7p-yE-dkj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -666,10 +665,10 @@
             </objects>
             <point key="canvasLocation" x="6202" y="1190"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--扫码记录导航-->
         <scene sceneID="3wt-AY-AHB">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Fyb-09-fFX" sceneMemberID="viewController">
+                <navigationController title="扫码记录导航" automaticallyAdjustsScrollViewInsets="NO" id="Fyb-09-fFX" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZU-RD-OuX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -684,10 +683,10 @@
             </objects>
             <point key="canvasLocation" x="4877" y="1190"/>
         </scene>
-        <!--Item-->
+        <!--任意设备扫码-->
         <scene sceneID="dii-1O-7LS">
             <objects>
-                <viewController id="bGq-xh-X7Q" customClass="QRCodeForAnyEquipmentViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="任意设备扫码" id="bGq-xh-X7Q" customClass="QRCodeForAnyEquipmentViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hxu-22-HvV"/>
                         <viewControllerLayoutGuide type="bottom" id="bO4-sM-Xoi"/>
@@ -780,10 +779,10 @@
             </objects>
             <point key="canvasLocation" x="2859" y="1944"/>
         </scene>
-        <!--Code For Any Equipment Table View Controller-->
+        <!--任意设备记录-->
         <scene sceneID="NOB-xo-9GO">
             <objects>
-                <tableViewController storyboardIdentifier="QRForAnyEuqipment" id="cun-SR-fNI" customClass="QRCodeForAnyEquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="QRForAnyEuqipment" title="任意设备记录" id="cun-SR-fNI" customClass="QRCodeForAnyEquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Cht-hn-doy">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -859,10 +858,10 @@
             </objects>
             <point key="canvasLocation" x="3389" y="1190"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--任意设备记录导航-->
         <scene sceneID="NuX-re-23Y">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="v1a-wx-bsQ" sceneMemberID="viewController">
+                <navigationController title="任意设备记录导航" automaticallyAdjustsScrollViewInsets="NO" id="v1a-wx-bsQ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="kL0-Zs-A28">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -877,10 +876,10 @@
             </objects>
             <point key="canvasLocation" x="2705" y="1190"/>
         </scene>
-        <!--Item-->
+        <!--测试周期导航-->
         <scene sceneID="CeJ-4L-hkc">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LUc-Jl-JYU" sceneMemberID="viewController">
+                <navigationController title="测试周期导航" automaticallyAdjustsScrollViewInsets="NO" id="LUc-Jl-JYU" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="ncv-rN-iTj"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OKp-qB-Xoi">

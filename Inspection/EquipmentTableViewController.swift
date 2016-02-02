@@ -51,8 +51,8 @@ class EquipmentTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentCell", forIndexPath: indexPath) as! EquipmentTableViewCell
             cell.equipmentTitle.text = equipmentArray[indexPath.row].1
             cell.equipmentID = equipmentArray[indexPath.row].0
-            let timeCycel = DB!.loadRecentInspectionTime(equipmentArray[indexPath.row].0)
-            if timeCycel[Inspection.Daily] >= 
+//            let timeCycel = DB!.loadRecentInspectionTime(equipmentArray[indexPath.row].0)
+//            if timeCycel[Inspection.Daily] >=
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddCell", forIndexPath: indexPath)

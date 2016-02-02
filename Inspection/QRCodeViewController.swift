@@ -20,14 +20,22 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         view.addSubview(qrCodeFrameView!)
         view.bringSubviewToFront(qrCodeFrameView!)
         DB = DBModel.sharedInstance()
-
+        if equipmentID != nil {
+            if let equipment = DB?.loadEquipment(equipmentID!) {
+                self.navigationItem.title = "\(equipment.roomName)\(equipment.name)"
+            }
+        }
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(animated: Bool) {
         session?.startRunning()
+        qrCodeFrameView?.frame=CGRectZero
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        session?.stopRunning()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -77,7 +85,8 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                 if "\(equipmentID!)" != QRResult {
                     let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，提示后返回
                     let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
-                        self.dismissViewControllerAnimated(false, completion: nil)
+                        self.session?.startRunning()
+                        self.qrCodeFrameView?.bounds = CGRectZero
                     })
                     alertController.addAction(alert)
                     self.presentViewController(alertController, animated: false, completion: nil)
