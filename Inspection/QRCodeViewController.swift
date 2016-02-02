@@ -9,6 +9,14 @@
 import UIKit
 import AVFoundation
 
+class QRCodeForAnyEquipmentViewController: QRCodeViewController {
+    
+    @IBAction func backToQRCodeForAnyEquipmentViewController(segue: UIStoryboardSegue) {
+        
+    }
+    
+}
+
 class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {

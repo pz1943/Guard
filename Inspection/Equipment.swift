@@ -9,6 +9,7 @@
 import Foundation
 import SQLite
 
+
 class Equipment {
     
     typealias EquipmentDetailArray = [EquipmentDetail]

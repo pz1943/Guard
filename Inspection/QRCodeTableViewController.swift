@@ -8,6 +8,8 @@
 
 import UIKit
 
+class QRCodeForAnyEquipmentTableViewController: QRCodeRecordTableViewController { }
+
 class QRCodeRecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {

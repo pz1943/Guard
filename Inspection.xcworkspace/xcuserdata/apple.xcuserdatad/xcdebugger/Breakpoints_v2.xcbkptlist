@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspection/QRCodeViewController.swift"
-            timestampString = "476113382.622891"
+            timestampString = "476114655.779205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "captureOutput(_:didOutputMetadataObjects:fromConnection:)"
             landmarkType = "5">
             <Locations>
@@ -100,11 +100,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspection/QRCodeViewController.swift"
-            timestampString = "476113382.622891"
+            timestampString = "476114655.779205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "captureOutput(_:didOutputMetadataObjects:fromConnection:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -116,11 +116,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Inspection/QRCodeViewController.swift"
-            timestampString = "476113382.622891"
+            timestampString = "476114655.779205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "captureOutput(_:didOutputMetadataObjects:fromConnection:)"
             landmarkType = "5">
          </BreakpointContent>

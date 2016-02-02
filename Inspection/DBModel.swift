@@ -48,6 +48,7 @@ class DBModel {
         static var token:dispatch_once_t = 0
     }
     
+
     class func sharedInstance() -> DBModel! {
         dispatch_once(&Static.token) {
             Static.instance = self.init()
@@ -131,13 +132,21 @@ class DBModel {
     }
     
     
-    func loadRoomTable() -> [(Int, String)]{
+    func loadRoomTable() -> [EquipmentBrief]{
         let rows = Array(try! DB.prepare(roomTable))
         var rooms: [(Int, String)] = [ ]
         for row in rows {
             rooms.append((row[roomID], row[roomName]))
         }
         return rooms
+    }
+    
+    func isRoomInspectionCompleted(roomID: Int) -> Bool {
+        var equipments = loadEquipmentTable(roomID)
+        for equipmentColumn in equipments {
+            if equipment.
+        }
+        return true
     }
     
     func loadEquipmentTable(roomID: Int) -> [(Int, String)]{
@@ -147,6 +156,12 @@ class DBModel {
             equipments.append((row[equipmentID], row[equipmentName]))
         }
         return equipments
+    }
+    
+    func isEquipmentInspectionCompleted(equipmentID: Int) -> Bool {
+        let equipment = loadEquipment(equipmentID)
+        let inspectionTime = loadRecentInspectionTime(equipmentID)
+        
     }
     
     
@@ -371,9 +386,31 @@ struct Inspection {
         (BeltChanging, 180),
         (HumidifyingCansChanging, 90),
         (Quarterly, 90)]
-    
 }
 
+struct RoomBrief {
+    var roomName: String
+    var roomID: Int
+    var isRoomInspectonCompleted: Bool
+    
+    init(ID: Int, name: String, completedFlag: Bool){
+        self.roomName = name
+        self.roomID = ID
+        self.isRoomInspectonCompleted = completedFlag
+    }
+}
+
+struct EquipmentBrief {
+    var equipmentName: String
+    var equipmentID: Int
+    var isequipmentInspectonCompleted: Bool
+    
+    init(ID: Int, name: String, completedFlag: Bool){
+        self.equipmentName = name
+        self.equipmentID = ID
+        self.isequipmentInspectonCompleted = completedFlag
+    }
+}
 
 struct InspectionRecord {
     var ID: Int {
