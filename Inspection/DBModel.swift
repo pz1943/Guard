@@ -31,7 +31,7 @@ class DBModel {
     let recordID = Expression<Int>("recordID")
     let recordMessage = Expression<String?>("recordMessage")
     let recordType = Expression<String>("recordType")
-    let recordDate = Expression<String>("recordDate")
+    let recordDate = Expression<NSDate>("recordDate")
     
    
     struct Constants {
@@ -61,6 +61,9 @@ class DBModel {
             .DocumentDirectory, .UserDomainMask, true
             ).first!
         print("DB at \(path)")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
+        dateFormatter.timeZone = NSTimeZone.systemTimeZone()
 
         DB = try! Connection("\(path)/db.sqlite3")
         self.roomTable = Table("roomTable")
@@ -132,36 +135,51 @@ class DBModel {
     }
     
     
-    func loadRoomTable() -> [EquipmentBrief]{
+    func loadRoomTable() -> [RoomBrief]{
         let rows = Array(try! DB.prepare(roomTable))
-        var rooms: [(Int, String)] = [ ]
+        var rooms: [RoomBrief] = [ ]
         for row in rows {
-            rooms.append((row[roomID], row[roomName]))
+            rooms.append(RoomBrief(ID: row[roomID], name: row[roomName], completedFlag: isRoomInspectionCompleted(row[roomID])))
         }
         return rooms
     }
     
     func isRoomInspectionCompleted(roomID: Int) -> Bool {
-        var equipments = loadEquipmentTable(roomID)
-        for equipmentColumn in equipments {
-            if equipment.
+        let equipments = loadEquipmentTable(roomID)
+        for equipment in equipments {
+            if equipment.isequipmentInspectonCompleted == false {
+                print("EQ \(equipment.equipmentName) UNDONE")
+                return false
+            }
         }
         return true
     }
     
-    func loadEquipmentTable(roomID: Int) -> [(Int, String)]{
+    func loadEquipmentTable(roomID: Int) -> [EquipmentBrief]{
         let rows = Array(try! DB.prepare(equipmentTable.filter(self.roomID == roomID)))
-        var equipments: [(Int, String)] = [ ]
+        var equipments: [EquipmentBrief] = [ ]
         for row in rows {
-            equipments.append((row[equipmentID], row[equipmentName]))
+            equipments.append(EquipmentBrief(ID: row[equipmentID], name: row[equipmentName], completedFlag: isEquipmentInspectionCompleted(row[equipmentID])))
         }
         return equipments
     }
     
     func isEquipmentInspectionCompleted(equipmentID: Int) -> Bool {
-        let equipment = loadEquipment(equipmentID)
-        let inspectionTime = loadRecentInspectionTime(equipmentID)
-        
+        let inspectionTimeDir = loadRecentInspectionTime(equipmentID)
+        if inspectionTimeDir.count < Inspection.timeCycleDir.count {
+            return false
+        }
+        for (type, date) in inspectionTimeDir {
+            if let timeCycle = Inspection.timeCycleDir[type]{
+                if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
+                    print(date.timeIntervalSinceNow.datatypeValue)
+                    return false
+                } else {
+                    print("\(type),\(date.timeIntervalSinceNow), \(Double(timeCycle) * 24 * 3600)")
+                }
+            }
+        }
+        return true
     }
     
     
@@ -321,21 +339,20 @@ class DBModel {
         return recordArray
     }
     
-    func loadRecentInspectionTime(equipmentID: Int) -> [String: String] {
-        var inspectionTime: [String: String] = [: ]
+    func loadRecentInspectionTime(equipmentID: Int) -> [String: NSDate] {
+        var inspectionTime: [String: NSDate] = [: ]
         for type in Inspection.getType() {
             let aTime = loadRecentInspectionTimeForType(equipmentID, inspectionType: type)
             inspectionTime[type] = aTime
         }
         return inspectionTime
     }
-    
-    func loadRecentInspectionTimeForType(equipmentID: Int, inspectionType: String) -> String? {
+    //MARK: TODO 得到的不是最新的数据，需要修改
+    func loadRecentInspectionTimeForType(equipmentID: Int, inspectionType: String) -> NSDate? {
         let alice = recordTable.filter(self.equipmentID == equipmentID && self.recordType == inspectionType)
         let row = DB.pluck(alice)
         return row?[recordDate]
     }
-    
 }
 
 enum EquipmentTableColumn: String{
@@ -364,6 +381,7 @@ enum EquipmentTableColumnTitle: String{
     case ImageName = "图片名称"
 }
 
+
 struct Inspection {
     static let Daily = "日巡视"
     static let Weekly = "周测试"
@@ -379,13 +397,21 @@ struct Inspection {
     
     static let typeCount = [Daily, Weekly, Quarterly, FilterChanging, Cleaning, BeltChanging, HumidifyingCansChanging].count
     
-    static let timeCycle: [(String, Int)] = [ (Daily, 1),
+    static let timeCycle: [(String, Double)] = [ (Daily, 0.01),
         (Weekly, 7),
         (FilterChanging, 90),
         (Cleaning, 90),
         (BeltChanging, 180),
         (HumidifyingCansChanging, 90),
         (Quarterly, 90)]
+    
+    static let timeCycleDir: [String: Double] = [ Daily: 0.001,
+        Weekly: 7,
+        FilterChanging: 90,
+        Cleaning: 90,
+        BeltChanging: 180,
+        HumidifyingCansChanging: 90,
+        Quarterly: 90]
 }
 
 struct RoomBrief {
@@ -420,9 +446,17 @@ struct InspectionRecord {
     }
     private var recordID: Int?
     var equipmentID: Int
-    var date: String
+    var date: NSDate
     var recordType: String
     var message: String?
+    var dateForString: String {
+        get {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateStyle = .ShortStyle
+            dateFormatter.timeStyle = .ShortStyle
+            return dateFormatter.stringFromDate(self.date)
+        }
+    }
     //add a new Record
     init(equipmentID: Int, type: String, recordData: String?) {
         self.equipmentID = equipmentID
@@ -433,10 +467,10 @@ struct InspectionRecord {
         dateFormatter.timeStyle = .ShortStyle
         //        dateFormatter.weekdaySymbols = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
         //        dateFormatter.monthSymbols = ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
-        self.date = dateFormatter.stringFromDate(NSDate())
+        self.date = NSDate()
     }
     //load a exist record
-    init(recordID: Int, equipmentID: Int, date: String, type: String, recordData: String?) {
+    init(recordID: Int, equipmentID: Int, date: NSDate, type: String, recordData: String?) {
         self.recordID = recordID
         self.equipmentID = equipmentID
         self.date = date

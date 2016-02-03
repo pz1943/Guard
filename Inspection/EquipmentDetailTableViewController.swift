@@ -37,7 +37,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var equipmentID: Int?
     var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
     var equipmentRecordArray: [InspectionRecord] = []
-    var recentInspectionTime: [String: String] = [: ]
+    var recentInspectionTime: [String: NSDate] = [: ]
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
@@ -118,7 +118,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             cell.equipmentInfoTitleLabel.text = Inspection.getType()[indexPath.row]
             let inspectionType = Inspection.getType()[indexPath.row]
-            cell.equipmentInfoContentLabel.text = recentInspectionTime[inspectionType]
+            cell.equipmentInfoContentLabel.text = recentInspectionTime[inspectionType]?.datatypeValue
             return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
@@ -126,7 +126,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             if record.message != nil {
                 cell.recordMessageLabel.text = record.message
             }
-            cell.recordTimeLabel.text = record.date
+            cell.recordTimeLabel.text = record.date.datatypeValue
             cell.recordTypeLabel.text = record.recordType
             return cell
         default:

@@ -37,7 +37,7 @@ class RoomTableViewController: UITableViewController {
         
     // MARK: - Table view data source
 
-    var rooms: [(Int, String)] = [ ]
+    var rooms: [RoomBrief] = [ ]
     var DB: DBModel?
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -57,8 +57,13 @@ class RoomTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
-            cell.roomTitle.text = rooms[indexPath.row].1
-            cell.roomID = rooms[indexPath.row].0
+            cell.roomTitle.text = rooms[indexPath.row].roomName
+            cell.roomID = rooms[indexPath.row].roomID
+            if rooms[indexPath.row].isRoomInspectonCompleted == false {
+                cell.DoneFlagImageView.alpha = 0.1
+            } else {
+                cell.DoneFlagImageView.alpha = 1
+            }
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("roomAddCell", forIndexPath: indexPath)
@@ -79,7 +84,7 @@ class RoomTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            DB?.delRoom(rooms[indexPath.row].0)
+            DB?.delRoom(rooms[indexPath.row].roomID)
             rooms.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }

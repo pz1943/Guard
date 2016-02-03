@@ -45,7 +45,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="DoneFlagImageView" destination="JhK-fS-dRK" id="mlg-aO-QHg"/>
+                                    <outlet property="DoneFlagImageView" destination="e68-lV-qAi" id="OxD-um-vGI"/>
                                     <outlet property="roomTitle" destination="WOz-tM-YBq" id="TQk-ZL-pdd"/>
                                     <segue destination="xXY-xo-8Fh" kind="show" identifier="showEquipment" id="OII-6a-QT8"/>
                                 </connections>
