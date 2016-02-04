@@ -166,11 +166,12 @@ class DBModel {
     
     func isEquipmentInspectionCompleted(equipmentID: Int) -> Bool {
         let inspectionTimeDir = loadRecentInspectionTime(equipmentID)
-        if inspectionTimeDir.count < Inspection.timeCycleDir.count {
+        if inspectionTimeDir.count < Inspection.typeCount {
             return false
         }
+        let timeCycleDir = Inspection.getTimeCycleDir()
         for (type, date) in inspectionTimeDir {
-            if let timeCycle = Inspection.timeCycleDir[type]{
+            if let timeCycle = timeCycleDir[type]{
                 if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
                     print(date.timeIntervalSinceNow.datatypeValue)
                     return false
@@ -353,128 +354,7 @@ class DBModel {
         let row = DB.pluck(alice)
         return row?[recordDate]
     }
-}
-
-enum EquipmentTableColumn: String{
-    case ID = "equipmentID"
-    case Name = "equipmentName"
-    case RoomID = "roomID"
-    case RoomName = "roomName"
-    case Brand = "equipmentBrand"
-    case Model = "equipmentModel"
-    case Capacity = "equipmentCapacity"
-    case CommissionTime = "equipmentCommissionTime"
-    case SN = "equipmentSN"
-    case ImageName = "equipmentImageName"
-}
-
-enum EquipmentTableColumnTitle: String{
-    case ID = "设备 ID"
-    case Name = "设备名称"
-    case RoomID = "机房 ID"
-    case RoomName = "机房名称"
-    case Brand = "设备品牌"
-    case Model = "设备型号"
-    case Capacity = "设备容量"
-    case CommissionTime = "投运时间"
-    case SN = "设备 SN"
-    case ImageName = "图片名称"
-}
-
-
-struct Inspection {
-    static let Daily = "日巡视"
-    static let Weekly = "周测试"
-    static let FilterChanging = "滤网更换"
-    static let Cleaning = "室外机清洁"
-    static let BeltChanging = "皮带更换"
-    static let HumidifyingCansChanging = "加湿罐更换"
-    static let Quarterly = "季度测试"
     
-    static func getType() -> [String] {
-        return [Daily, Weekly, Quarterly, FilterChanging, Cleaning, BeltChanging, HumidifyingCansChanging]
-    }
-    
-    static let typeCount = [Daily, Weekly, Quarterly, FilterChanging, Cleaning, BeltChanging, HumidifyingCansChanging].count
-    
-    static let timeCycle: [(String, Double)] = [ (Daily, 0.01),
-        (Weekly, 7),
-        (FilterChanging, 90),
-        (Cleaning, 90),
-        (BeltChanging, 180),
-        (HumidifyingCansChanging, 90),
-        (Quarterly, 90)]
-    
-    static let timeCycleDir: [String: Double] = [ Daily: 0.001,
-        Weekly: 7,
-        FilterChanging: 90,
-        Cleaning: 90,
-        BeltChanging: 180,
-        HumidifyingCansChanging: 90,
-        Quarterly: 90]
 }
 
-struct RoomBrief {
-    var roomName: String
-    var roomID: Int
-    var isRoomInspectonCompleted: Bool
-    
-    init(ID: Int, name: String, completedFlag: Bool){
-        self.roomName = name
-        self.roomID = ID
-        self.isRoomInspectonCompleted = completedFlag
-    }
-}
 
-struct EquipmentBrief {
-    var equipmentName: String
-    var equipmentID: Int
-    var isequipmentInspectonCompleted: Bool
-    
-    init(ID: Int, name: String, completedFlag: Bool){
-        self.equipmentName = name
-        self.equipmentID = ID
-        self.isequipmentInspectonCompleted = completedFlag
-    }
-}
-
-struct InspectionRecord {
-    var ID: Int {
-        get {
-            return recordID!
-        }
-    }
-    private var recordID: Int?
-    var equipmentID: Int
-    var date: NSDate
-    var recordType: String
-    var message: String?
-    var dateForString: String {
-        get {
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = .ShortStyle
-            dateFormatter.timeStyle = .ShortStyle
-            return dateFormatter.stringFromDate(self.date)
-        }
-    }
-    //add a new Record
-    init(equipmentID: Int, type: String, recordData: String?) {
-        self.equipmentID = equipmentID
-        self.recordType = type
-        self.message = recordData
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .ShortStyle
-        dateFormatter.timeStyle = .ShortStyle
-        //        dateFormatter.weekdaySymbols = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
-        //        dateFormatter.monthSymbols = ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
-        self.date = NSDate()
-    }
-    //load a exist record
-    init(recordID: Int, equipmentID: Int, date: NSDate, type: String, recordData: String?) {
-        self.recordID = recordID
-        self.equipmentID = equipmentID
-        self.date = date
-        self.recordType = type
-        self.message = recordData
-    }
-}

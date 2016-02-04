@@ -9,6 +9,29 @@
 import Foundation
 import SQLite
 
+struct RoomBrief {
+    var roomName: String
+    var roomID: Int
+    var isRoomInspectonCompleted: Bool
+    
+    init(ID: Int, name: String, completedFlag: Bool){
+        self.roomName = name
+        self.roomID = ID
+        self.isRoomInspectonCompleted = completedFlag
+    }
+}
+
+struct EquipmentBrief {
+    var equipmentName: String
+    var equipmentID: Int
+    var isequipmentInspectonCompleted: Bool
+    
+    init(ID: Int, name: String, completedFlag: Bool){
+        self.equipmentName = name
+        self.equipmentID = ID
+        self.isequipmentInspectonCompleted = completedFlag
+    }
+}
 
 class Equipment {
     
@@ -26,6 +49,42 @@ class Equipment {
             }
         }
     }
+    
+    enum EquipmentTableColumn: String{
+        case ID = (x, y)
+        case Name = "equipmentName"
+        case RoomID = "roomID"
+        case RoomName = "roomName"
+        case Brand = "equipmentBrand"
+        case Model = "equipmentModel"
+        case Capacity = "equipmentCapacity"
+        case CommissionTime = "equipmentCommissionTime"
+        case SN = "equipmentSN"
+        case ImageName = "equipmentImageName"
+        
+        struct columnString {
+            var name: String
+            var nameInChinese: String
+            init(name: String, nameInChinese: String) {
+                self.name = name
+                self.nameInChinese = nameInChinese
+            }
+        }
+    }
+    
+    enum EquipmentTableColumnTitle: String{
+        case ID = "设备 ID"
+        case Name = "设备名称"
+        case RoomID = "机房 ID"
+        case RoomName = "机房名称"
+        case Brand = "设备品牌"
+        case Model = "设备型号"
+        case Capacity = "设备容量"
+        case CommissionTime = "投运时间"
+        case SN = "设备 SN"
+        case ImageName = "图片名称"
+    }
+
     
     var ID: Int
     var name: String
