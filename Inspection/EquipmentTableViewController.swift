@@ -14,15 +14,19 @@ class EquipmentTableViewController: UITableViewController {
         super.viewDidLoad()
         
         DB = DBModel.sharedInstance()
-        if selectRoomID != nil {
-            equipmentArray = DB!.loadEquipmentTable(selectRoomID!)
-        }
         NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoomID!)
             self.tableView.reloadData()
         }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.navigationItem.rightBarButtonItem?.title = "编辑"
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        if selectRoomID != nil {
+            equipmentArray = DB!.loadEquipmentTable(selectRoomID!)
+            self.tableView.reloadData()
+        }
     }
     
     // MARK: - Table view data source

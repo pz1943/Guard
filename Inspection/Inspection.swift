@@ -12,16 +12,15 @@ struct Inspection {
     
     struct InspectionType {
         var name: String
-        var nameInChinese: String
         var timeCycle: Double
     }
-    static var InspectionTypeArray: [InspectionType] = [InspectionType(name: "Daily", nameInChinese: "日巡视", timeCycle: 1),
-        InspectionType(name: "Weekly", nameInChinese: "周测试", timeCycle: 7),
-        InspectionType(name: "FilterChanging", nameInChinese: "滤网更换", timeCycle: 90),
-        InspectionType(name: "Cleaning", nameInChinese: "室外机清洁", timeCycle: 90),
-        InspectionType(name: "BeltChanging", nameInChinese: "皮带更换", timeCycle: 180),
-        InspectionType(name: "HumidifyingCansChanging", nameInChinese: "加湿罐更换", timeCycle: 90),
-        InspectionType(name: "Quarterly", nameInChinese: "季度测试", timeCycle: 90)]
+    static var InspectionTypeArray: [InspectionType] = [InspectionType(name: "日巡视", timeCycle: 1),
+        InspectionType(name: "周测试", timeCycle: 7),
+        InspectionType(name: "滤网更换", timeCycle: 90),
+        InspectionType(name: "室外机清洁", timeCycle: 90),
+        InspectionType(name: "皮带更换", timeCycle: 180),
+        InspectionType(name: "加湿罐更换", timeCycle: 90),
+        InspectionType(name: "季度测试", timeCycle: 90)]
     
     
     static func getTimeCycleDir() -> [String: Double] {

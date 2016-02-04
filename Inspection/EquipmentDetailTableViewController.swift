@@ -96,7 +96,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            cell.equipmentInfoTitleLabel.text = equipmentDetail[indexPath.row].title.rawValue
+            cell.equipmentInfoTitleLabel.text = equipmentDetail[indexPath.row].title
             cell.equipmentInfoContentLabel.text = equipmentDetail[indexPath.row].info
             return cell
             
@@ -178,6 +178,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             DB?.delInspectionRecord(equipmentRecordArray[indexPath.row].ID)
             equipmentRecordArray.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
+            self.tableView.reloadData()
         }
     }
 

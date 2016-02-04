@@ -48,7 +48,7 @@ class EquipmentEditTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("equipmentEditCell", forIndexPath: indexPath) as! EquipmentEditTableViewCell
-        cell.titleLabel.text = equipmentDetail[indexPath.row].title.rawValue
+        cell.titleLabel.text = equipmentDetail[indexPath.row].title
         cell.infoTextField.text = equipmentDetail[indexPath.row].info
         cell.equipment = self.equipment
         return cell

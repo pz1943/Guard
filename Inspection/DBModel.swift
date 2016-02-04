@@ -19,36 +19,25 @@ class DBModel {
     let roomID = Expression<Int>("roomID")
     let roomName = Expression<String>("roomName")
     
-    let equipmentID = Expression<Int>(EquipmentTableColumn.ID.rawValue)
-    let equipmentName = Expression<String>(EquipmentTableColumn.Name.rawValue)
-    let equipmentBrand = Expression<String?>(EquipmentTableColumn.Brand.rawValue)
-    let equipmentModel = Expression<String?>(EquipmentTableColumn.Model.rawValue)
-    let equipmentCapacity = Expression<String?>(EquipmentTableColumn.Capacity.rawValue)
-    let equipmentCommissionTime = Expression<String?>(EquipmentTableColumn.CommissionTime.rawValue)
-    let equipmentSN = Expression<String?>(EquipmentTableColumn.SN.rawValue)
-    let equipmentImageName = Expression<String?>(EquipmentTableColumn.ImageName.rawValue)
+    let equipmentID = Expression<Int>(Equipment.EquipmentInfoTitle.ID.rawValue)
+    let equipmentName = Expression<String>(Equipment.EquipmentInfoTitle.Name.rawValue)
+    let equipmentBrand = Expression<String?>(Equipment.EquipmentInfoTitle.Brand.rawValue)
+    let equipmentModel = Expression<String?>(Equipment.EquipmentInfoTitle.Model.rawValue)
+    let equipmentCapacity = Expression<String?>(Equipment.EquipmentInfoTitle.Capacity.rawValue)
+    let equipmentCommissionTime = Expression<String?>(Equipment.EquipmentInfoTitle.CommissionTime.rawValue)
+    let equipmentSN = Expression<String?>(Equipment.EquipmentInfoTitle.SN.rawValue)
+    let equipmentImageName = Expression<String?>(Equipment.EquipmentInfoTitle.ImageName.rawValue)
     
     let recordID = Expression<Int>("recordID")
     let recordMessage = Expression<String?>("recordMessage")
     let recordType = Expression<String>("recordType")
     let recordDate = Expression<NSDate>("recordDate")
     
-   
-    struct Constants {
-        static let defaultRoom = ["信息北机房","传输机房","电源室","信息南机房"]
-        static let defaultEquipmentInRoom = [
-            ["北1","北2","北3"],
-            ["传1","传2","传3"],
-            ["电1","电2"],
-            ["南1","南2","南3"]]
-    }
-    
     struct Static {
         static var instance:DBModel? = nil
         static var token:dispatch_once_t = 0
     }
     
-
     class func sharedInstance() -> DBModel! {
         dispatch_once(&Static.token) {
             Static.instance = self.init()
@@ -98,42 +87,6 @@ class DBModel {
         initDefaultData()
    }
     
-    func initDefaultData() {
-        var result = try! DB.prepare(roomTable.count)
-        for row: Row in result {
-            let countExpression = count(*)
-            if row.get(countExpression) == 0 {
-                for name in Constants.defaultRoom {
-                    let insert = roomTable.insert(self.roomName <- name)
-                    do {
-                        try DB.run(insert)
-                    } catch let error as NSError {
-                        print(error)
-                    }
-                }
-            }
-        }
-        result = try! DB.prepare(equipmentTable.count)
-        for row: Row in result {
-            for var roomIndex = 0; roomIndex < Constants.defaultRoom.count; roomIndex++ {
-                let countExpression = count(*)
-                if row.get(countExpression) == 0 {
-                    for var i = 0; i < Constants.defaultEquipmentInRoom[roomIndex].count; i++ {
-                        let insert = equipmentTable.insert(
-                            self.roomID <- roomIndex + 1,
-                            self.equipmentName <- Constants.defaultEquipmentInRoom[roomIndex][i],
-                            self.roomName <- Constants.defaultRoom[roomIndex])
-                        do {
-                            try DB.run(insert)
-                        } catch let error as NSError {
-                            print(error)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     
     func loadRoomTable() -> [RoomBrief]{
         let rows = Array(try! DB.prepare(roomTable))
@@ -173,16 +126,16 @@ class DBModel {
         for (type, date) in inspectionTimeDir {
             if let timeCycle = timeCycleDir[type]{
                 if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
-                    print(date.timeIntervalSinceNow.datatypeValue)
                     return false
-                } else {
-                    print("\(type),\(date.timeIntervalSinceNow), \(Double(timeCycle) * 24 * 3600)")
                 }
             }
         }
         return true
     }
-    
+    //MARK: TODO- 完善设备详情页面条目的特殊颜色显示。
+    func loadEquipmentInspectionState() {
+        
+    }
     
     func loadEquipment(equipmentID: Int) -> Equipment? {
         let row = Array(try! DB.prepare(equipmentTable.filter(self.equipmentID == equipmentID))).first
@@ -207,7 +160,7 @@ class DBModel {
         let alice = equipmentTable.filter(self.equipmentID == equipment.ID)
         for equipmentDetail in equipment.editableDetailArray {
             do {
-                try DB.run(alice.update(Expression<String>("\(equipmentDetail.title.rawValue)") <- equipmentDetail.info))
+                try DB.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
             } catch let error as NSError {
                 print(error)
             }
@@ -217,45 +170,16 @@ class DBModel {
     func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
         let alice = equipmentTable.filter(self.equipmentID == equipmentID)
         do {
-            if let expressionString = titleStringToExpressionString(equipmentDetailTitleString) {
-                if expressionString != EquipmentTableColumn.Name.rawValue {
-                    try DB.run(alice.update(Expression<String?>(expressionString) <- newValue))
-                } else {
-                    try DB.run(alice.update(Expression<String>(expressionString) <- newValue))
-                }
+            if equipmentDetailTitleString != Equipment.EquipmentInfoTitle.Name.rawValue {
+                try DB.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
+            } else {
+                try DB.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
             }
         } catch let error as NSError {
             print(error)
         }
     }
-    
-    func titleStringToExpressionString(title: String) -> String? {
-        switch title {
-        case "设备 ID":
-            return EquipmentTableColumn.ID.rawValue
-        case "设备名称":
-            return EquipmentTableColumn.Name.rawValue
-        case "机房 ID":
-            return EquipmentTableColumn.RoomID.rawValue
-        case "机房名称":
-            return EquipmentTableColumn.RoomName.rawValue
-        case "设备品牌":
-            return EquipmentTableColumn.Brand.rawValue
-        case "设备型号":
-            return EquipmentTableColumn.Model.rawValue
-        case "设备容量":
-            return EquipmentTableColumn.Capacity.rawValue
-        case "投运时间":
-            return EquipmentTableColumn.CommissionTime.rawValue
-        case "设备 SN":
-            return EquipmentTableColumn.SN.rawValue
-        case "图片名称":
-            return EquipmentTableColumn.ImageName.rawValue
-        default:
-            return nil
-        }
-    }
-    
+ 
     func addRoom(roomName: String) {
         let insert = roomTable.insert(self.roomName <- roomName)
         do {
@@ -293,8 +217,8 @@ class DBModel {
         }
     }
 
-    func delEquipment(equipmentId: Int) {
-        let alice = equipmentTable.filter(self.equipmentID == equipmentID)
+    func delEquipment(equipmentToDel: Int) {
+        let alice = equipmentTable.filter(self.equipmentID == equipmentToDel)
         do {
             try DB.run(alice.delete())
         } catch let error as NSError {
@@ -302,16 +226,67 @@ class DBModel {
         }
     }
     
-    func addInspectionRecord(record: InspectionRecord) {
-            let insert = recordTable.insert(self.recordMessage <- record.message,
-                self.recordType <- record.recordType,
-                self.equipmentID <- record.equipmentID,
-                self.recordDate <- record.date)
-            do {
-                try DB.run(insert)
-            } catch let error as NSError {
-                print(error)
+    
+}
+// 初始化数据，测试用
+extension DBModel {
+    struct Constants {
+        static let defaultRoom = ["信息北机房","传输机房","电源室","信息南机房"]
+        static let defaultEquipmentInRoom = [
+            ["北1","北2","北3"],
+            ["传1","传2","传3"],
+            ["电1","电2"],
+            ["南1","南2","南3"]]
+    }
+    
+    func initDefaultData() {
+        var result = try! DB.prepare(roomTable.count)
+        for row: Row in result {
+            let countExpression = count(*)
+            if row.get(countExpression) == 0 {
+                for name in Constants.defaultRoom {
+                    let insert = roomTable.insert(self.roomName <- name)
+                    do {
+                        try DB.run(insert)
+                    } catch let error as NSError {
+                        print(error)
+                    }
+                }
             }
+        }
+        result = try! DB.prepare(equipmentTable.count)
+        for row: Row in result {
+            for var roomIndex = 0; roomIndex < Constants.defaultRoom.count; roomIndex++ {
+                let countExpression = count(*)
+                if row.get(countExpression) == 0 {
+                    for var i = 0; i < Constants.defaultEquipmentInRoom[roomIndex].count; i++ {
+                        let insert = equipmentTable.insert(
+                            self.roomID <- roomIndex + 1,
+                            self.equipmentName <- Constants.defaultEquipmentInRoom[roomIndex][i],
+                            self.roomName <- Constants.defaultRoom[roomIndex])
+                        do {
+                            try DB.run(insert)
+                        } catch let error as NSError {
+                            print(error)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// 管理巡检数据
+extension DBModel {
+    func addInspectionRecord(record: InspectionRecord) {
+        let insert = recordTable.insert(self.recordMessage <- record.message,
+            self.recordType <- record.recordType,
+            self.equipmentID <- record.equipmentID,
+            self.recordDate <- record.date)
+        do {
+            try DB.run(insert)
+        } catch let error as NSError {
+            print(error)
+        }
     }
     
     func delInspectionRecord(recordID: Int) {
@@ -354,7 +329,4 @@ class DBModel {
         let row = DB.pluck(alice)
         return row?[recordDate]
     }
-    
 }
-
-

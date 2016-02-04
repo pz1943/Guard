@@ -37,11 +37,11 @@ class Equipment {
     
     typealias EquipmentDetailArray = [EquipmentDetail]
     struct EquipmentDetail {
-        var title: EquipmentTableColumnTitle
+        var title: String
         var info: String
         
-        init(title: EquipmentTableColumnTitle, info: String?) {
-            self.title = title
+        init(title: EquipmentInfoTitle, info: String?) {
+            self.title = title.titleInChinese
             if info != nil {
                 self.info = info!
             } else {
@@ -49,30 +49,7 @@ class Equipment {
             }
         }
     }
-    
-    enum EquipmentTableColumn: String{
-        case ID = (x, y)
-        case Name = "equipmentName"
-        case RoomID = "roomID"
-        case RoomName = "roomName"
-        case Brand = "equipmentBrand"
-        case Model = "equipmentModel"
-        case Capacity = "equipmentCapacity"
-        case CommissionTime = "equipmentCommissionTime"
-        case SN = "equipmentSN"
-        case ImageName = "equipmentImageName"
-        
-        struct columnString {
-            var name: String
-            var nameInChinese: String
-            init(name: String, nameInChinese: String) {
-                self.name = name
-                self.nameInChinese = nameInChinese
-            }
-        }
-    }
-    
-    enum EquipmentTableColumnTitle: String{
+    enum EquipmentInfoTitle: String{
         case ID = "设备 ID"
         case Name = "设备名称"
         case RoomID = "机房 ID"
@@ -83,8 +60,13 @@ class Equipment {
         case CommissionTime = "投运时间"
         case SN = "设备 SN"
         case ImageName = "图片名称"
+        
+        var titleInChinese: String {
+            get {
+                return self.rawValue
+            }
+        }
     }
-
     
     var ID: Int
     var name: String
@@ -108,7 +90,7 @@ class Equipment {
     var detailArray: EquipmentDetailArray {
         get {
             var detail = self.editableDetailArray
-            detail.insert(EquipmentDetail(title: EquipmentTableColumnTitle.RoomName, info: "\(self.roomName)"), atIndex: 1)
+            detail.insert(EquipmentDetail(title: EquipmentInfoTitle.RoomName, info: "\(self.roomName)"), atIndex: 1)
             return detail
         }
     }
@@ -116,12 +98,12 @@ class Equipment {
     var editableDetailArray: EquipmentDetailArray {
         get {
             var detail: [EquipmentDetail] = []
-            detail.insert(EquipmentDetail(title: EquipmentTableColumnTitle.Name, info: "\(self.name)"), atIndex: 0)
-            detail.append(EquipmentDetail(title: EquipmentTableColumnTitle.Brand, info: self.brand))
-            detail.append(EquipmentDetail(title: EquipmentTableColumnTitle.Model, info: self.model))
-            detail.append(EquipmentDetail(title: EquipmentTableColumnTitle.Capacity, info: self.capacity))
-            detail.append(EquipmentDetail(title: EquipmentTableColumnTitle.CommissionTime, info: self.commissionTime))
-            detail.append(EquipmentDetail(title: EquipmentTableColumnTitle.SN, info: self.SN))
+            detail.insert(EquipmentDetail(title: EquipmentInfoTitle.Name, info: "\(self.name)"), atIndex: 0)
+            detail.append(EquipmentDetail(title: EquipmentInfoTitle.Brand, info: self.brand))
+            detail.append(EquipmentDetail(title: EquipmentInfoTitle.Model, info: self.model))
+            detail.append(EquipmentDetail(title: EquipmentInfoTitle.Capacity, info: self.capacity))
+            detail.append(EquipmentDetail(title: EquipmentInfoTitle.CommissionTime, info: self.commissionTime))
+            detail.append(EquipmentDetail(title: EquipmentInfoTitle.SN, info: self.SN))
             return detail
         }
     }
