@@ -23,6 +23,9 @@ class QRCodeRecordTableViewController: UITableViewController {
         self.navigationItem.title = equipment!.roomName + equipment!.name
     }
     
+    @IBAction func QRDone(sender: UIBarButtonItem) {
+        self.navigationController?.popToRootViewControllerAnimated(false)
+    }
     
     var equipmentID: Int? {
         didSet {
@@ -80,7 +83,6 @@ class QRCodeRecordTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("InspectionTypeCell", forIndexPath: indexPath)
             cell.textLabel?.text = Inspection.getType()[indexPath.row]
             return cell
-
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("RecordCell", forIndexPath: indexPath) as! QRCodeTableViewCell
             cell.recordType.text = record?.recordType
@@ -154,8 +156,8 @@ class QRCodeRecordTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "QRDone" {
+            print(4)
             DB?.addInspectionRecord(record!)
         }
     }
-
 }

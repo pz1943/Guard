@@ -263,7 +263,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="Fyb-09-fFX" kind="presentation" identifier="RecordSegue" id="6oN-Nv-dad"/>
+                        <segue destination="W3h-Bd-GIJ" kind="show" identifier="RecordSegue" id="DbH-4O-Yik"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lBb-JV-bCu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -546,7 +546,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bKq-Re-HB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Fx5-Mt-chg" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5561" y="1190"/>
+            <point key="canvasLocation" x="4979" y="1190"/>
         </scene>
         <!--设备图片-->
         <scene sceneID="rmR-wJ-iOp">
@@ -664,24 +664,6 @@
                 <exit id="3hM-7p-MMl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="6202" y="1190"/>
-        </scene>
-        <!--扫码记录导航-->
-        <scene sceneID="3wt-AY-AHB">
-            <objects>
-                <navigationController title="扫码记录导航" automaticallyAdjustsScrollViewInsets="NO" id="Fyb-09-fFX" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vZU-RD-OuX">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="W3h-Bd-GIJ" kind="relationship" relationship="rootViewController" id="jJV-WA-aJu"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VIK-iq-cxc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4877" y="1190"/>
         </scene>
         <!--任意设备扫码-->
         <scene sceneID="dii-1O-7LS">

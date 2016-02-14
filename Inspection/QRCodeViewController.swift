@@ -21,12 +21,6 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadQRCode()
-        qrCodeFrameView = UIView()
-        qrCodeFrameView?.layer.borderColor = UIColor.greenColor().CGColor
-        qrCodeFrameView?.layer.borderWidth = 2
-        view.addSubview(qrCodeFrameView!)
-        view.bringSubviewToFront(qrCodeFrameView!)
         DB = DBModel.sharedInstance()
         if equipmentID != nil {
             if let equipment = DB?.loadEquipment(equipmentID!) {
@@ -37,12 +31,15 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     }
     
     override func viewWillAppear(animated: Bool) {
-        session?.startRunning()
-        qrCodeFrameView?.frame=CGRectZero
+        loadQRCode()
     }
     
     override func viewWillDisappear(animated: Bool) {
-        session?.stopRunning()
+        QRLayer?.removeFromSuperlayer()
+        qrCodeFrameView?.removeFromSuperview()
+        session = nil
+        QRLayer = nil
+        qrCodeFrameView = nil
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,6 +70,14 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         QRLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         QRLayer!.frame = self.view.layer.bounds
         self.view.layer.insertSublayer(QRLayer!, atIndex: 0)
+        qrCodeFrameView = UIView()
+        qrCodeFrameView?.layer.borderColor = UIColor.greenColor().CGColor
+        qrCodeFrameView?.layer.borderWidth = 2
+        view.addSubview(qrCodeFrameView!)
+        view.bringSubviewToFront(qrCodeFrameView!)
+        
+        session?.startRunning()
+        qrCodeFrameView?.frame=CGRectZero
     }
     
     
@@ -99,13 +104,19 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                     alertController.addAction(alert)
                     self.presentViewController(alertController, animated: false, completion: nil)
                 } else {
-                    self.performSegueWithIdentifier("RecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
+                    dispatch_after(DISPATCH_TIME_NOW, dispatch_get_main_queue(), { () -> Void in
+                        self.performSegueWithIdentifier("RecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
+                        print(6)
+                    })
                 }
             } else {   //无指定设备
                 let QREquipmentID = NSString(string: QRResult).integerValue
                 if let _ = DB?.loadEquipment(QREquipmentID) {  //扫描结果是设备 ID，进入记录页面。
                     self.equipmentID = QREquipmentID
-                    self.performSegueWithIdentifier("RecordSegue", sender: self)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.performSegueWithIdentifier("RecordSegue", sender: self)
+                        print(0)
+                    })
                 } else {  // 不是设备 ID，提示后返回
                     let alertController = UIAlertController(title: "错误的二维码", message: "扫描的二维码不是管理的设备，请确认后重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，重新开始搜索
                     let alert = UIAlertAction(title: "重试", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
@@ -113,7 +124,6 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                     })
                     alertController.addAction(alert)
                     self.presentViewController(alertController, animated: false, completion: nil)
-
                 }
             }
         }
@@ -123,10 +133,9 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "RecordSegue" {
-            if let NVC = segue.destinationViewController as? UINavigationController {
-                if let DVC = NVC.viewControllers.first as? QRCodeRecordTableViewController{
-                    DVC.equipmentID = self.equipmentID
-                }
+            if let DVC = segue.destinationViewController as? QRCodeRecordTableViewController{
+                DVC.equipmentID = self.equipmentID
+                print(3)
             }
         }
     }
