@@ -23,7 +23,6 @@ class EquipmentTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         if selectRoomID != nil {
-            print(7)
             equipmentArray = DB!.loadEquipmentTable(selectRoomID!)
             self.tableView.reloadData()
         }
@@ -114,6 +113,6 @@ class EquipmentTableViewController: UITableViewController {
     }
     
     @IBAction func backToEquipmentTable(segue: UIStoryboardSegue) {
-        print(5)
+
     }
 }

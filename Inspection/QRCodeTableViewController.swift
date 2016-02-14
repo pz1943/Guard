@@ -23,10 +23,6 @@ class QRCodeRecordTableViewController: UITableViewController {
         self.navigationItem.title = equipment!.roomName + equipment!.name
     }
     
-    @IBAction func QRDone(sender: UIBarButtonItem) {
-        self.navigationController?.popToRootViewControllerAnimated(false)
-    }
-    
     var equipmentID: Int? {
         didSet {
             DB = DBModel.sharedInstance()

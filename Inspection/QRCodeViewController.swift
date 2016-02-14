@@ -106,7 +106,6 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                 } else {
                     dispatch_after(DISPATCH_TIME_NOW, dispatch_get_main_queue(), { () -> Void in
                         self.performSegueWithIdentifier("RecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
-                        print(6)
                     })
                 }
             } else {   //无指定设备
@@ -115,7 +114,6 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                     self.equipmentID = QREquipmentID
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.performSegueWithIdentifier("RecordSegue", sender: self)
-                        print(0)
                     })
                 } else {  // 不是设备 ID，提示后返回
                     let alertController = UIAlertController(title: "错误的二维码", message: "扫描的二维码不是管理的设备，请确认后重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，重新开始搜索
@@ -135,7 +133,6 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         if segue.identifier == "RecordSegue" {
             if let DVC = segue.destinationViewController as? QRCodeRecordTableViewController{
                 DVC.equipmentID = self.equipmentID
-                print(3)
             }
         }
     }
