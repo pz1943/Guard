@@ -116,9 +116,17 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             }
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            cell.equipmentInfoTitleLabel.text = Inspection.getType()[indexPath.row]
             let inspectionType = Inspection.getType()[indexPath.row]
-            cell.equipmentInfoContentLabel.text = recentInspectionTime[inspectionType]?.datatypeValue
+            cell.equipmentInfoTitleLabel.text = inspectionType
+            if let date = recentInspectionTime[inspectionType] {
+                if DBModel.isEquipmentInspectionCompleted(inspectionType, date: date) == false{
+                    cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
+                }
+                cell.equipmentInfoContentLabel.text = date.datatypeValue
+            } else {
+                cell.equipmentInfoContentLabel.text = nil
+                cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
+            }
             return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell

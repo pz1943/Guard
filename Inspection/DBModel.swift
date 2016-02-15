@@ -112,22 +112,27 @@ class DBModel {
         let rows = Array(try! DB.prepare(equipmentTable.filter(self.roomID == roomID)))
         var equipments: [EquipmentBrief] = [ ]
         for row in rows {
-            equipments.append(EquipmentBrief(ID: row[equipmentID], name: row[equipmentName], completedFlag: isEquipmentInspectionCompleted(row[equipmentID])))
+            equipments.append(EquipmentBrief(ID: row[equipmentID], name: row[equipmentName], completedFlag: isEquipmentInspectionsCompleted(row[equipmentID])))
         }
         return equipments
     }
     
-    func isEquipmentInspectionCompleted(equipmentID: Int) -> Bool {
+    func isEquipmentInspectionsCompleted(equipmentID: Int) -> Bool {
         let inspectionTimeDir = loadRecentInspectionTime(equipmentID)
         if inspectionTimeDir.count < Inspection.typeCount {
             return false
         }
-        let timeCycleDir = Inspection.getTimeCycleDir()
         for (type, date) in inspectionTimeDir {
-            if let timeCycle = timeCycleDir[type]{
-                if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
-                    return false
-                }
+            DBModel.isEquipmentInspectionCompleted(type, date: date)
+        }
+        return true
+    }
+    
+    static func isEquipmentInspectionCompleted(type: String, date: NSDate) -> Bool {
+        let timeCycleDir = Inspection.getTimeCycleDir()
+        if let timeCycle = timeCycleDir[type]{
+            if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
+                return false
             }
         }
         return true
@@ -240,35 +245,25 @@ extension DBModel {
     }
     
     func initDefaultData() {
-        var result = try! DB.prepare(roomTable.count)
-        for row: Row in result {
-            let countExpression = count(*)
-            if row.get(countExpression) == 0 {
-                for name in Constants.defaultRoom {
-                    let insert = roomTable.insert(self.roomName <- name)
+        if DB.scalar(roomTable.count) == 0 {
+            for name in Constants.defaultRoom {
+                let insert = roomTable.insert(self.roomName <- name)
+                do {
+                    try DB.run(insert)
+                } catch let error as NSError {
+                    print(error)
+                }
+            }
+            for var roomIndex = 0; roomIndex < Constants.defaultRoom.count; roomIndex++ {
+                for var i = 0; i < Constants.defaultEquipmentInRoom[roomIndex].count; i++ {
+                    let insert = equipmentTable.insert(
+                        self.roomID <- roomIndex + 1,
+                        self.equipmentName <- Constants.defaultEquipmentInRoom[roomIndex][i],
+                        self.roomName <- Constants.defaultRoom[roomIndex])
                     do {
                         try DB.run(insert)
                     } catch let error as NSError {
                         print(error)
-                    }
-                }
-            }
-        }
-        result = try! DB.prepare(equipmentTable.count)
-        for row: Row in result {
-            for var roomIndex = 0; roomIndex < Constants.defaultRoom.count; roomIndex++ {
-                let countExpression = count(*)
-                if row.get(countExpression) == 0 {
-                    for var i = 0; i < Constants.defaultEquipmentInRoom[roomIndex].count; i++ {
-                        let insert = equipmentTable.insert(
-                            self.roomID <- roomIndex + 1,
-                            self.equipmentName <- Constants.defaultEquipmentInRoom[roomIndex][i],
-                            self.roomName <- Constants.defaultRoom[roomIndex])
-                        do {
-                            try DB.run(insert)
-                        } catch let error as NSError {
-                            print(error)
-                        }
                     }
                 }
             }
@@ -310,11 +305,17 @@ extension DBModel {
         }
         for row in array {
             let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
-            recordArray.append(record)
+            recordArray.insert(record, atIndex: 0)
         }
         return recordArray
     }
-    
+    func loadInstectionRecordFromRecordID(recordID: Int) -> InspectionRecord {
+        let alice = recordTable.filter(self.recordID == recordID)
+        let row = Array(try! DB.prepare(alice)).first!
+        let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
+        return record
+
+    }
     func loadRecentInspectionTime(equipmentID: Int) -> [String: NSDate] {
         var inspectionTime: [String: NSDate] = [: ]
         for type in Inspection.getType() {
@@ -323,10 +324,14 @@ extension DBModel {
         }
         return inspectionTime
     }
-    //MARK: TODO 得到的不是最新的数据，需要修改
+
     func loadRecentInspectionTimeForType(equipmentID: Int, inspectionType: String) -> NSDate? {
         let alice = recordTable.filter(self.equipmentID == equipmentID && self.recordType == inspectionType)
-        let row = DB.pluck(alice)
-        return row?[recordDate]
+        if let lastRecordID = DB.scalar(alice.select(recordID.max)) {
+            let record = loadInstectionRecordFromRecordID(lastRecordID)
+            return record.date
+        } else {
+            return nil
+        }
     }
 }

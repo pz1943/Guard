@@ -15,7 +15,7 @@ struct Inspection {
         var timeCycle: Double
     }
     static var InspectionTypeArray: [InspectionType] = [InspectionType(name: "日巡视", timeCycle: 1),
-        InspectionType(name: "周测试", timeCycle: 7),
+        InspectionType(name: "周测试", timeCycle: 0.001),
         InspectionType(name: "滤网更换", timeCycle: 90),
         InspectionType(name: "室外机清洁", timeCycle: 90),
         InspectionType(name: "皮带更换", timeCycle: 180),

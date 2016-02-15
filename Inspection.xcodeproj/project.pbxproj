@@ -26,12 +26,12 @@
 		18933E6D1C47DA5200357F74 /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E641C47DA5200357F74 /* RoomTableViewCell.swift */; };
 		18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E651C47DA5200357F74 /* RoomTableViewController.swift */; };
 		18933E741C47F0B500357F74 /* EquipmentDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */; };
-		18C2A9341C63A2D3001432C6 /* 工作记录 in Resources */ = {isa = PBXBuildFile; fileRef = 18C2A9331C63A2D3001432C6 /* 工作记录 */; };
 		18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E42D631C512BDA004A9015 /* QRCodeViewController.swift */; };
 		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
 		499B40A81C62E08700FD6425 /* Inspection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B40A71C62E08700FD6425 /* Inspection.swift */; };
+		49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */ = {isa = PBXBuildFile; fileRef = 49EE2BB31C71A5D500871F8F /* 工作记录 */; };
 		590CC1FC8F8F9C4BD07DF375 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C45D85E3F38A700E259C0 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -79,12 +79,12 @@
 		18933E641C47DA5200357F74 /* RoomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
 		18933E651C47DA5200357F74 /* RoomTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewController.swift; sourceTree = "<group>"; };
 		18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentDetailTableViewController.swift; sourceTree = "<group>"; };
-		18C2A9331C63A2D3001432C6 /* 工作记录 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "工作记录"; sourceTree = "<group>"; };
 		18E42D631C512BDA004A9015 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewController.swift; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
 		499B40A71C62E08700FD6425 /* Inspection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspection.swift; sourceTree = "<group>"; };
+		49EE2BB31C71A5D500871F8F /* 工作记录 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "工作记录"; sourceTree = "<group>"; };
 		7988BE7B4F86F30202425F39 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A0283FEF7611512015DFE086 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,7 +118,7 @@
 		18933E201C47D8E100357F74 = {
 			isa = PBXGroup;
 			children = (
-				18C2A9331C63A2D3001432C6 /* 工作记录 */,
+				49EE2BB31C71A5D500871F8F /* 工作记录 */,
 				18933E2B1C47D8E100357F74 /* Inspection */,
 				18933E431C47D8E100357F74 /* InspectionTests */,
 				18933E4E1C47D8E100357F74 /* InspectionUITests */,
@@ -347,7 +347,7 @@
 			files = (
 				18933E3A1C47D8E100357F74 /* LaunchScreen.storyboard in Resources */,
 				18933E371C47D8E100357F74 /* Assets.xcassets in Resources */,
-				18C2A9341C63A2D3001432C6 /* 工作记录 in Resources */,
+				49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */,
 				18933E321C47D8E100357F74 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
