@@ -16,7 +16,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         tableView.rowHeight = UITableViewAutomaticDimension
 
         DB = DBModel.sharedInstance()
-        NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: nil) { (notification) -> Void in
+        NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.takeANewPhoto()
         }
     }
@@ -115,7 +115,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 return cell
             }
         case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             let inspectionType = Inspection.getType()[indexPath.row]
             cell.equipmentInfoTitleLabel.text = inspectionType
             if let date = recentInspectionTime[inspectionType] {

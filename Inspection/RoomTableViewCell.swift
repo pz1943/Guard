@@ -24,7 +24,7 @@ class RoomTableViewCell: UITableViewCell, UITextFieldDelegate {
         if let roomName = roomAddTextField.text {
             DB?.addRoom(roomName)
             roomAddTextField.text = nil
-            NSNotificationCenter.defaultCenter().postNotificationName("roomTableNeedRefreshNotification", object: nil)
+            NSNotificationCenter.defaultCenter().postNotificationName("RoomTableNeedRefreshNotification", object: nil)
         }
     }
     

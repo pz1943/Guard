@@ -11,6 +11,16 @@ import AVFoundation
 
 class QRCodeForAnyEquipmentViewController: QRCodeViewController {
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "RecordSegue" {
+            if let NVC = segue.destinationViewController as? UINavigationController {
+                if let DVC = NVC.viewControllers[0] as? QRCodeForAnyEquipmentTableViewController{
+                    DVC.equipmentID = self.equipmentID
+                }
+            }
+        }
+    }
+
     @IBAction func backToQRCodeForAnyEquipmentViewController(segue: UIStoryboardSegue) {
         
     }

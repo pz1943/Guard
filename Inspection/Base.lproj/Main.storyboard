@@ -124,7 +124,7 @@
         <scene sceneID="6SC-h9-m3d">
             <objects>
                 <navigationController title="机房信息导航" automaticallyAdjustsScrollViewInsets="NO" id="PvT-ct-yAo" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="UQS-gL-cGs"/>
+                    <tabBarItem key="tabBarItem" title="设备详情" id="UQS-gL-cGs"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="EFu-1o-1Mj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -362,8 +362,53 @@
                                     <outlet property="equipmentInfoTitleLabel" destination="ACK-rU-qiD" id="0WV-9v-a8T"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentTimeCycleCell" rowHeight="52" id="MR7-Xo-8lN" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="196" width="600" height="52"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MR7-Xo-8lN" id="3v6-3N-j0o">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="51"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设备名称" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="71E-sS-iVl">
+                                            <rect key="frame" x="8" y="16" width="68" height="19"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="240" verticalHuggingPriority="251" text="机房精密空调1" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wG0-qV-jV8">
+                                            <rect key="frame" x="96" y="15" width="496" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="71E-sS-iVl" firstAttribute="top" secondItem="3v6-3N-j0o" secondAttribute="topMargin" constant="8" id="3B4-My-9g9"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="wG0-qV-jV8" secondAttribute="trailing" id="EhR-Qm-1qB"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="71E-sS-iVl" secondAttribute="leading" id="LSc-xd-XGK"/>
+                                        <constraint firstItem="wG0-qV-jV8" firstAttribute="leading" secondItem="71E-sS-iVl" secondAttribute="trailing" constant="20" id="XEG-lX-YNT"/>
+                                        <constraint firstItem="71E-sS-iVl" firstAttribute="centerY" secondItem="wG0-qV-jV8" secondAttribute="centerY" id="etW-Ec-YZ5"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="71E-sS-iVl" secondAttribute="bottom" constant="8" id="idL-ac-FEv"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="wG0-qV-jV8" secondAttribute="trailing" id="wNJ-iJ-keR"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="EhR-Qm-1qB"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="heightClass=regular-widthClass=regular">
+                                        <mask key="constraints">
+                                            <include reference="EhR-Qm-1qB"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="equipmentInfoContentLabel" destination="wG0-qV-jV8" id="pJ7-Jh-B04"/>
+                                    <outlet property="equipmentInfoTitleLabel" destination="71E-sS-iVl" id="UGr-av-e1x"/>
+                                </connections>
+                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentImageCell" rowHeight="141" id="2Uf-zb-8pz" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="196" width="600" height="141"/>
+                                <rect key="frame" x="0.0" y="248" width="600" height="141"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2Uf-zb-8pz" id="fxm-OG-34I">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="140"/>
@@ -390,7 +435,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentRecordCell" rowHeight="91" id="0dl-98-6eh" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="337" width="600" height="91"/>
+                                <rect key="frame" x="0.0" y="389" width="600" height="91"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0dl-98-6eh" id="MNq-ew-Oik">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="90"/>
@@ -538,7 +583,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="完成" id="YM6-Ed-Jav">
                             <connections>
-                                <segue destination="Fx5-Mt-chg" kind="unwind" identifier="QRDone" unwindAction="backToEquipmentTable:" id="CJU-3S-aBo"/>
+                                <segue destination="Fx5-Mt-chg" kind="unwind" unwindAction="backToQRCodeForAnyEquipmentViewController:" id="Qhm-Ag-hYQ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -678,20 +723,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="eq9-lk-9sd"/>
+                    <tabBarItem key="tabBarItem" title="设备扫码" id="eq9-lk-9sd"/>
                     <navigationItem key="navigationItem" id="CZv-1v-WwU">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="n3p-HF-dFQ">
-                            <connections>
-                                <segue destination="sCg-sy-xxM" kind="unwind" unwindAction="backToEquipmentTable:" id="4nX-Ak-Uki"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="n3p-HF-dFQ"/>
                     </navigationItem>
                     <connections>
                         <segue destination="v1a-wx-bsQ" kind="presentation" identifier="RecordSegue" id="NFq-je-Xsu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Osa-da-2Hs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="sCg-sy-xxM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2047" y="1190"/>
         </scene>
@@ -825,12 +865,12 @@
                     <navigationItem key="navigationItem" id="ui2-Pz-FWl">
                         <barButtonItem key="leftBarButtonItem" title="取消" id="kJw-J3-gQU">
                             <connections>
-                                <segue destination="vTc-6j-Qvp" kind="unwind" unwindAction="backToQRCodeForAnyEquipmentViewController:" id="vs6-gn-8iB"/>
+                                <segue destination="vTc-6j-Qvp" kind="unwind" identifier="channel" unwindAction="backToQRCodeForAnyEquipmentViewController:" id="nOy-lN-VqM"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="完成" id="Lmt-RH-IsZ">
                             <connections>
-                                <segue destination="vTc-6j-Qvp" kind="unwind" unwindAction="backToQRCodeForAnyEquipmentViewController:" id="9fP-U9-WR6"/>
+                                <segue destination="vTc-6j-Qvp" kind="unwind" identifier="QRDone" unwindAction="backToQRCodeForAnyEquipmentViewController:" id="rfK-9G-pIU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -862,7 +902,7 @@
         <scene sceneID="CeJ-4L-hkc">
             <objects>
                 <navigationController title="测试周期导航" automaticallyAdjustsScrollViewInsets="NO" id="LUc-Jl-JYU" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="ncv-rN-iTj"/>
+                    <tabBarItem key="tabBarItem" title="测试周期" id="ncv-rN-iTj"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OKp-qB-Xoi">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -880,6 +920,6 @@
     </scenes>
     <resources>
         <image name="9febd5448b793109750ad48cd4f29fe9" width="220" height="220"/>
-        <image name="check" width="220" height="220"/>
+        <image name="check" width="256" height="256"/>
     </resources>
 </document>
