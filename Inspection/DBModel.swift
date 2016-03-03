@@ -44,7 +44,15 @@ class DBModel {
         }
         return Static.instance!
     }
-
+    
+    func reload() {
+        let path = NSSearchPathForDirectoriesInDomains(
+            .DocumentDirectory, .UserDomainMask, true
+            ).first!
+        print("new DB at \(path)")
+        DB = try! Connection("\(path)/db.sqlite3")
+    }
+    
     required init() {
         let path = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true
@@ -53,7 +61,7 @@ class DBModel {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
         dateFormatter.timeZone = NSTimeZone.systemTimeZone()
-
+        
         DB = try! Connection("\(path)/db.sqlite3")
         self.roomTable = Table("roomTable")
         self.equipmentTable = Table("equipmentTable")

@@ -27,6 +27,16 @@ class InspectionCycleTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func shareDataBase(sender: UIBarButtonItem) {
+        let path = NSSearchPathForDirectoriesInDomains(
+            .DocumentDirectory, .UserDomainMask, true
+            ).first!
+        let fullPath = "\(path)/db.sqlite3"
+        let url = NSURL(fileURLWithPath: fullPath)
+
+        let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
     var DB: DBModel?
     var timeCycleArray: [(String, Double)] = [ ]
     // MARK: - Table view data source

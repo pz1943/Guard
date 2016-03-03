@@ -30,6 +30,11 @@ class RoomTableViewController: UITableViewController {
         rooms = DB!.loadRoomTable()
         tableView.reloadData()
     }
+    @IBAction func refresh(sender: UIRefreshControl) {
+        rooms = DB!.loadRoomTable()
+        tableView.reloadData()
+        sender.endRefreshing()
+    }
 
     @IBAction func backToRoomTable(segue: UIStoryboardSegue) {
         

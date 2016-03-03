@@ -96,6 +96,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="机房信息" id="xyC-fa-z5M"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="v7f-tC-pNN">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh:" destination="4zb-Gm-C0H" eventType="valueChanged" id="qAu-nV-Oaa"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="egE-id-Acb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -104,7 +110,7 @@
         <!--主页面-->
         <scene sceneID="J8v-90-duJ">
             <objects>
-                <tabBarController title="主页面" automaticallyAdjustsScrollViewInsets="NO" id="2FS-8b-ZXJ" sceneMemberID="viewController">
+                <tabBarController title="主页面" automaticallyAdjustsScrollViewInsets="NO" id="2FS-8b-ZXJ" customClass="RootViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="BEP-A4-LrY">
                         <autoresizingMask key="autoresizingMask"/>
@@ -735,7 +741,7 @@
             </objects>
             <point key="canvasLocation" x="2047" y="1190"/>
         </scene>
-        <!--测试周期-->
+        <!--设置-->
         <scene sceneID="Tyn-jT-8Nq">
             <objects>
                 <tableViewController id="pKO-vD-DsI" customClass="InspectionCycleTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
@@ -795,7 +801,13 @@
                             <outlet property="delegate" destination="pKO-vD-DsI" id="kHd-KW-2s5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="测试周期" id="Adr-qx-TH9"/>
+                    <navigationItem key="navigationItem" title="设置" id="Adr-qx-TH9">
+                        <barButtonItem key="rightBarButtonItem" title="数据库导出" style="plain" id="bng-j1-8r1">
+                            <connections>
+                                <action selector="shareDataBase:" destination="pKO-vD-DsI" id="H1q-ba-coX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jI3-qn-X2s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
