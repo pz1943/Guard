@@ -14,7 +14,7 @@ class InspectionCycleTableViewController: UITableViewController {
         super.viewDidLoad()
 
         DB = DBModel.sharedInstance()
-        timeCycleArray = Inspection.getTimeCycleArray()
+        timeCycleDir = DB!.loadInspectionTypeArray()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -38,23 +38,23 @@ class InspectionCycleTableViewController: UITableViewController {
         self.presentViewController(controller, animated: true, completion: nil)
     }
     var DB: DBModel?
-    var timeCycleArray: [(String, Double)] = [ ]
+    var timeCycleDir = InspectionTypeDir()
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return timeCycleDir.dir.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return timeCycleArray.count
+        return timeCycleDir.dir[timeCycleDir.equipmentTypeArray[section]]?.count ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("timeCycleCell", forIndexPath: indexPath) as! InspectionCycleTableViewCell
-        cell.typeLabel.text = timeCycleArray[indexPath.row].0
-        cell.timeCycelLabel.text = "\(Int(timeCycleArray[indexPath.row].1))天"
+        cell.typeLabel.text = timeCycleDir[indexPath.section][indexPath.row].inspectionTypeName
+        cell.timeCycelLabel.text = Int(timeCycleDir[indexPath.section][indexPath.row].inspectionCycle).description
         // Configure the cell...
 
         return cell

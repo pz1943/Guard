@@ -52,6 +52,7 @@ class Equipment {
     enum EquipmentInfoTitle: String{
         case ID = "设备 ID"
         case Name = "设备名称"
+        case EQType = "设备类型"
         case RoomID = "机房 ID"
         case RoomName = "机房名称"
         case Brand = "设备品牌"
@@ -70,6 +71,7 @@ class Equipment {
     
     var ID: Int
     var name: String
+    var type: String?
     var roomID: Int
     var roomName: String
     var brand: String?
@@ -91,6 +93,7 @@ class Equipment {
         get {
             var detail = self.editableDetailArray
             detail.insert(EquipmentDetail(title: EquipmentInfoTitle.RoomName, info: "\(self.roomName)"), atIndex: 1)
+            detail.insert(EquipmentDetail(title: EquipmentInfoTitle.EQType, info: "\(self.type)"), atIndex: 1)
             return detail
         }
     }
@@ -110,6 +113,7 @@ class Equipment {
     
     init(ID: Int,
         name: String,
+        type: String?,
         roomID: Int,
         roomName: String,
         brand: String?,
@@ -122,6 +126,7 @@ class Equipment {
     {
         self.ID = ID
         self.name = name
+        self.type = type
         self.roomID = roomID
         self.roomName = roomName
         self.brand = brand

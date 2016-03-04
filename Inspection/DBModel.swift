@@ -15,12 +15,14 @@ class DBModel {
     var roomTable: Table
     var equipmentTable: Table
     var recordTable: Table
+    var inspectionTypeTable: Table
 
     let roomID = Expression<Int>("roomID")
     let roomName = Expression<String>("roomName")
     
     let equipmentID = Expression<Int>(Equipment.EquipmentInfoTitle.ID.rawValue)
     let equipmentName = Expression<String>(Equipment.EquipmentInfoTitle.Name.rawValue)
+    let equipmentType = Expression<String>("equipmentType")
     let equipmentBrand = Expression<String?>(Equipment.EquipmentInfoTitle.Brand.rawValue)
     let equipmentModel = Expression<String?>(Equipment.EquipmentInfoTitle.Model.rawValue)
     let equipmentCapacity = Expression<String?>(Equipment.EquipmentInfoTitle.Capacity.rawValue)
@@ -30,8 +32,11 @@ class DBModel {
     
     let recordID = Expression<Int>("recordID")
     let recordMessage = Expression<String?>("recordMessage")
-    let recordType = Expression<String>("recordType")
+    let inspectionTypeName = Expression<String>("inspectionTypeName")
     let recordDate = Expression<NSDate>("recordDate")
+    
+    let inspectionTypeID = Expression<Int>("insepectionTypeID")
+    let inspectionCycle = Expression<Double>("inspectionCycle")
     
     struct Static {
         static var instance:DBModel? = nil
@@ -66,6 +71,7 @@ class DBModel {
         self.roomTable = Table("roomTable")
         self.equipmentTable = Table("equipmentTable")
         self.recordTable = Table("recordTable")
+        self.inspectionTypeTable = Table("inspectionTypeTable")
         
         try! DB.run(roomTable.create(ifNotExists: true) { t in
             t.column(roomID, primaryKey: true)
@@ -75,6 +81,7 @@ class DBModel {
         try! DB.run(equipmentTable.create(ifNotExists: true) { t in
             t.column(equipmentID, primaryKey: true)
             t.column(equipmentName)
+            t.column(equipmentType)
             t.column(roomID)
             t.column(roomName)
             t.column(equipmentBrand)
@@ -88,13 +95,23 @@ class DBModel {
         try! DB.run(recordTable.create(ifNotExists: true) { t in
             t.column(recordID, primaryKey: true)
             t.column(equipmentID)
-            t.column(recordType)
+            t.column(inspectionTypeName)
             t.column(recordMessage)
             t.column(recordDate)
             })
+        
+        try! DB.run(inspectionTypeTable.create(ifNotExists: true) { t in
+            t.column(inspectionTypeID, primaryKey: true)
+            t.column(equipmentType)
+            t.column(inspectionCycle)
+            })
+
         initDefaultData()
    }
     
+}
+//MARK: RoomAndEquipmentManagement
+extension DBModel {
     
     func loadRoomTable() -> [RoomBrief]{
         let rows = Array(try! DB.prepare(roomTable))
@@ -145,14 +162,11 @@ class DBModel {
         }
         return true
     }
-    //MARK: TODO- 完善设备详情页面条目的特殊颜色显示。
-    func loadEquipmentInspectionState() {
-        
-    }
-    
+
     func loadEquipment(equipmentID: Int) -> Equipment? {
         let row = Array(try! DB.prepare(equipmentTable.filter(self.equipmentID == equipmentID))).first
         if let name =  row?[equipmentName] {
+            let EQType = row?[equipmentType]
             let locatedRoomID = row?[roomID]
             let locatedRoomName = row?[roomName]
             let brand = row?[equipmentBrand]
@@ -162,13 +176,13 @@ class DBModel {
             let SN = row?[equipmentSN]
             let ImageName = row?[equipmentImageName]
             
-            return Equipment(ID: equipmentID, name: name, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
-
+            return Equipment(ID: equipmentID, name: name, type: EQType, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
+            
         } else {
             return nil
         }
     }
-
+    
     func editEquipment(equipment: Equipment) {
         let alice = equipmentTable.filter(self.equipmentID == equipment.ID)
         for equipmentDetail in equipment.editableDetailArray {
@@ -179,7 +193,7 @@ class DBModel {
             }
         }
     }
-// to edit one singel Detail
+    // to edit one singel Detail
     func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
         let alice = equipmentTable.filter(self.equipmentID == equipmentID)
         do {
@@ -192,7 +206,7 @@ class DBModel {
             print(error)
         }
     }
- 
+    
     func addRoom(roomName: String) {
         let insert = roomTable.insert(self.roomName <- roomName)
         do {
@@ -201,7 +215,7 @@ class DBModel {
             print(error)
         }
     }
-
+    
     func delRoom(roomID: Int) {
         let roomTableAlice = roomTable.filter(self.roomID == roomID)
         do {
@@ -229,7 +243,7 @@ class DBModel {
             print(error)
         }
     }
-
+    
     func delEquipment(equipmentToDel: Int) {
         let alice = equipmentTable.filter(self.equipmentID == equipmentToDel)
         do {
@@ -238,10 +252,8 @@ class DBModel {
             print(error)
         }
     }
-    
-    
 }
-// 初始化数据，测试用
+//MARK: testDateInit
 extension DBModel {
     struct Constants {
         static let defaultRoom = ["信息北机房","传输机房","电源室","信息南机房"]
@@ -278,11 +290,11 @@ extension DBModel {
         }
     }
 }
-// 管理巡检数据
+//MARK: RecordManagement
 extension DBModel {
     func addInspectionRecord(record: InspectionRecord) {
         let insert = recordTable.insert(self.recordMessage <- record.message,
-            self.recordType <- record.recordType,
+            self.inspectionTypeName <- record.recordType,
             self.equipmentID <- record.equipmentID,
             self.recordDate <- record.date)
         do {
@@ -312,7 +324,7 @@ extension DBModel {
             print(error)
         }
         for row in array {
-            let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
+            let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[inspectionTypeName], recordData: row[recordMessage])
             recordArray.insert(record, atIndex: 0)
         }
         return recordArray
@@ -320,7 +332,7 @@ extension DBModel {
     func loadInstectionRecordFromRecordID(recordID: Int) -> InspectionRecord {
         let alice = recordTable.filter(self.recordID == recordID)
         let row = Array(try! DB.prepare(alice)).first!
-        let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[recordType], recordData: row[recordMessage])
+        let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[inspectionTypeName], recordData: row[recordMessage])
         return record
 
     }
@@ -334,7 +346,7 @@ extension DBModel {
     }
 
     func loadRecentInspectionTimeForType(equipmentID: Int, inspectionType: String) -> NSDate? {
-        let alice = recordTable.filter(self.equipmentID == equipmentID && self.recordType == inspectionType)
+        let alice = recordTable.filter(self.equipmentID == equipmentID && self.inspectionTypeName == inspectionType)
         if let lastRecordID = DB.scalar(alice.select(recordID.max)) {
             let record = loadInstectionRecordFromRecordID(lastRecordID)
             return record.date
@@ -343,3 +355,5 @@ extension DBModel {
         }
     }
 }
+
+
