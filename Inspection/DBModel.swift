@@ -11,32 +11,32 @@ import SQLite
 
 class DBModel {
     
-    var DB: Connection
+    var user: Connection
     var roomTable: Table
     var equipmentTable: Table
     var recordTable: Table
     var inspectionTypeTable: Table
 
-    let roomID = Expression<Int>("roomID")
-    let roomName = Expression<String>("roomName")
+    let roomIDExpression = Expression<Int>("roomID")
+    let roomNameExpression = Expression<String>("roomName")
     
-    let equipmentID = Expression<Int>(Equipment.EquipmentInfoTitle.ID.rawValue)
-    let equipmentName = Expression<String>(Equipment.EquipmentInfoTitle.Name.rawValue)
-    let equipmentType = Expression<String>("equipmentType")
-    let equipmentBrand = Expression<String?>(Equipment.EquipmentInfoTitle.Brand.rawValue)
-    let equipmentModel = Expression<String?>(Equipment.EquipmentInfoTitle.Model.rawValue)
-    let equipmentCapacity = Expression<String?>(Equipment.EquipmentInfoTitle.Capacity.rawValue)
-    let equipmentCommissionTime = Expression<String?>(Equipment.EquipmentInfoTitle.CommissionTime.rawValue)
-    let equipmentSN = Expression<String?>(Equipment.EquipmentInfoTitle.SN.rawValue)
-    let equipmentImageName = Expression<String?>(Equipment.EquipmentInfoTitle.ImageName.rawValue)
+    let equipmentIDExpression = Expression<Int>(Equipment.EquipmentInfoTitle.ID.rawValue)
+    let equipmentNameExpression = Expression<String>(Equipment.EquipmentInfoTitle.Name.rawValue)
+    let equipmentTypeExpression = Expression<String>(Equipment.EquipmentInfoTitle.EQType.rawValue)
+    let equipmentBrandExpression = Expression<String?>(Equipment.EquipmentInfoTitle.Brand.rawValue)
+    let equipmentModelExpression = Expression<String?>(Equipment.EquipmentInfoTitle.Model.rawValue)
+    let equipmentCapacityExpression = Expression<String?>(Equipment.EquipmentInfoTitle.Capacity.rawValue)
+    let equipmentCommissionTimeExpression = Expression<String?>(Equipment.EquipmentInfoTitle.CommissionTime.rawValue)
+    let equipmentSNExpression = Expression<String?>(Equipment.EquipmentInfoTitle.SN.rawValue)
+    let equipmentImageNameExpression = Expression<String?>(Equipment.EquipmentInfoTitle.ImageName.rawValue)
     
-    let recordID = Expression<Int>("recordID")
-    let recordMessage = Expression<String?>("recordMessage")
-    let inspectionTypeName = Expression<String>("inspectionTypeName")
-    let recordDate = Expression<NSDate>("recordDate")
+    let recordIDExpression = Expression<Int>("recordID")
+    let recordMessageExpression = Expression<String?>("recordMessage")
+    let inspectionTypeNameExpression = Expression<String>("inspectionTypeName")
+    let recordDateExpression = Expression<NSDate>("recordDate")
     
-    let inspectionTypeID = Expression<Int>("insepectionTypeID")
-    let inspectionCycle = Expression<Double>("inspectionCycle")
+    let inspectionTypeIDExpression = Expression<Int>("insepectionTypeID")
+    let inspectionCycleExpression = Expression<Double>("inspectionCycle")
     
     struct Static {
         static var instance:DBModel? = nil
@@ -55,7 +55,7 @@ class DBModel {
             .DocumentDirectory, .UserDomainMask, true
             ).first!
         print("new DB at \(path)")
-        DB = try! Connection("\(path)/db.sqlite3")
+        user = try! Connection("\(path)/db.sqlite3")
     }
     
     required init() {
@@ -67,43 +67,44 @@ class DBModel {
         dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
         dateFormatter.timeZone = NSTimeZone.systemTimeZone()
         
-        DB = try! Connection("\(path)/db.sqlite3")
+        user = try! Connection("\(path)/db.sqlite3")
         self.roomTable = Table("roomTable")
         self.equipmentTable = Table("equipmentTable")
         self.recordTable = Table("recordTable")
         self.inspectionTypeTable = Table("inspectionTypeTable")
         
-        try! DB.run(roomTable.create(ifNotExists: true) { t in
-            t.column(roomID, primaryKey: true)
-            t.column(roomName)
+        try! user.run(roomTable.create(ifNotExists: true) { t in
+            t.column(roomIDExpression, primaryKey: true)
+            t.column(roomNameExpression)
             })
         
-        try! DB.run(equipmentTable.create(ifNotExists: true) { t in
-            t.column(equipmentID, primaryKey: true)
-            t.column(equipmentName)
-            t.column(equipmentType)
-            t.column(roomID)
-            t.column(roomName)
-            t.column(equipmentBrand)
-            t.column(equipmentModel)
-            t.column(equipmentCapacity)
-            t.column(equipmentCommissionTime)
-            t.column(equipmentSN)
-            t.column(equipmentImageName)
+        try! user.run(equipmentTable.create(ifNotExists: true) { t in
+            t.column(equipmentIDExpression, primaryKey: true)
+            t.column(equipmentNameExpression)
+            t.column(equipmentTypeExpression)
+            t.column(roomIDExpression)
+            t.column(roomNameExpression)
+            t.column(equipmentBrandExpression)
+            t.column(equipmentModelExpression)
+            t.column(equipmentCapacityExpression)
+            t.column(equipmentCommissionTimeExpression)
+            t.column(equipmentSNExpression)
+            t.column(equipmentImageNameExpression)
             })
         
-        try! DB.run(recordTable.create(ifNotExists: true) { t in
-            t.column(recordID, primaryKey: true)
-            t.column(equipmentID)
-            t.column(inspectionTypeName)
-            t.column(recordMessage)
-            t.column(recordDate)
+        try! user.run(recordTable.create(ifNotExists: true) { t in
+            t.column(recordIDExpression, primaryKey: true)
+            t.column(equipmentIDExpression)
+            t.column(inspectionTypeNameExpression)
+            t.column(recordMessageExpression)
+            t.column(recordDateExpression)
             })
         
-        try! DB.run(inspectionTypeTable.create(ifNotExists: true) { t in
-            t.column(inspectionTypeID, primaryKey: true)
-            t.column(equipmentType)
-            t.column(inspectionCycle)
+        try! user.run(inspectionTypeTable.create(ifNotExists: true) { t in
+            t.column(inspectionTypeIDExpression, primaryKey: true)
+            t.column(inspectionTypeNameExpression)
+            t.column(equipmentTypeExpression)
+            t.column(inspectionCycleExpression)
             })
 
         initDefaultData()
@@ -114,69 +115,42 @@ class DBModel {
 extension DBModel {
     
     func loadRoomTable() -> [RoomBrief]{
-        let rows = Array(try! DB.prepare(roomTable))
+        let rows = Array(try! user.prepare(roomTable))
         var rooms: [RoomBrief] = [ ]
         for row in rows {
-            rooms.append(RoomBrief(ID: row[roomID], name: row[roomName], completedFlag: isRoomInspectionCompleted(row[roomID])))
+            rooms.append(RoomBrief(ID: row[roomIDExpression], name: row[roomNameExpression], completedFlag: isRoomInspectionCompleted(row[roomIDExpression])))
         }
         return rooms
     }
     
-    func isRoomInspectionCompleted(roomID: Int) -> Bool {
-        let equipments = loadEquipmentTable(roomID)
-        for equipment in equipments {
-            if equipment.isequipmentInspectonCompleted == false {
-                print("EQ \(equipment.equipmentName) UNDONE")
-                return false
-            }
-        }
-        return true
-    }
-    
     func loadEquipmentTable(roomID: Int) -> [EquipmentBrief]{
-        let rows = Array(try! DB.prepare(equipmentTable.filter(self.roomID == roomID)))
+        let rows = Array(try! user.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
         var equipments: [EquipmentBrief] = [ ]
         for row in rows {
-            equipments.append(EquipmentBrief(ID: row[equipmentID], name: row[equipmentName], completedFlag: isEquipmentInspectionsCompleted(row[equipmentID])))
+            equipments.append(EquipmentBrief(ID: row[equipmentIDExpression], name: row[equipmentNameExpression], completedFlag: isEquipmentInspectionsCompleted(row[equipmentIDExpression])))
         }
         return equipments
     }
     
-    func isEquipmentInspectionsCompleted(equipmentID: Int) -> Bool {
-        let inspectionTimeDir = loadRecentInspectionTime(equipmentID)
-        if inspectionTimeDir.count < Inspection.typeCount {
-            return false
-        }
-        for (type, date) in inspectionTimeDir {
-            DBModel.isEquipmentInspectionCompleted(type, date: date)
-        }
-        return true
-    }
-    
-    static func isEquipmentInspectionCompleted(type: String, date: NSDate) -> Bool {
-        let timeCycleDir = Inspection.getTimeCycleDir()
-        if let timeCycle = timeCycleDir[type]{
-            if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
-                return false
-            }
-        }
-        return true
+    func loadEquipmentType(equipmentID: Int) -> String? {
+        let row = Array(try! user.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
+        return row?[equipmentTypeExpression]
     }
 
     func loadEquipment(equipmentID: Int) -> Equipment? {
-        let row = Array(try! DB.prepare(equipmentTable.filter(self.equipmentID == equipmentID))).first
-        if let name =  row?[equipmentName] {
-            let EQType = row?[equipmentType]
-            let locatedRoomID = row?[roomID]
-            let locatedRoomName = row?[roomName]
-            let brand = row?[equipmentBrand]
-            let model = row?[equipmentModel]
-            let capacity = row?[equipmentCapacity]
-            let commissionTime = row?[equipmentCommissionTime]
-            let SN = row?[equipmentSN]
-            let ImageName = row?[equipmentImageName]
+        let row = Array(try! user.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
+        if let name =  row?[equipmentNameExpression] {
+            let EQType = row?[equipmentTypeExpression]
+            let locatedRoomID = row?[roomIDExpression]
+            let locatedRoomName = row?[roomNameExpression]
+            let brand = row?[equipmentBrandExpression]
+            let model = row?[equipmentModelExpression]
+            let capacity = row?[equipmentCapacityExpression]
+            let commissionTime = row?[equipmentCommissionTimeExpression]
+            let SN = row?[equipmentSNExpression]
+            let ImageName = row?[equipmentImageNameExpression]
             
-            return Equipment(ID: equipmentID, name: name, type: EQType, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
+            return Equipment(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
             
         } else {
             return nil
@@ -184,10 +158,10 @@ extension DBModel {
     }
     
     func editEquipment(equipment: Equipment) {
-        let alice = equipmentTable.filter(self.equipmentID == equipment.ID)
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.ID)
         for equipmentDetail in equipment.editableDetailArray {
             do {
-                try DB.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
+                try user.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
             } catch let error as NSError {
                 print(error)
             }
@@ -195,12 +169,12 @@ extension DBModel {
     }
     // to edit one singel Detail
     func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
-        let alice = equipmentTable.filter(self.equipmentID == equipmentID)
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentID)
         do {
             if equipmentDetailTitleString != Equipment.EquipmentInfoTitle.Name.rawValue {
-                try DB.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
+                try user.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
             } else {
-                try DB.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
+                try user.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
             }
         } catch let error as NSError {
             print(error)
@@ -208,25 +182,25 @@ extension DBModel {
     }
     
     func addRoom(roomName: String) {
-        let insert = roomTable.insert(self.roomName <- roomName)
+        let insert = roomTable.insert(self.roomNameExpression <- roomName)
         do {
-            try DB.run(insert)
+            try user.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
     func delRoom(roomID: Int) {
-        let roomTableAlice = roomTable.filter(self.roomID == roomID)
+        let roomTableAlice = roomTable.filter(self.roomIDExpression == roomID)
         do {
-            try DB.run(roomTableAlice.delete())
+            try user.run(roomTableAlice.delete())
         } catch let error as NSError {
             print(error)
         }
         
-        let equipmentTableAlice = equipmentTable.filter(self.roomID == roomID)
+        let equipmentTableAlice = equipmentTable.filter(self.roomIDExpression == roomID)
         do {
-            try DB.run(equipmentTableAlice.delete())
+            try user.run(equipmentTableAlice.delete())
         } catch let error as NSError {
             print(error)
         }
@@ -234,20 +208,20 @@ extension DBModel {
     
     func addEquipment(equipmentName: String, roomID: Int, roomName: String) {
         let insert = equipmentTable.insert(
-            self.equipmentName <- equipmentName,
-            self.roomID <- roomID,
-            self.roomName <- roomName)
+            self.equipmentNameExpression <- equipmentName,
+            self.roomIDExpression <- roomID,
+            self.roomNameExpression <- roomName)
         do {
-            try DB.run(insert)
+            try user.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
     func delEquipment(equipmentToDel: Int) {
-        let alice = equipmentTable.filter(self.equipmentID == equipmentToDel)
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentToDel)
         do {
-            try DB.run(alice.delete())
+            try user.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
@@ -262,30 +236,47 @@ extension DBModel {
             ["传1","传2","传3"],
             ["电1","电2"],
             ["南1","南2","南3"]]
+        static let defaultInspectionTypeArray: [InspectionType] = [
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "日巡视", inspectionCycle: 1),
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "周测试", inspectionCycle: 7),
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "滤网更换", inspectionCycle: 90),
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "室外机清洁", inspectionCycle: 90),
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "皮带更换", inspectionCycle: 180),
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "加湿罐更换", inspectionCycle: 90),
+            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "季度测试", inspectionCycle: 90),
+            InspectionType(equipmentType: "蓄电池组",inspectionTypeName: "周巡视", inspectionCycle: 7)]
     }
     
+
     func initDefaultData() {
-        if DB.scalar(roomTable.count) == 0 {
+        var roomIndex = 0
+        if user.scalar(roomTable.count) == 0 {
             for name in Constants.defaultRoom {
-                let insert = roomTable.insert(self.roomName <- name)
+                let insert = roomTable.insert(self.roomNameExpression <- name)
                 do {
-                    try DB.run(insert)
+                    try user.run(insert)
                 } catch let error as NSError {
                     print(error)
                 }
-            }
-            for var roomIndex = 0; roomIndex < Constants.defaultRoom.count; roomIndex++ {
                 for var i = 0; i < Constants.defaultEquipmentInRoom[roomIndex].count; i++ {
                     let insert = equipmentTable.insert(
-                        self.roomID <- roomIndex + 1,
-                        self.equipmentName <- Constants.defaultEquipmentInRoom[roomIndex][i],
-                        self.roomName <- Constants.defaultRoom[roomIndex])
+                        self.roomIDExpression <- roomIndex + 1,
+                        self.equipmentTypeExpression <- "机房精密空调",
+                        self.equipmentNameExpression <- Constants.defaultEquipmentInRoom[roomIndex][i],
+                        self.roomNameExpression <- Constants.defaultRoom[roomIndex])
                     do {
-                        try DB.run(insert)
+                        try user.run(insert)
                     } catch let error as NSError {
-                        print(error)
+                        print("error when init equipments, error = \(error)")
                     }
                 }
+                roomIndex++
+            }
+        }
+        if user.scalar(inspectionTypeTable.count) == 0 {
+            for var i = 0; i < Constants.defaultInspectionTypeArray.count; i++ {
+                let type = Constants.defaultInspectionTypeArray[i]
+                self.addInspectionType(InspectionType(equipmentType: type.equipmentType, inspectionTypeName: type.inspectionTypeName, inspectionCycle: type.inspectionCycle))
             }
         }
     }
@@ -293,67 +284,110 @@ extension DBModel {
 //MARK: RecordManagement
 extension DBModel {
     func addInspectionRecord(record: InspectionRecord) {
-        let insert = recordTable.insert(self.recordMessage <- record.message,
-            self.inspectionTypeName <- record.recordType,
-            self.equipmentID <- record.equipmentID,
-            self.recordDate <- record.date)
+        let insert = recordTable.insert(self.recordMessageExpression <- record.message,
+            self.inspectionTypeNameExpression <- record.recordType,
+            self.equipmentIDExpression <- record.equipmentID,
+            self.recordDateExpression <- record.date)
         do {
-            try DB.run(insert)
+            try user.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
     func delInspectionRecord(recordID: Int) {
-        let alice = recordTable.filter(self.recordID == recordID)
+        let alice = recordTable.filter(self.recordIDExpression == recordID)
         do {
-            try DB.run(alice.delete())
+            try user.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
     }
     
     func loadInstectionRecord(equipmentID: Int) -> [InspectionRecord]{
-        let alice = recordTable.filter(self.equipmentID == equipmentID)
+        let alice = recordTable.filter(self.equipmentIDExpression == equipmentID)
         var array: [Row] = []
         var recordArray: [InspectionRecord] = []
         do {
-            let rows = try DB.prepare(alice)
+            let rows = try user.prepare(alice)
             array = Array(rows)
         } catch let error as NSError {
             print(error)
         }
         for row in array {
-            let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[inspectionTypeName], recordData: row[recordMessage])
+            let record = InspectionRecord(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTypeNameExpression], recordData: row[recordMessageExpression])
             recordArray.insert(record, atIndex: 0)
         }
         return recordArray
     }
     func loadInstectionRecordFromRecordID(recordID: Int) -> InspectionRecord {
-        let alice = recordTable.filter(self.recordID == recordID)
-        let row = Array(try! DB.prepare(alice)).first!
-        let record = InspectionRecord(recordID: row[self.recordID], equipmentID: row[self.equipmentID], date: row[recordDate], type: row[inspectionTypeName], recordData: row[recordMessage])
+        let alice = recordTable.filter(self.recordIDExpression == recordID)
+        let row = Array(try! user.prepare(alice)).first!
+        let record = InspectionRecord(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTypeNameExpression], recordData: row[recordMessageExpression])
         return record
 
     }
     func loadRecentInspectionTime(equipmentID: Int) -> [String: NSDate] {
         var inspectionTime: [String: NSDate] = [: ]
-        for type in Inspection.getType() {
-            let aTime = loadRecentInspectionTimeForType(equipmentID, inspectionType: type)
-            inspectionTime[type] = aTime
+        if let EQType = loadEquipmentType(equipmentID) {
+            let types = self.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(EQType)
+                for type in types {
+                    let aTime = loadRecentInspectionTimeForType(equipmentID, inspectionType: type.inspectionTypeName)
+                    inspectionTime[type.inspectionTypeName] = aTime
+            }
         }
         return inspectionTime
     }
 
     func loadRecentInspectionTimeForType(equipmentID: Int, inspectionType: String) -> NSDate? {
-        let alice = recordTable.filter(self.equipmentID == equipmentID && self.inspectionTypeName == inspectionType)
-        if let lastRecordID = DB.scalar(alice.select(recordID.max)) {
+        let alice = recordTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTypeNameExpression == inspectionType)
+        if let lastRecordID = user.scalar(alice.select(recordIDExpression.max)) {
             let record = loadInstectionRecordFromRecordID(lastRecordID)
             return record.date
         } else {
             return nil
         }
     }
+    
+    func isEquipmentInspectionsCompleted(equipmentID: Int) -> Bool {
+        if let equipmentType = loadEquipmentType(equipmentID) {
+            let recentInspectionTimeDir = loadRecentInspectionTime(equipmentID)
+            let inspectionTypeDir = self.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipmentType)
+            if recentInspectionTimeDir.count < inspectionTypeDir.count {
+                return false
+            }
+            for (type, date) in recentInspectionTimeDir {
+                if isEquipmentInspectionCompleted(equipmentType, type: type, date: date) == false {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    func isEquipmentInspectionCompleted(equipmentType: String?, type: String, date: NSDate) -> Bool {
+        if equipmentType == nil {
+            return false
+        }
+        let timeCycleDir = self.loadInspectionTypeDir()
+        if let timeCycle = timeCycleDir.getTimeCycleForEquipment(equipmentType!, type: type){
+            if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
+                return false
+            }
+        }
+        return true
+    }
+    func isRoomInspectionCompleted(roomID: Int) -> Bool {
+        let equipments = loadEquipmentTable(roomID)
+        for equipment in equipments {
+            if equipment.isequipmentInspectonCompleted == false {
+                print("EQ \(equipment.equipmentName) UNDONE")
+                return false
+            }
+        }
+        return true
+    }
+
 }
 
 

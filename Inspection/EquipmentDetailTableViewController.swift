@@ -26,6 +26,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             equipment = DB!.loadEquipment(equipmentID!)
             equipmentRecordArray = DB!.loadInstectionRecord(equipmentID!)
             recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
+            inspectionTypeDir = DB!.loadInspectionTypeDir()
             if equipment != nil {
                 equipmentDetail = equipment!.detailArray
                 tableView.reloadData()
@@ -38,6 +39,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
     var equipmentRecordArray: [InspectionRecord] = []
     var recentInspectionTime: [String: NSDate] = [: ]
+    var inspectionTypeDir: InspectionTypeDir?
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
@@ -83,7 +85,9 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         case 1:
             return 1
         case 2:
-            return Inspection.getType().count
+            if inspectionTypeDir != nil {
+                return inspectionTypeDir!.getInspectionTypeArrayForEquipmentType(equipment?.type).count
+            } else { return 0 }
         case 3:
             return equipmentRecordArray.count
         default:
@@ -97,7 +101,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             cell.equipmentInfoTitleLabel.text = equipmentDetail[indexPath.row].title
-            cell.equipmentInfoContentLabel.text = equipmentDetail[indexPath.row].info
+            cell.equipmentInfoContentLabel.text = equipmentDetail[indexPath.row].info ?? "暂无"
             return cell
             
         case 1:
@@ -116,16 +120,17 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             }
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            let inspectionType = Inspection.getType()[indexPath.row]
-            cell.equipmentInfoTitleLabel.text = inspectionType
-            if let date = recentInspectionTime[inspectionType] {
-                if DBModel.isEquipmentInspectionCompleted(inspectionType, date: date) == false{
+            if let type = inspectionTypeDir?.getInspectionTypeArrayForEquipmentType(equipment?.type)[indexPath.row] {
+                cell.equipmentInfoTitleLabel.text = type.inspectionTypeName
+                if let date = recentInspectionTime[type.inspectionTypeName] {
+                    if DB?.isEquipmentInspectionCompleted(equipment?.type, type: type.inspectionTypeName, date: date) == false{
+                        cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
+                    }
+                    cell.equipmentInfoContentLabel.text = date.datatypeValue
+                } else {
+                    cell.equipmentInfoContentLabel.text = nil
                     cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
                 }
-                cell.equipmentInfoContentLabel.text = date.datatypeValue
-            } else {
-                cell.equipmentInfoContentLabel.text = nil
-                cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
             }
             return cell
         case 3:

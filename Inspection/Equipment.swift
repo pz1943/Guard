@@ -71,7 +71,7 @@ class Equipment {
     
     var ID: Int
     var name: String
-    var type: String?
+    var type: String
     var roomID: Int
     var roomName: String
     var brand: String?
@@ -113,7 +113,7 @@ class Equipment {
     
     init(ID: Int,
         name: String,
-        type: String?,
+        type: String,
         roomID: Int,
         roomName: String,
         brand: String?,

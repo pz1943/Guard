@@ -16,10 +16,14 @@ struct InspectionType {
 }
 
 struct InspectionTypeDir {
-    var dir: [String: [(String, Double)]] = [: ]
+    private var dir: [String: [(String, Double)]] = [: ]
 
     mutating func addInspectionType(type: InspectionType) {
-        dir[type.equipmentType]?.append((typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle))
+        if dir[type.equipmentType] != nil {
+            dir[type.equipmentType]!.append((typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle))
+        } else {
+            dir[type.equipmentType] = [(typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle)]
+        }
     }
     
     var equipmentTypeArray: [String] {
@@ -27,39 +31,61 @@ struct InspectionTypeDir {
             return Array(dir.keys)
         }
     }
-    subscript(index: Int) -> [InspectionType] {
+    
+    var equipmentTypeCount: Int {
         get {
-            let equipmentType = equipmentTypeArray[index]
-            if let types =  dir[equipmentType] {
-                return types.map({InspectionType(equipmentType: equipmentType, inspectionTypeName: $0.0, inspectionCycle: $0.1)})
+            return equipmentTypeArray.count
+        }
+    }
+    
+    func getInspectionTypeArrayForEquipmentType(equipmentType: String?) -> [InspectionType]{
+        if equipmentType != nil {
+            if let arr = dir[equipmentType!] {
+                return arr.map({InspectionType(equipmentType: equipmentType!, inspectionTypeName: $0.0, inspectionCycle: $0.1)})
+            }
+        }
+        return []
+    }
+    
+    subscript(index: Int?) -> [InspectionType] {
+        get {
+            if index != nil {
+                let equipmentType = equipmentTypeArray[index!]
+                if let types =  dir[equipmentType] {
+                    return types.map({InspectionType(equipmentType: equipmentType, inspectionTypeName: $0.0, inspectionCycle: $0.1)})
+                } else {
+                    return []
+                }
             } else {
                 return []
             }
         }
     }
+    
+    func getTimeCycleForEquipment(equipmentType: String, type: String) -> Double? {
+        var typeDirForEQDir :[String: Double] = [: ]
+        if let arr = self.dir[equipmentType] {
+            let _ = arr.map({typeDirForEQDir[$0.0] = $0.1})
+        }
+        return typeDirForEQDir[type]
+    }
+    
+//    func getDirForEquipment(equipmentID: Int) -> [String: Double] {
+//        
+//    }
 }
 
 extension DBModel {
     
-    static var defaultInspectionTypeArray: [InspectionType] = [
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "日巡视", inspectionCycle: 1),
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "周测试", inspectionCycle: 7),
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "滤网更换", inspectionCycle: 90),
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "室外机清洁", inspectionCycle: 90),
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "皮带更换", inspectionCycle: 180),
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "加湿罐更换", inspectionCycle: 90),
-        InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "季度测试", inspectionCycle: 90),
-        InspectionType(equipmentType: "蓄电池组",inspectionTypeName: "周巡视", inspectionCycle: 7)
-    ]
 
-    func loadInspectionTypeArray() -> InspectionTypeDir {
-        let rows = Array(try! DB.prepare(inspectionTypeTable))
+    func loadInspectionTypeDir() -> InspectionTypeDir {
+        let rows = Array(try! user.prepare(inspectionTypeTable))
         var inspectionTypeDir = InspectionTypeDir()
         for row in rows {
             let inspectionType = InspectionType(
-                equipmentType: row[equipmentType],
-                inspectionTypeName: row[inspectionTypeName],
-                inspectionCycle: row[inspectionCycle])
+                equipmentType: row[equipmentTypeExpression],
+                inspectionTypeName: row[inspectionTypeNameExpression],
+                inspectionCycle: row[inspectionCycleExpression])
             inspectionTypeDir.addInspectionType(inspectionType)
             
         }
@@ -68,12 +94,12 @@ extension DBModel {
     
     func addInspectionType(type: InspectionType) -> Bool {
         let insert = inspectionTypeTable.insert(
-            self.inspectionTypeName <- type.inspectionTypeName,
-            self.equipmentType <- type.equipmentType,
-            self.inspectionCycle <- type.inspectionCycle
+            self.inspectionTypeNameExpression <- type.inspectionTypeName,
+            self.equipmentTypeExpression <- type.equipmentType,
+            self.inspectionCycleExpression <- type.inspectionCycle
         )
         do {
-            try DB.run(insert)
+            try user.run(insert)
             return true
         } catch let error as NSError {
             print(error)
@@ -82,18 +108,18 @@ extension DBModel {
     }
     
     func changeInspectionTypeCycle(inspectionTypeID: Int, newValue: String) {
-        let alice = inspectionTypeTable.filter(self.inspectionTypeID == inspectionTypeID)
+        let alice = inspectionTypeTable.filter(self.inspectionTypeIDExpression == inspectionTypeID)
         do {
-            try DB.run(alice.update(Expression<String>(inspectionCycle) <- newValue))
+            try user.run(alice.update(Expression<String>(inspectionCycleExpression) <- newValue))
         } catch let error as NSError {
             print(error)
         }
     }
     
     func delInspectionType(inspectionTypeID: Int) {
-        let roomTableAlice = inspectionTypeTable.filter(self.inspectionTypeID == inspectionTypeID)
+        let roomTableAlice = inspectionTypeTable.filter(self.inspectionTypeIDExpression == inspectionTypeID)
         do {
-            try DB.run(roomTableAlice.delete())
+            try user.run(roomTableAlice.delete())
         } catch let error as NSError {
             print(error)
         }

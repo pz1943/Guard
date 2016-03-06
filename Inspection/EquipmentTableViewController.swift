@@ -17,8 +17,6 @@ class EquipmentTableViewController: UITableViewController {
             self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoomID!)
             self.tableView.reloadData()
         }
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.navigationItem.rightBarButtonItem?.title = "编辑"
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -27,7 +25,7 @@ class EquipmentTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-    
+
     // MARK: - Table view data source
     var DB: DBModel?
     var equipmentArray: [EquipmentBrief] = []
@@ -36,7 +34,7 @@ class EquipmentTableViewController: UITableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -44,7 +42,7 @@ class EquipmentTableViewController: UITableViewController {
         if section == 0 {
             return equipmentArray.count
         } else{
-            return 1
+            return 0
         }
     }
     

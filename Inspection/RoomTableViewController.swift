@@ -23,6 +23,7 @@ class RoomTableViewController: UITableViewController {
             self.rooms = self.DB!.loadRoomTable()
             self.tableView.reloadData()
         }
+        
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.navigationItem.rightBarButtonItem?.title = "编辑"
     }
@@ -39,7 +40,16 @@ class RoomTableViewController: UITableViewController {
     @IBAction func backToRoomTable(segue: UIStoryboardSegue) {
         
     }
-        
+    
+    func addNewRoom(name: String) {
+        for room in rooms {
+            if room.roomName == name {
+                return
+            }
+        }
+        DB?.addRoom(name)
+    }
+    
     // MARK: - Table view data source
 
     var rooms: [RoomBrief] = [ ]
@@ -47,14 +57,14 @@ class RoomTableViewController: UITableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return  rooms.count
         } else {
-            return 1
+            return 0
         }
     }
 

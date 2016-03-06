@@ -24,7 +24,7 @@ class EquipmentEditTableViewController: UITableViewController {
     var equipment: Equipment?{
         didSet{
             if equipment != nil {
-                equipmentDetail = equipment!.detailArray
+                equipmentDetail = equipment!.editableDetailArray
             }
         }
     }

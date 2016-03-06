@@ -14,7 +14,8 @@ class QRCodeRecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        record = InspectionRecord(equipmentID: equipment!.ID, type: Inspection.getType().first!, recordData: nil)
+        
+        record = InspectionRecord(equipmentID: equipment!.ID, type: inspectionTypeArrayForEQ.first?.inspectionTypeName ?? "无", recordData: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
         selectFirst()
@@ -26,13 +27,15 @@ class QRCodeRecordTableViewController: UITableViewController {
         didSet {
             DB = DBModel.sharedInstance()
             if equipmentID != nil {
-                equipment = DB?.loadEquipment(equipmentID!)
+                equipment = DB!.loadEquipment(equipmentID!)
+                inspectionTypeArrayForEQ = DB!.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment?.type)
             }
         }
     }
     var equipment: Equipment?
     var DB: DBModel?
     var record: InspectionRecord?
+    var inspectionTypeArrayForEQ: [InspectionType] = []
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -69,14 +72,14 @@ class QRCodeRecordTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {
-            return Inspection.typeCount
+            return inspectionTypeArrayForEQ.count
         } else { return 1 }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("InspectionTypeCell", forIndexPath: indexPath)
-            cell.textLabel?.text = Inspection.getType()[indexPath.row]
+            cell.textLabel?.text = inspectionTypeArrayForEQ[indexPath.row].inspectionTypeName
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("RecordCell", forIndexPath: indexPath) as! QRCodeTableViewCell
@@ -107,7 +110,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        record?.recordType = Inspection.getType()[indexPath.row]
+        record?.recordType = inspectionTypeArrayForEQ[indexPath.row].inspectionTypeName
         reloadTableView()
     }
     

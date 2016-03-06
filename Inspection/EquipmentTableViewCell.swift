@@ -16,7 +16,6 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
 
         // Initialization code
     }
-
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -27,27 +26,7 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
     var roomID: Int?
     var roomName: String?
     var equipmentID: Int?
-    @IBOutlet weak var equipmentAddTextField: UITextField!
     @IBOutlet weak var equipmentTitle: UILabel!
     @IBOutlet weak var DoneFlagImageView: UIImageView!
-
-    @IBAction func addNew(sender: UIButton) {
-        equipmentAddTextField.resignFirstResponder()
-        if let equipmentName = equipmentAddTextField.text {
-            if equipmentName != "" {
-                if roomID != nil {
-                    DB?.addEquipment(equipmentName, roomID: roomID!, roomName: roomName!)
-                    equipmentAddTextField.text = nil
-                    NSNotificationCenter.defaultCenter().postNotificationName("EquipmentTableNeedRefreshNotification", object: nil)
-                }
-            }
-        }
-    }
-    
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        equipmentAddTextField.resignFirstResponder()
-        return true
-    }
-    
 
 }

@@ -14,7 +14,7 @@ class InspectionCycleTableViewController: UITableViewController {
         super.viewDidLoad()
 
         DB = DBModel.sharedInstance()
-        timeCycleDir = DB!.loadInspectionTypeArray()
+        timeCycleDir = DB!.loadInspectionTypeDir()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -43,12 +43,12 @@ class InspectionCycleTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return timeCycleDir.dir.count
+        return timeCycleDir.equipmentTypeCount
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return timeCycleDir.dir[timeCycleDir.equipmentTypeArray[section]]?.count ?? 0
+        return timeCycleDir[section].count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -58,6 +58,13 @@ class InspectionCycleTableViewController: UITableViewController {
         // Configure the cell...
 
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return timeCycleDir.equipmentTypeArray[section]
+    }
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
 
     /*

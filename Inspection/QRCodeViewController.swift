@@ -10,12 +10,13 @@ import UIKit
 import AVFoundation
 
 class QRCodeForAnyEquipmentViewController: QRCodeViewController {
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "RecordSegue" {
+        if segue.identifier == "AnyEQRecordSegue" {
             if let NVC = segue.destinationViewController as? UINavigationController {
                 if let DVC = NVC.viewControllers[0] as? QRCodeForAnyEquipmentTableViewController{
+                    let equipment = DB?.loadEquipment(equipmentID!)
                     DVC.equipmentID = self.equipmentID
+                    DVC.inspectionTypeArrayForEQ = self.DB!.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment?.type)
                 }
             }
         }
@@ -25,6 +26,21 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
         
     }
     
+}
+
+class QRCodeForOneEquipmentViewController: QRCodeViewController {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "OneEQRecordSegue" {
+            if let DVC = segue.destinationViewController as? QRCodeRecordTableViewController{
+                let equipment = DB?.loadEquipment(equipmentID!)
+                DVC.equipmentID = self.equipmentID
+                DVC.inspectionTypeArrayForEQ = self.DB!.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment?.type)
+            }
+        }
+    }
+    @IBAction func backToQRCodeForOneEquipmentViewController(segue: UIStoryboardSegue) {
+
+    }
 }
 
 class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
@@ -115,7 +131,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                     self.presentViewController(alertController, animated: false, completion: nil)
                 } else {
                     dispatch_after(DISPATCH_TIME_NOW, dispatch_get_main_queue(), { () -> Void in
-                        self.performSegueWithIdentifier("RecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
+                        self.performSegueWithIdentifier("OneEQRecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
                     })
                 }
             } else {   //无指定设备
@@ -123,7 +139,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                 if let _ = DB?.loadEquipment(QREquipmentID) {  //扫描结果是设备 ID，进入记录页面。
                     self.equipmentID = QREquipmentID
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.performSegueWithIdentifier("RecordSegue", sender: self)
+                        self.performSegueWithIdentifier("AnyEQRecordSegue", sender: self)
                     })
                 } else {  // 不是设备 ID，提示后返回
                     let alertController = UIAlertController(title: "错误的二维码", message: "扫描的二维码不是管理的设备，请确认后重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，重新开始搜索
@@ -139,11 +155,4 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "RecordSegue" {
-            if let DVC = segue.destinationViewController as? QRCodeRecordTableViewController{
-                DVC.equipmentID = self.equipmentID
-            }
-        }
-    }
 }
