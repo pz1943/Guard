@@ -14,13 +14,34 @@ class RoomAddTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        NSNotificationCenter.defaultCenter().addObserverForName("newRoomNameGotNotification", object: self, queue: nil) { (notification) -> Void in
-            self.newRoomName = notification.userInfo?["newRoomName"] as? String
-            print("2222")
-        }
+        DB = DBModel.sharedInstance()
+        roomsArray = DB!.loadRoomTable()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "newNameGot:", name: "newRoomNameGotNotification", object: nil)
+        
     }
 
-    var newRoomName: String?
+    func newNameGot(notification: NSNotification) {
+        if let newRoomName = notification.userInfo?["newRoomName"] as? String {
+            for room in roomsArray {
+                if room.roomName == newRoomName {
+                    return
+                }
+            }
+            DB?.addRoom(newRoomName)
+            NSNotificationCenter.defaultCenter().postNotificationName("RoomTableNeedRefreshNotification", object: nil)
+        }
+    }
+    
+
+    override func viewDidDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+
+    }
+    override func viewWillDisappear(animated: Bool) {
+    }
+
+    var DB: DBModel?
+    var roomsArray: [RoomBrief] = []
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -58,13 +79,7 @@ class RoomAddTableViewController: UITableViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "NewRoomGotSegue" {
-            if let DVC = segue.destinationViewController as? RoomTableViewController {
-                if newRoomName != nil {
-                    DVC.addNewRoom(newRoomName!)
-                }
-            }
-        }
+            
     }
 
 }

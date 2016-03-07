@@ -25,6 +25,9 @@ class EquipmentTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 
     // MARK: - Table view data source
     var DB: DBModel?

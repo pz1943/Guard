@@ -33,6 +33,11 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             }
         }
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     var DB: DBModel?
     var equipment: Equipment?
     var equipmentID: Int?

@@ -6,11 +6,7 @@
 //  Copyright © 2016年 pz1943. All rights reserved.
 //
 //
-//MARK: TODO 最近巡视记录按照设定时间提醒需执行工作。做设置页面，设置各项工作周期。
-//做页面提示明日代办。
-//巡检类型里增加其他，并可以通过文本单独标注。
-//
-//当前 机房和设备页面提示巡检情况。日测试和周测试
+
 
 import UIKit
 
@@ -36,18 +32,13 @@ class RoomTableViewController: UITableViewController {
         tableView.reloadData()
         sender.endRefreshing()
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 
     @IBAction func backToRoomTable(segue: UIStoryboardSegue) {
-        
-    }
-    
-    func addNewRoom(name: String) {
-        for room in rooms {
-            if room.roomName == name {
-                return
-            }
-        }
-        DB?.addRoom(name)
+
     }
     
     // MARK: - Table view data source

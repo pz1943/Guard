@@ -22,7 +22,10 @@ class QRCodeRecordTableViewController: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.title = equipment!.roomName + equipment!.name
     }
-    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     var equipmentID: Int? {
         didSet {
             DB = DBModel.sharedInstance()
