@@ -17,6 +17,7 @@ class EquipmentTableViewController: UITableViewController {
             self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoomID!)
             self.tableView.reloadData()
         }
+        self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -109,6 +110,11 @@ class EquipmentTableViewController: UITableViewController {
                 if let equipmentID = (sender as? EquipmentTableViewCell)?.equipmentID {
                     DVC.equipmentID = equipmentID
                 }
+            }
+        } else if segue.identifier == "AddEquipmentSegue" {
+            if let DVC = segue.destinationViewController as? EquipmentAddTableViewController {
+                DVC.roomID = self.selectRoomID
+                DVC.roomName = self.selectRoomName
             }
         }
     }

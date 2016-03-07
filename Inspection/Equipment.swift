@@ -49,6 +49,24 @@ class Equipment {
             }
         }
     }
+    
+    static let RequiredEquipmentInfoTitleArray = [
+        EquipmentInfoTitle.Name,
+        EquipmentInfoTitle.EQType,
+    ]
+    static let OptionalEquipmentInfoTitleArray = [
+        EquipmentInfoTitle.Brand,
+        EquipmentInfoTitle.Model,
+        EquipmentInfoTitle.Capacity,
+        EquipmentInfoTitle.CommissionTime,
+        EquipmentInfoTitle.SN,
+        EquipmentInfoTitle.ImageName
+    ]
+    static var EquipmentInfoTitleArray: [EquipmentInfoTitle] {
+        get {
+            return RequiredEquipmentInfoTitleArray + OptionalEquipmentInfoTitleArray
+        }
+    }
     enum EquipmentInfoTitle: String{
         case ID = "设备 ID"
         case Name = "设备名称"

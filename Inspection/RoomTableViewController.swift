@@ -21,7 +21,6 @@ class RoomTableViewController: UITableViewController {
         }
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.navigationItem.rightBarButtonItem?.title = "编辑"
     }
     override func viewWillAppear(animated: Bool) {
         rooms = DB!.loadRoomTable()

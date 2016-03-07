@@ -1,34 +1,30 @@
 //
-//  EquipmentEditTableViewController.swift
-//  
+//  EquipmentTypeSelectTableViewController.swift
+//  Inspection
 //
-//  Created by apple on 16/1/17.
-//
+//  Created by apple on 16/3/7.
+//  Copyright © 2016年 pz1943. All rights reserved.
 //
 
 import UIKit
 
-class EquipmentEditTableViewController: UITableViewController {
+class EquipmentTypeSelectTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.estimatedRowHeight = tableView.rowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
+        DB = DBModel.sharedInstance()
+        equipmentTypeArray = DB!.loadInspectionTypeDir().equipmentTypeArray
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    var equipment: Equipment?{
-        didSet{
-            if equipment != nil {
-                equipmentDetail = equipment!.editableDetailArray
-            }
-        }
-    }
-    var equipmentDetail: Equipment.EquipmentDetailArray = []
+    
+    var DB: DBModel?
+    var equipmentTypeArray: [String] = []
+    var selectedEQType: String?
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -43,35 +39,21 @@ class EquipmentEditTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return equipmentDetail.count
+        return equipmentTypeArray.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("equipmentEditCell", forIndexPath: indexPath) as! EquipmentEditTableViewCell
-        cell.titleLabel.text = equipmentDetail[indexPath.row].title
-        cell.infoTextField.text = equipmentDetail[indexPath.row].info
-        cell.equipment = self.equipment
+        let cell = tableView.dequeueReusableCellWithIdentifier("EquipmentTypeSelectCell", forIndexPath: indexPath)
+        cell.textLabel?.text = equipmentTypeArray[indexPath.row]
+        // Configure the cell...
+
         return cell
-    }
-    
-    
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return "  设备信息"
-        default:
-            return nil
-        }
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
     }
 
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        return nil
+        selectedEQType = equipmentTypeArray[indexPath.row]
+        return indexPath
     }
-    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -107,14 +89,17 @@ class EquipmentEditTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "backToEquipmentAddSegue" {
+            if let DVC = segue.destinationViewController as? EquipmentAddTableViewController {
+                DVC.equipmentType = self.selectedEQType
+            }
+        }
     }
-    */
 
 }

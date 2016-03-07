@@ -206,9 +206,10 @@ extension DBModel {
         }
     }
     
-    func addEquipment(equipmentName: String, roomID: Int, roomName: String) {
+    func addEquipment(equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {
         let insert = equipmentTable.insert(
             self.equipmentNameExpression <- equipmentName,
+            self.equipmentTypeExpression <- equipmentType,
             self.roomIDExpression <- roomID,
             self.roomNameExpression <- roomName)
         do {

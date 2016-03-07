@@ -44,6 +44,7 @@ class RoomAddTableViewController: UITableViewController {
     var roomsArray: [RoomBrief] = []
     // MARK: - Table view data source
     
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -60,6 +61,10 @@ class RoomAddTableViewController: UITableViewController {
         return cell
     }    
 
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        return nil
+    }
+    
     /*
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
