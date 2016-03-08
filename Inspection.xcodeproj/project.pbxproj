@@ -32,6 +32,8 @@
 		18C59C7D1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C7C1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift */; };
 		18C59C7F1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C7E1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift */; };
 		18C59C811C8F05DC00CA1428 /* EquipmentAddTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */; };
+		18C59C831C8F15E300CA1428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C821C8F15E300CA1428 /* User.swift */; };
+		18C59C8B1C8F249B00CA1428 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */; };
 		18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E42D631C512BDA004A9015 /* QRCodeViewController.swift */; };
 		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
@@ -91,6 +93,8 @@
 		18C59C7C1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentAddTableViewCell.swift; sourceTree = "<group>"; };
 		18C59C7E1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTypeSelectTableViewController.swift; sourceTree = "<group>"; };
 		18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentAddTableViewController.swift; sourceTree = "<group>"; };
+		18C59C821C8F15E300CA1428 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		18E42D631C512BDA004A9015 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewController.swift; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
@@ -186,6 +190,7 @@
 				18933E5D1C47DA5200357F74 /* DBModel.swift */,
 				499B40A71C62E08700FD6425 /* InspectionModel.swift */,
 				1843F2571C49EFB4002BB69A /* Equipment.swift */,
+				18C59C821C8F15E300CA1428 /* User.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -220,6 +225,7 @@
 				18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */,
 				184616871C49DEE00047E3EE /* ImageViewController.swift */,
 				18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */,
+				18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -439,6 +445,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18C59C8B1C8F249B00CA1428 /* LoginViewController.swift in Sources */,
+				18C59C831C8F15E300CA1428 /* User.swift in Sources */,
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
 				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
 				18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */,
