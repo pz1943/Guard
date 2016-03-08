@@ -19,7 +19,6 @@ class RoomTableViewController: UITableViewController {
             self.rooms = self.DB!.loadRoomTable()
             self.tableView.reloadData()
         }
-        
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     override func viewWillAppear(animated: Bool) {

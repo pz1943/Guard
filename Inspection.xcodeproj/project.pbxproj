@@ -31,6 +31,7 @@
 		18C59C791C8C7A9900CA1428 /* RoomAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C781C8C7A9900CA1428 /* RoomAddTableViewCell.swift */; };
 		18C59C7D1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C7C1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift */; };
 		18C59C7F1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C7E1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift */; };
+		18C59C811C8F05DC00CA1428 /* EquipmentAddTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */; };
 		18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E42D631C512BDA004A9015 /* QRCodeViewController.swift */; };
 		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
@@ -89,6 +90,7 @@
 		18C59C781C8C7A9900CA1428 /* RoomAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomAddTableViewCell.swift; sourceTree = "<group>"; };
 		18C59C7C1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentAddTableViewCell.swift; sourceTree = "<group>"; };
 		18C59C7E1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTypeSelectTableViewController.swift; sourceTree = "<group>"; };
+		18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentAddTableViewController.swift; sourceTree = "<group>"; };
 		18E42D631C512BDA004A9015 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewController.swift; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				18933E651C47DA5200357F74 /* RoomTableViewController.swift */,
 				187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */,
 				18C59C761C8C79C000CA1428 /* RoomAddTableViewController.swift */,
+				18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */,
 				18C59C7E1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift */,
 				18933E611C47DA5200357F74 /* EquipmentTableViewController.swift */,
 				18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */,
@@ -445,6 +448,7 @@
 				18C59C7D1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift in Sources */,
 				18933E2D1C47D8E100357F74 /* AppDelegate.swift in Sources */,
 				18933E6A1C47DA5200357F74 /* EquipmentTableViewController.swift in Sources */,
+				18C59C811C8F05DC00CA1428 /* EquipmentAddTableViewController.swift in Sources */,
 				187BA6A31C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift in Sources */,
 				49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */,
 				18C59C791C8C7A9900CA1428 /* RoomAddTableViewCell.swift in Sources */,

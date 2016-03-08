@@ -14,7 +14,6 @@ class InspectionCycleTableViewController: UITableViewController {
         super.viewDidLoad()
 
         DB = DBModel.sharedInstance()
-        timeCycleDir = DB!.loadInspectionTypeDir()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -27,6 +26,11 @@ class InspectionCycleTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func viewWillAppear(animated: Bool) {
+        timeCycleDir = DB!.loadInspectionTypeDir()
+        self.tableView.reloadData()
+    }
+    
     @IBAction func shareDataBase(sender: UIBarButtonItem) {
         let path = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true

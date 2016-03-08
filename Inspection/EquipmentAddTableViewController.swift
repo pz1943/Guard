@@ -36,6 +36,12 @@ class EquipmentAddTableViewController: UITableViewController {
     //
     
     @IBAction func equipmentAddDone(sender: UIBarButtonItem) {
+        if let equipmentName = equipmentNameTextField.text {
+            if equipmentName != "" && equipmentType != nil {
+                DB?.addEquipment(equipmentName,equipmentType: equipmentType!, roomID: self.roomID!, roomName: self.roomName!)
+                self.performSegueWithIdentifier("newEquipmentGotSegue", sender: self)
+            }
+        }
     }
     override func viewDidDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -120,19 +126,13 @@ class EquipmentAddTableViewController: UITableViewController {
     return true
     }
     */
-    
+    /*
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "EquipmentAddDone" {
-            if let equipmentName = equipmentNameTextField.text {
-                if equipmentName != "" && equipmentType != nil {
-                    DB?.addEquipment(equipmentName,equipmentType: equipmentType!, roomID: self.roomID!, roomName: self.roomName!)
-                }
-            }
-        }
     }
+*/
     @IBAction func backToEquipmentAddTable(segue: UIStoryboardSegue) {
         if segue.identifier == "backToEquipmentAddSegue" {
             self.equipmentTypeLabel.text = self.equipmentType

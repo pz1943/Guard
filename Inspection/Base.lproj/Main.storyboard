@@ -964,13 +964,14 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="YtQ-Yh-83E">
                             <connections>
-                                <segue destination="S66-KA-6ka" kind="unwind" identifier="EquipmentAddDone" unwindAction="backToEquipmentTable:" id="Rd9-SG-sIq"/>
+                                <action selector="equipmentAddDone:" destination="c6q-tc-XZJ" id="Ojn-Ej-BRo"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="equipmentNameTextField" destination="dhB-26-hs7" id="hM4-JQ-Dh7"/>
                         <outlet property="equipmentTypeLabel" destination="W22-kr-Oov" id="BHV-FS-Qea"/>
+                        <segue destination="S66-KA-6ka" kind="unwind" identifier="newEquipmentGotSegue" unwindAction="backToEquipmentTable:" id="gZ6-xt-cdA"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="69G-9R-5YB" userLabel="First Responder" sceneMemberID="firstResponder"/>
