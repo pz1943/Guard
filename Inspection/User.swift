@@ -15,21 +15,21 @@ class User {
         case admin
     }
     
-    var userName: String
+    var name: String
     var passWord: String
     var authorty: UserPermission
     
-    init(userName: String, passWord: String, authorty: UserPermission) {
-        self.userName = userName
-        self.passWord = passWord
+    init(userName: String, userPassWord: String, authorty: UserPermission) {
+        self.name = userName
+        self.passWord = userPassWord
         self.authorty = authorty
     }
 }
 
 class UserCenter {
     static var userDB: [User] = [
-        User(userName: "default", passWord: "default", authorty: .defaultUser),
-        User(userName: "admin", passWord: "admin", authorty: .admin)
+        User(userName: "default", userPassWord: "default", authorty: .defaultUser),
+        User(userName: "admin", userPassWord: "admin", authorty: .admin)
     ]
     
     static var defaultUser: User {
@@ -40,18 +40,18 @@ class UserCenter {
     
     static var currentUser: User = UserCenter.defaultUser
     
-    func addUser(user: User) {
-        UserCenter.userDB.append(user)
-    }
+//    func addUser(user: User) {
+//        UserCenter.userDB.append(user)
+//    }
+//    
     
-    
-    func login(userName: String, passWord: String) -> User {
+    class func login(loginUserName: String, loginUserPSD: String) -> User? {
         for user in UserCenter.userDB {
-            if userName == user.userName && passWord == user.passWord {
+            if loginUserName == user.name && loginUserPSD == user.passWord {
                 return user
             }
         }
         
-        return UserCenter.defaultUser
+        return nil
     }
 }

@@ -20,15 +20,23 @@ class RoomTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
+        addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
+        loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
     }
     override func viewWillAppear(animated: Bool) {
-        rooms = DB!.loadRoomTable()
-        tableView.reloadData()
+        refresh()
     }
     @IBAction func refresh(sender: UIRefreshControl) {
-        rooms = DB!.loadRoomTable()
-        tableView.reloadData()
+        refresh()
         sender.endRefreshing()
+    }
+    
+    func refresh() {
+        rooms = DB!.loadRoomTable()
+        loadForUser(user)
+        tableView.reloadData()
+
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -39,8 +47,39 @@ class RoomTableViewController: UITableViewController {
 
     }
     
+    func loadForUser(user: User?) {
+        if user?.authorty != User.UserPermission.admin {
+            if canEditFlag == true {
+                self.navigationItem.rightBarButtonItems?.removeAll()
+                self.navigationItem.leftBarButtonItem = loginBarButtonItemCopy
+                canEditFlag = false
+            }
+        } else {
+            if canEditFlag == false {
+                if editBarButtonItemCopy != nil && addBarButtonItemCopy != nil {
+                    self.navigationItem.rightBarButtonItems?.append(editBarButtonItemCopy!)
+                    self.navigationItem.rightBarButtonItems?.append(addBarButtonItemCopy!)
+                    canEditFlag = true
+                    self.navigationItem.leftBarButtonItem? = UIBarButtonItem(title: "管理员退出", style: UIBarButtonItemStyle.Plain, target: self, action: "adminExit")
+                }
+            }
+        }
+    }
+    
+    func adminExit() {
+        user = UserCenter.defaultUser
+        refresh()
+    }
     // MARK: - Table view data source
-
+    var editBarButtonItemCopy: UIBarButtonItem?
+    var addBarButtonItemCopy: UIBarButtonItem?
+    var loginBarButtonItemCopy: UIBarButtonItem?
+    var canEditFlag: Bool = true
+    var user: User? {
+        didSet {
+            print(user?.authorty)
+        }
+    }
     var rooms: [RoomBrief] = [ ]
     var DB: DBModel?
     
@@ -80,7 +119,7 @@ class RoomTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 
         if indexPath.section == 0 {
-            return true
+            return canEditFlag
         } else {
             return false
         }
@@ -119,6 +158,7 @@ class RoomTableViewController: UITableViewController {
                 if let cell = sender as? RoomTableViewCell {
                     DVC.selectRoomID = cell.roomID
                     DVC.selectRoomName = cell.roomTitle.text
+                    DVC.user = self.user
                 }
             }
         }

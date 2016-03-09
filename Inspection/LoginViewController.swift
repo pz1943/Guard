@@ -11,15 +11,29 @@ import UIKit
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var userNameTextField: UITextField!
-    
     @IBOutlet weak var passWordTextField: UITextField!
     
+    var user: User?
     
     @IBAction func login(sender: UIButton) {
-        
+        if let nameText = userNameTextField.text {
+            if  let pswText = passWordTextField.text {
+                user = UserCenter.login(nameText, loginUserPSD: pswText)
+                if user != nil {
+                    self.performSegueWithIdentifier("loginCompleteSegue", sender: nil)
+                }
+            }
+        }
     }
     
     @IBAction func loginCancel(sender: UIButton) {
+        user = UserCenter.defaultUser
+        self.performSegueWithIdentifier("loginCompleteSegue", sender: nil)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let DVC = segue.destinationViewController as? RoomTableViewController {
+            DVC.user = self.user
+        }
+    }    
 }

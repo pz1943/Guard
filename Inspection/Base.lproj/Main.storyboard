@@ -58,8 +58,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="机房信息" id="xyC-fa-z5M">
-                        <barButtonItem key="leftBarButtonItem" title="用户" id="jPN-iu-SXP">
-                            <color key="tintColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <barButtonItem key="leftBarButtonItem" title="管理员登录" id="jPN-iu-SXP">
                             <connections>
                                 <segue destination="jh6-Jm-Mq3" kind="presentation" identifier="loginSegue" modalPresentationStyle="formSheet" id="qfA-1A-EoQ"/>
                             </connections>
@@ -619,7 +618,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="信息北机房" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hx1-KB-Vxk">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hx1-KB-Vxk">
                                             <rect key="frame" x="84" y="16" width="508" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -1051,9 +1050,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="M6S-wj-YSv">
-                                <rect key="frame" x="71" y="54" width="509" height="30"/>
+                                <rect key="frame" x="79" y="54" width="501" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58P-zD-sg7">
                                 <rect key="frame" x="351" y="88" width="30" height="30"/>
@@ -1076,7 +1075,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="668-58-KLy">
-                                <rect key="frame" x="71" y="16" width="509" height="30"/>
+                                <rect key="frame" x="79" y="16" width="501" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -1098,13 +1097,14 @@
                             <constraint firstAttribute="leadingMargin" secondItem="Xkj-Ar-jkv" secondAttribute="leading" id="gI2-fI-9jD"/>
                             <constraint firstItem="668-58-KLy" firstAttribute="centerY" secondItem="Xkj-Ar-jkv" secondAttribute="centerY" id="jYo-hs-YVc"/>
                             <constraint firstItem="Ogd-Ag-xpE" firstAttribute="centerY" secondItem="M6S-wj-YSv" secondAttribute="centerY" id="kiz-XE-FZd"/>
-                            <constraint firstItem="668-58-KLy" firstAttribute="leading" secondItem="Xkj-Ar-jkv" secondAttribute="trailing" id="nST-hj-rti"/>
+                            <constraint firstItem="668-58-KLy" firstAttribute="leading" secondItem="Xkj-Ar-jkv" secondAttribute="trailing" constant="8" id="nST-hj-rti"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="passWordTextField" destination="M6S-wj-YSv" id="ohH-fl-xX1"/>
                         <outlet property="userNameTextField" destination="668-58-KLy" id="P0G-hp-muf"/>
                         <segue destination="RtL-Zy-70h" kind="unwind" identifier="loginCompletedSegue" unwindAction="backToRoomTable:" id="GO3-5w-4Lb"/>
+                        <segue destination="RtL-Zy-70h" kind="unwind" identifier="loginCompleteSegue" unwindAction="backToRoomTable:" id="qjw-Dc-nwW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zI2-d4-kuU" userLabel="First Responder" sceneMemberID="firstResponder"/>

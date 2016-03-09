@@ -45,7 +45,7 @@ class Equipment {
             if info != nil {
                 self.info = info!
             } else {
-                self.info = "暂无"
+                self.info = ""
             }
         }
     }
@@ -53,6 +53,7 @@ class Equipment {
     static let RequiredEquipmentInfoTitleArray = [
         EquipmentInfoTitle.Name,
         EquipmentInfoTitle.EQType,
+        EquipmentInfoTitle.ID
     ]
     static let OptionalEquipmentInfoTitleArray = [
         EquipmentInfoTitle.Brand,
@@ -112,6 +113,7 @@ class Equipment {
             var detail = self.editableDetailArray
             detail.insert(EquipmentDetail(title: EquipmentInfoTitle.RoomName, info: "\(self.roomName)"), atIndex: 1)
             detail.insert(EquipmentDetail(title: EquipmentInfoTitle.EQType, info: "\(self.type)"), atIndex: 1)
+            detail.insert(EquipmentDetail(title: EquipmentInfoTitle.ID, info: "\(self.ID)"), atIndex: 1)
             return detail
         }
     }

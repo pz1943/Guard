@@ -22,19 +22,34 @@ class EquipmentTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         if selectRoomID != nil {
-            equipmentArray = DB!.loadEquipmentTable(selectRoomID!)
-            self.tableView.reloadData()
+            refresh()
         }
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
+    func refresh() {
+        equipmentArray = DB!.loadEquipmentTable(selectRoomID!)
+        self.loginForUser()
+        self.tableView.reloadData()
+    }
+    
+    func loginForUser() {
+        if user?.authorty != .admin {
+            self.navigationItem.rightBarButtonItems?.removeAll()
+            self.canEditFlag = false
+        }
+    }
+    
     // MARK: - Table view data source
     var DB: DBModel?
+    var user: User?
     var equipmentArray: [EquipmentBrief] = []
     var selectRoomID: Int?
     var selectRoomName: String?
+    var rightBarButtonItems: UIBarButtonItem?
+    var canEditFlag = true
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -74,7 +89,7 @@ class EquipmentTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         
         if indexPath.section == 0 {
-            return true
+            return canEditFlag
         } else {
             return false
         }
