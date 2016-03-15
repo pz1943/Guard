@@ -18,13 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let DB = DBModel.sharedInstance()
         let fromPath = url.path!
-        print("from path \(fromPath)")
         let fileName = url.lastPathComponent
         print(fileName)
         let toPath = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true
             ).first! + "/db.sqlite3"
-        print("to path \(toPath)")
         do {
             try NSFileManager.defaultManager().removeItemAtPath(toPath)
             try NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath)

@@ -28,7 +28,7 @@ class EquipmentEditTableViewController: UITableViewController {
             }
         }
     }
-    var equipmentDetail: Equipment.EquipmentDetailArray = []
+    var equipmentDetail: EquipmentDetailArray = []
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

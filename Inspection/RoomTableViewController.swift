@@ -23,9 +23,11 @@ class RoomTableViewController: UITableViewController {
         editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
         loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
+        refresh()
     }
     override func viewWillAppear(animated: Bool) {
-        refresh()
+        loadForUser(user)
+        tableView.reloadData()
     }
     @IBAction func refresh(sender: UIRefreshControl) {
         refresh()
@@ -36,7 +38,6 @@ class RoomTableViewController: UITableViewController {
         rooms = DB!.loadRoomTable()
         loadForUser(user)
         tableView.reloadData()
-
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -75,11 +76,7 @@ class RoomTableViewController: UITableViewController {
     var addBarButtonItemCopy: UIBarButtonItem?
     var loginBarButtonItemCopy: UIBarButtonItem?
     var canEditFlag: Bool = true
-    var user: User? {
-        didSet {
-            print(user?.authorty)
-        }
-    }
+    var user: User? 
     var rooms: [RoomBrief] = [ ]
     var DB: DBModel?
     

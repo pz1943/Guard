@@ -41,7 +41,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     var DB: DBModel?
     var equipment: Equipment?
     var equipmentID: Int?
-    var equipmentDetail: Equipment.EquipmentDetailArray = [ ]
+    var equipmentDetail: EquipmentDetailArray = [ ]
     var equipmentRecordArray: [InspectionRecord] = []
     var recentInspectionTime: [String: NSDate] = [: ]
     var inspectionTypeDir: InspectionTypeDir?
@@ -192,7 +192,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     }
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            print(indexPath)
             DB?.delInspectionRecord(equipmentRecordArray[indexPath.row].ID)
             equipmentRecordArray.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)

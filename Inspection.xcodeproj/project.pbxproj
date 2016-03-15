@@ -36,6 +36,7 @@
 		18C59C8B1C8F249B00CA1428 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */; };
 		18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E42D631C512BDA004A9015 /* QRCodeViewController.swift */; };
 		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
+		18F89F721C96EE1900F0F054 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F89F711C96EE1900F0F054 /* Room.swift */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
 		499B40A81C62E08700FD6425 /* InspectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B40A71C62E08700FD6425 /* InspectionModel.swift */; };
@@ -97,6 +98,7 @@
 		18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		18E42D631C512BDA004A9015 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewController.swift; sourceTree = "<group>"; };
+		18F89F711C96EE1900F0F054 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
 		499B40A71C62E08700FD6425 /* InspectionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionModel.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				18933E5D1C47DA5200357F74 /* DBModel.swift */,
 				499B40A71C62E08700FD6425 /* InspectionModel.swift */,
 				1843F2571C49EFB4002BB69A /* Equipment.swift */,
+				18F89F711C96EE1900F0F054 /* Room.swift */,
 				18C59C821C8F15E300CA1428 /* User.swift */,
 			);
 			name = Model;
@@ -447,6 +450,7 @@
 			files = (
 				18C59C8B1C8F249B00CA1428 /* LoginViewController.swift in Sources */,
 				18C59C831C8F15E300CA1428 /* User.swift in Sources */,
+				18F89F721C96EE1900F0F054 /* Room.swift in Sources */,
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
 				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
 				18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */,
