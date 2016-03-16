@@ -9,10 +9,20 @@
 import Foundation
 import SQLite
 
-struct InspectionType {
+func ==(lhs: InspectionType, rhs: InspectionType) -> Bool {
+    return lhs.hashValue == rhs.hashValue
+}
+struct InspectionType: Hashable {
     var equipmentType: String
-    var inspectionTypeName: String
-    var inspectionCycle: Double
+    var typeName: String
+    var cycle: Double
+    
+    
+    var hashValue: Int {
+        get {
+            return self.typeName.hashValue
+        }
+    }
 }
 
 struct InspectionTypeDir {
@@ -20,9 +30,9 @@ struct InspectionTypeDir {
 
     mutating func addInspectionType(type: InspectionType) {
         if dir[type.equipmentType] != nil {
-            dir[type.equipmentType]!.append((typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle))
+            dir[type.equipmentType]!.append((typeName: type.typeName, timeCycle: type.Cycle))
         } else {
-            dir[type.equipmentType] = [(typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle)]
+            dir[type.equipmentType] = [(typeName: type.typeName, timeCycle: type.Cycle)]
         }
     }
     

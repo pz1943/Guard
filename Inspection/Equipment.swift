@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct Record {
+class Record {
     var ID: Int {
         get {
             return recordID!
@@ -27,7 +27,7 @@ struct Record {
         self.message = recordData
         self.date = NSDate()
     }
-    //load a exist record
+    //load an exist record
     init(recordID: Int, equipmentID: Int, date: NSDate, type: String, recordData: String?) {
         self.recordID = recordID
         self.equipmentID = equipmentID
@@ -35,13 +35,23 @@ struct Record {
         self.recordType = type
         self.message = recordData
     }
+    
 }
 
+class RecordWithDelay: Record {
+    var delayHours: DelayHours = 0
+    convenience init(delay: DelayHours) {
+        self.delayHours = delay
+    }
+}
+
+typealias DelayHours = Int
 typealias EquipmentDetailArray = [Equipment.EquipmentDetail]
 typealias EquipmentBrief = Equipment.EquipmentBrief
 
 class Equipment {
-    //MARK: -info
+    
+    //MARK:- info
     var ID: Int
     var name: String
     var type: String
@@ -64,8 +74,12 @@ class Equipment {
     }
     
     let DB: DBModel = DBModel.sharedInstance()
-    let types: [InspectionType]
-
+    lazy var types: [InspectionType] = {
+        return self.DB.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(self.type)
+    }()
+    
+    var changed: Bool = false
+    
     init(ID: Int,
         name: String,
         type: String,
@@ -90,7 +104,6 @@ class Equipment {
         self.SN = SN
         self.imageName = imageName
         
-        types = DB.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(self.type)
     }
     
     convenience init(ID: Int, name: String, type: String, roomID: Int, roomName: String) {
@@ -127,22 +140,22 @@ class Equipment {
     }
 
    //MARK:- records
-    var recordsArray:[Record] {
-        get {
-            return DB.loadRecordFromEquipmetID(ID)
-        }
-    }
-    var mostRecentRecordsDir:[String: NSDate] {
-        get {
-            var recordsDir: [String: NSDate] = [: ]
-            for type in types {
-                if let record = DB.loadRecentTimeForType(ID, inspectionType: type.inspectionTypeName) {
-                    recordsDir[type.inspectionTypeName] = record.date
-                }
+    
+    //remind delay of types for Inspection
+    lazy var delayHoursDir: [InspectionType: DelayHours] = {
+        return self.DB.loadDelayHoursForEquipment(self.ID)
+    }()
+    lazy var recordsArray:[Record] = { return self.DB.loadRecordFromEquipmetID(self.ID) }()
+    var 
+    lazy var mostRecentRecordsDir:[String: RecordWithDelay] = {
+        var recordsDir: [String: RecordWithDelay] = [: ]
+        for type in self.types {
+            if let record = self.DB.loadRecentTimeForType(self.ID, inspectionType: type.typeName) {
+                recordsDir[type.typeName] = RecordWithDelay(delayHoursDir[type.typeName])
             }
-            return recordsDir
         }
-    }
+        return recordsDir
+    }()
     
     func isEquipmentCompleted() -> Bool{
         for type in types {
