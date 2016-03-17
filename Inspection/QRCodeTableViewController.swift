@@ -38,7 +38,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     var equipment: Equipment?
     var DB: DBModel?
     var record: InspectionRecord?
-    var inspectionTypeArrayForEQ: [InspectionType] = []
+    var inspectionTypeArrayForEQ: [InspectionTask] = []
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

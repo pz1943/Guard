@@ -8,12 +8,12 @@
 
 import Foundation
 import SQLite
-
+typealias EquipmentType = String
 class Equipment {
     //MARK: -info
     var ID: Int
     var name: String
-    var type: String
+    var type: EquipmentType
     var roomID: Int
     var roomName: String
     var brand: String?
@@ -32,11 +32,12 @@ class Equipment {
         }
     }
     
+    let records: RecordsForEquipment
     let DB: DBModel = DBModel.sharedInstance()
 
     init(ID: Int,
         name: String,
-        type: String,
+        type: EquipmentType,
         roomID: Int,
         roomName: String,
         brand: String?,
@@ -57,9 +58,10 @@ class Equipment {
         self.commissionTime = commissionTime
         self.SN = SN
         self.imageName = imageName
+        records = RecordsForEquipment(equipmentID: ID, equipmentType: type)
     }
     
-    convenience init(ID: Int, name: String, type: String, roomID: Int, roomName: String) {
+    convenience init(ID: Int, name: String, type: EquipmentType, roomID: Int, roomName: String) {
         self.init(ID: ID,
             name: name,
             type: type,
@@ -74,10 +76,15 @@ class Equipment {
     }
     var brief: EquipmentBrief {
         get {
-            return EquipmentBrief(ID: ID, name: name, completedFlag: completedFlag)
+            return EquipmentBrief(ID: ID, name: name, completedFlag: records.completedFlag)
         }
     }
-
+    
+    var inspectionDoneFlag: Bool {
+        get {
+            return records.completedFlag
+        }
+    }
 }
 
 struct EquipmentTitleArray {
@@ -101,17 +108,10 @@ struct EquipmentTitleArray {
     }
 }
 
-struct InspectionTypesArrayForEQ {
-    var types: [InspectionType]
-    init(equipment: Equipment) {
-        let DB = DBModel.sharedInstance()
-        types = DB.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment.type)
-    }
-}
 
 struct EquipmentDetailArrayWithTitle {
     var equipment: Equipment
-    var editableDetailArray: [EquipmentDetail]
+    var editableDetailArray: [EquipmentDetail] = []
     var detailArray: [EquipmentDetail]
     init(equipment: Equipment) {
         self.equipment = equipment

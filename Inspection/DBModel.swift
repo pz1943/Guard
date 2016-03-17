@@ -14,7 +14,7 @@ class DBModel {
     private var roomTable: Table
     private var equipmentTable: Table
     private var recordTable: Table
-    private var inspectionTypeTable: Table
+    private var inspectionTaskTable: Table
     private var inspectionDelayTable: Table
     
     private let roomIDExpression = Expression<Int>("roomID")
@@ -32,10 +32,10 @@ class DBModel {
     
     private let recordIDExpression = Expression<Int>("recordID")
     private let recordMessageExpression = Expression<String?>("recordMessage")
-    private let inspectionTypeNameExpression = Expression<String>("inspectionTypeName")
+    private let inspectionTaskNameExpression = Expression<String>("inspectionTaskName")
     private let recordDateExpression = Expression<NSDate>("recordDate")
     
-    private let inspectionTypeIDExpression = Expression<Int>("insepectionTypeID")
+    private let inspectionTaskIDExpression = Expression<Int>("insepectionTaskID")
     private let inspectionCycleExpression = Expression<Double>("inspectionCycle")
     
     private let inspectionDelayIDExpression = Expression<Int>("inspectionDelayID")
@@ -82,7 +82,7 @@ class DBModel {
         self.roomTable = Table("roomTable")
         self.equipmentTable = Table("equipmentTable")
         self.recordTable = Table("recordTable")
-        self.inspectionTypeTable = Table("inspectionTypeTable")
+        self.inspectionTaskTable = Table("inspectionTaskTable")
         self.inspectionDelayTable = Table("inspectionDelayTable")
         
         try! user.run(roomTable.create(ifNotExists: true) { t in
@@ -107,14 +107,14 @@ class DBModel {
         try! user.run(recordTable.create(ifNotExists: true) { t in
             t.column(recordIDExpression, primaryKey: true)
             t.column(equipmentIDExpression)
-            t.column(inspectionTypeNameExpression)
+            t.column(inspectionTaskNameExpression)
             t.column(recordMessageExpression)
             t.column(recordDateExpression)
             })
         
-        try! user.run(inspectionTypeTable.create(ifNotExists: true) { t in
-            t.column(inspectionTypeIDExpression, primaryKey: true)
-            t.column(inspectionTypeNameExpression)
+        try! user.run(inspectionTaskTable.create(ifNotExists: true) { t in
+            t.column(inspectionTaskIDExpression, primaryKey: true)
+            t.column(inspectionTaskNameExpression)
             t.column(equipmentTypeExpression)
             t.column(inspectionCycleExpression)
             })
@@ -122,7 +122,7 @@ class DBModel {
         try! user.run(inspectionDelayTable.create(ifNotExists: true) { t in
             t.column(inspectionDelayIDExpression, primaryKey: true)
             t.column(equipmentIDExpression)
-            t.column(inspectionTypeNameExpression)
+            t.column(inspectionTaskNameExpression)
             t.column(inspectionDelayHourExpression)
         })
 
@@ -134,27 +134,27 @@ class DBModel {
 //MARK: RoomAndEquipmentManagement
 extension DBModel {
     
-    func loadRoomTable() -> [RoomBrief]{
+    func loadRoomTable() -> [Room]{
         let rows = Array(try! user.prepare(roomTable))
-        var rooms: [RoomBrief] = [ ]
+        var rooms: [Room] = [ ]
         for row in rows {
-            rooms.append(RoomBrief(ID: row[roomIDExpression], name: row[roomNameExpression], completedFlag: isRoomInspectionCompleted(row[roomIDExpression])))
+            rooms.append(Room(roomID: row[roomIDExpression], roomName: row[roomNameExpression]))
         }
         return rooms
     }
-    
-    func loadEquipmentTable(roomID: Int) -> [EquipmentBrief]{
+    // 需要重做equipmentBrief么？
+    func loadEquipmentTable(roomID: Int) -> [Equipment]{
         let rows = Array(try! user.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
-        var equipments: [EquipmentBrief] = [ ]
+        var equipments: [Equipment] = [ ]
         for row in rows {
-            equipments.append(EquipmentBrief(ID: row[equipmentIDExpression], name: row[equipmentNameExpression], completedFlag: isEquipmentCompleted(row[equipmentIDExpression])))
+            equipments.append(
+                Equipment(ID: row[equipmentIDExpression],
+                    name: row[equipmentNameExpression],
+                    type: row[equipmentTypeExpression],
+                    roomID: row[roomIDExpression],
+                    roomName: row[roomNameExpression]))
         }
         return equipments
-    }
-    
-    func loadEquipmentType(equipmentID: Int) -> String? {
-        let row = Array(try! user.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
-        return row?[equipmentTypeExpression]
     }
 
     func loadEquipment(equipmentID: Int) -> Equipment? {
@@ -257,15 +257,15 @@ extension DBModel {
             ["传1","传2","传3"],
             ["电1","电2"],
             ["南1","南2","南3"]]
-        static let defaultInspectionTypeArray: [InspectionType] = [
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "日巡视", inspectionCycle: 1),
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "周测试", inspectionCycle: 7),
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "滤网更换", inspectionCycle: 90),
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "室外机清洁", inspectionCycle: 90),
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "皮带更换", inspectionCycle: 180),
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "加湿罐更换", inspectionCycle: 90),
-            InspectionType(equipmentType: "机房精密空调",inspectionTypeName: "季度测试", inspectionCycle: 90),
-            InspectionType(equipmentType: "蓄电池组",inspectionTypeName: "周巡视", inspectionCycle: 7)]
+        static let defaultInspectionTaskArray: [InspectionTask] = [
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "日巡视", inspectionCycle: 1),
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "周测试", inspectionCycle: 7),
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "滤网更换", inspectionCycle: 90),
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "室外机清洁", inspectionCycle: 90),
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "皮带更换", inspectionCycle: 180),
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "加湿罐更换", inspectionCycle: 90),
+            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "季度测试", inspectionCycle: 90),
+            InspectionTask(equipmentType: "蓄电池组",inspectionTaskName: "周巡视", inspectionCycle: 7)]
     }
     
 
@@ -294,10 +294,10 @@ extension DBModel {
                 roomIndex++
             }
         }
-        if user.scalar(inspectionTypeTable.count) == 0 {
-            for var i = 0; i < defaultData.defaultInspectionTypeArray.count; i++ {
-                let type = defaultData.defaultInspectionTypeArray[i]
-                self.addInspectionType(InspectionType(equipmentType: type.equipmentType, inspectionTypeName: type.inspectionTypeName, inspectionCycle: type.inspectionCycle))
+        if user.scalar(inspectionTaskTable.count) == 0 {
+            for var i = 0; i < defaultData.defaultInspectionTaskArray.count; i++ {
+                let type = defaultData.defaultInspectionTaskArray[i]
+                self.addInspectionTask(InspectionTask(equipmentType: type.equipmentType, inspectionTaskName: type.inspectionTaskName, inspectionCycle: type.inspectionCycle))
             }
         }
         
@@ -307,8 +307,8 @@ extension DBModel {
                 let equipments = self.loadEquipmentTable(room.roomID)
                 for equipment in equipments {
                     let EQtype = self.loadEquipmentType(equipment.equipmentID)
-                    for type in self.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(EQtype){
-                        self.addInspectionDelayForEquipment(equipment.equipmentID, inspectionType: type.inspectionTypeName, hours: Constants.inspectionDelayHour)
+                    for type in self.loadInspectionTaskDir().getInspectionTaskArrayForEquipmentType(EQtype){
+                        self.addInspectionDelayForEquipment(equipment.equipmentID, inspectionTask: type.inspectionTaskName, hours: Constants.inspectionDelayHour)
                     }
 
                 }
@@ -327,7 +327,7 @@ extension DBModel {
 extension DBModel {
     func addRecord(record: Record) {
         let insert = recordTable.insert(self.recordMessageExpression <- record.message,
-            self.inspectionTypeNameExpression <- record.recordType,
+            self.inspectionTaskNameExpression <- record.recordType,
             self.equipmentIDExpression <- record.equipmentID,
             self.recordDateExpression <- record.date)
         do {
@@ -357,7 +357,7 @@ extension DBModel {
             print(error)
         }
         for row in array {
-            let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTypeNameExpression], recordData: row[recordMessageExpression])
+            let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
             recordArray.insert(record, atIndex: 0)
         }
         return recordArray
@@ -365,13 +365,13 @@ extension DBModel {
     func loadRecordFromRecordID(recordID: Int) -> Record {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
         let row = Array(try! user.prepare(alice)).first!
-        let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTypeNameExpression], recordData: row[recordMessageExpression])
+        let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
         return record
 
     }
 
-    func loadRecentTimeForType(equipmentID: Int, inspectionType: String) -> Record? {
-        let alice = recordTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTypeNameExpression == inspectionType)
+    func loadRecentTimeForType(equipmentID: Int, inspectionTask: String) -> Record? {
+        let alice = recordTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         if let lastRecordID = user.scalar(alice.select(recordIDExpression.max)) {
             let record = loadRecordFromRecordID(lastRecordID)
             return record
@@ -379,12 +379,13 @@ extension DBModel {
             return nil
         }
     }
+    
 //
 //    func isEquipmentCompleted(equipmentID: Int) -> Bool {
 //        if let equipmentType = loadEquipmentType(equipmentID) {
 //            let recentInspectionTimeDir = loadRecentTimeDir(equipmentID)
-//            let inspectionTypeDir = self.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipmentType)
-//            if recentInspectionTimeDir.count < inspectionTypeDir.count {
+//            let inspectionTaskDir = self.loadInspectionTaskDir().getInspectionTaskArrayForEquipmentType(equipmentType)
+//            if recentInspectionTimeDir.count < inspectionTaskDir.count {
 //                return false
 //            }
 //            for (type, date) in recentInspectionTimeDir {
@@ -400,7 +401,7 @@ extension DBModel {
 //        if equipmentType == nil {
 //            return false
 //        }
-//        let timeCycleDir = self.loadInspectionTypeDir()
+//        let timeCycleDir = self.loadInspectionTaskDir()
 //        if let timeCycle = timeCycleDir.getTimeCycleForEquipment(equipmentType!, type: type){
 //            if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
 //                return false
@@ -420,25 +421,26 @@ extension DBModel {
 //    }
 
 }
+
+
 extension DBModel {
-    
-    func loadInspectionTypeDir() -> InspectionTypeDir {
-        let rows = Array(try! user.prepare(inspectionTypeTable))
-        var inspectionTypeDir = InspectionTypeDir()
+
+    func loadInspectionTaskDir() -> [String: [InspectionTask]] {
+        let rows = Array(try! user.prepare(inspectionTaskTable))
+        var inspectionTaskDir: [String: [InspectionTask]] = [: ]
         for row in rows {
-            let inspectionType = InspectionType(
+            let type = InspectionTask(
                 equipmentType: row[equipmentTypeExpression],
-                inspectionTypeName: row[inspectionTypeNameExpression],
+                inspectionTaskName: row[inspectionTaskNameExpression],
                 inspectionCycle: row[inspectionCycleExpression])
-            inspectionTypeDir.addInspectionType(inspectionType)
-            
+                inspectionTaskDir[type.equipmentType]?.append(type)
         }
-        return inspectionTypeDir
+        return inspectionTaskDir
     }
     
-    func addInspectionType(type: InspectionType) -> Bool {
-        let insert = inspectionTypeTable.insert(
-            self.inspectionTypeNameExpression <- type.inspectionTypeName,
+    func addInspectionTask(type: InspectionTask) -> Bool {
+        let insert = inspectionTaskTable.insert(
+            self.inspectionTaskNameExpression <- type.inspectionTaskName,
             self.equipmentTypeExpression <- type.equipmentType,
             self.inspectionCycleExpression <- type.inspectionCycle
         )
@@ -450,9 +452,9 @@ extension DBModel {
             return false
         }
     }
-//
-//    func changeInspectionTypeCycle(inspectionTypeID: Int, newValue: String) {
-//        let alice = inspectionTypeTable.filter(self.inspectionTypeIDExpression == inspectionTypeID)
+
+//    func changeInspectionTaskCycle(inspectionTaskID: Int, newValue: String) {
+//        let alice = inspectionTaskTable.filter(self.inspectionTaskIDExpression == inspectionTaskID)
 //        do {
 //            try user.run(alice.update(Expression<String>(inspectionCycleExpression) <- newValue))
 //        } catch let error as NSError {
@@ -460,8 +462,8 @@ extension DBModel {
 //        }
 //    }
 //    
-//    func delInspectionType(inspectionTypeID: Int) {
-//        let roomTableAlice = inspectionTypeTable.filter(self.inspectionTypeIDExpression == inspectionTypeID)
+//    func delInspectionTask(inspectionTaskID: Int) {
+//        let roomTableAlice = inspectionTaskTable.filter(self.inspectionTaskIDExpression == inspectionTaskID)
 //        do {
 //            try user.run(roomTableAlice.delete())
 //        } catch let error as NSError {
@@ -472,13 +474,19 @@ extension DBModel {
 }
 
 extension DBModel {
-    func editInspectionDelayHourForEquipment(equipmentID: Int, inspectionType: String, hours: Int) {
-        
+    func editInspectionDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+        let alice = inspectionDelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
+        do {
+            try user.run(alice.update(Expression<Int>(inspectionDelayHourExpression) <- hours))
+        } catch let error as NSError {
+            print(error)
+        }
     }
     
-    func addInspectionDelayForEquipment(equipmentID: Int, inspectionType: String, hours: Int) {
-        let insert = inspectionDelayTable.insert(self.inspectionTypeNameExpression <- inspectionType,
+    func addInspectionDelayForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+        let insert = inspectionDelayTable.insert(self.inspectionTaskNameExpression <- inspectionTask,
             self.equipmentIDExpression <- equipmentID,
+            self.inspectionTaskNameExpression <- inspectionTask,
             self.inspectionDelayHourExpression <- hours
         )
         do {

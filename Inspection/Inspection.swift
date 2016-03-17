@@ -9,21 +9,17 @@
 import Foundation
 import SQLite
 
-struct InspectionType {
+struct InspectionTask {
     var equipmentType: String
-    var inspectionTypeName: String
+    var inspectionTaskName: String
     var inspectionCycle: Double
 }
 
-struct InspectionTypeDir {
-    private var dir: [String: [(String, Double)]] = [: ]
-
-    mutating func addInspectionType(type: InspectionType) {
-        if dir[type.equipmentType] != nil {
-            dir[type.equipmentType]!.append((typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle))
-        } else {
-            dir[type.equipmentType] = [(typeName: type.inspectionTypeName, timeCycle: type.inspectionCycle)]
-        }
+struct InspectionTaskDir {
+    private var dir: [String: [InspectionTask]] = [: ]
+    private let DB = DBModel.sharedInstance()
+    init() {
+        self.dir = DB.loadInspectionTaskDir()
     }
     
     var equipmentTypeArray: [String] {
@@ -38,21 +34,21 @@ struct InspectionTypeDir {
         }
     }
     
-    func getInspectionTypeArrayForEquipmentType(equipmentType: String?) -> [InspectionType]{
+    func getTaskArray(equipmentType: String?) -> [InspectionTask]{
         if equipmentType != nil {
             if let arr = dir[equipmentType!] {
-                return arr.map({InspectionType(equipmentType: equipmentType!, inspectionTypeName: $0.0, inspectionCycle: $0.1)})
+                return arr
             }
         }
         return []
     }
     
-    subscript(index: Int?) -> [InspectionType] {
+    subscript(index: Int?) -> [InspectionTask] {
         get {
             if index != nil {
                 let equipmentType = equipmentTypeArray[index!]
                 if let types =  dir[equipmentType] {
-                    return types.map({InspectionType(equipmentType: equipmentType, inspectionTypeName: $0.0, inspectionCycle: $0.1)})
+                    return types
                 } else {
                     return []
                 }
@@ -63,17 +59,27 @@ struct InspectionTypeDir {
     }
     
     func getTimeCycleForEquipment(equipmentType: String, type: String) -> Double? {
-        var typeDirForEQDir :[String: Double] = [: ]
-        if let arr = self.dir[equipmentType] {
-            let _ = arr.map({typeDirForEQDir[$0.0] = $0.1})
+        var cycle: Double = 0.0
+        if let typeArray = dir[equipmentType] {
+            let _ = typeArray.map({
+                if $0.equipmentType == type {
+                    cycle = $0.inspectionCycle
+                }
+            })
+            return cycle
+        } else {
+            return nil
         }
-        return typeDirForEQDir[type]
     }
-    
-//    func getDirForEquipment(equipmentID: Int) -> [String: Double] {
-//        
-//    }
 }
 
+struct InspectionDelayDir {
+    private var dir: [String: Int] = [: ]
+    private let DB = DBModel.sharedInstance()
+    init(equipmentID: Int) {
+        self.dir = DB.loadInspectionDelayDir(equipmentID)
+    }
+    
+}
 
 

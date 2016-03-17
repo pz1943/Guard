@@ -38,32 +38,36 @@ struct Record {
 }
 
 struct RecordsForEquipment {
-    var equipment: Equipment
-    let DB: DBModel = DBModel.sharedInstance()
-    let typeArray: [InspectionType]
+    private var equipmentID: Int
+    private var equipmentType: String
+    private var typeArray: [InspectionTask]
     
-    init(equipment: Equipment) {
-        self.equipment = equipment
-        self.typeArray = InspectionTypesArrayForEQ(equipment: equipment).types
+    private let inspectionTaskDir = InspectionTaskDir()
+    private let DB: DBModel = DBModel.sharedInstance()
+
+    init(equipmentID: Int, equipmentType: String) {
+        self.equipmentID = equipmentID
+        self.equipmentType = equipmentType
+        self.typeArray = inspectionTaskDir.getTaskArray(equipmentType)
     }
     var recordsArray:[Record] {
         get {
-            return DB.loadRecordFromEquipmetID(equipment.ID)
+            return DB.loadRecordFromEquipmetID(equipmentID)
         }
     }
     var mostRecentRecordsDir:[String: NSDate] {
         get {
             var recordsDir: [String: NSDate] = [: ]
             for type in typeArray {
-                if let record = DB.loadRecentTimeForType(equipment.ID, inspectionType: type.inspectionTypeName) {
-                    recordsDir[type.inspectionTypeName] = record.date
+                if let record = DB.loadRecentTimeForType(equipmentID, inspectionTask: type.inspectionTaskName) {
+                    recordsDir[type.inspectionTaskName] = record.date
                 }
             }
             return recordsDir
         }
     }
     
-    func isEquipmentCompleted() -> Bool{
+    private func isEquipmentCompleted() -> Bool{
         for type in typeArray {
             if isEquipmentCompletedForType(type) == false {
                 return false
@@ -72,10 +76,9 @@ struct RecordsForEquipment {
         return true
     }
     
-    func isEquipmentCompletedForType(inspectionType: InspectionType) -> Bool {
-        let timeCycleDir = DB.loadInspectionTypeDir()
-        if let timeCycle = timeCycleDir.getTimeCycleForEquipment(equipment.type, type: inspectionType.inspectionTypeName){
-            if let date = mostRecentRecordsDir[inspectionType.inspectionTypeName] {
+    private func isEquipmentCompletedForType(inspectionTask: InspectionTask) -> Bool {
+        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, type: inspectionTask.inspectionTaskName){
+            if let date = mostRecentRecordsDir[inspectionTask.inspectionTaskName] {
                 if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
                     return false
                 }
@@ -84,7 +87,6 @@ struct RecordsForEquipment {
             }
         }
         return true
-        
     }
     
     var completedFlag: Bool {

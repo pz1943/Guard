@@ -8,14 +8,14 @@
 
 import Foundation
 
-class room {
+class Room {
     var name: String
     var ID: Int
     var equipmentsArray: [Equipment]
     var isInspectionDone: Bool {
         get {
             for equipment in equipmentsArray {
-                if equipment.isInspectionDone == false {
+                if equipment.inspectionDoneFlag == false {
                     return false
                 }
             }
@@ -31,6 +31,5 @@ class room {
         self.name = roomName
         self.ID = roomID
         self.equipmentsArray = []
-
     }
 }

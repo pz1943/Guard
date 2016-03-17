@@ -77,7 +77,7 @@ class RoomTableViewController: UITableViewController {
     var loginBarButtonItemCopy: UIBarButtonItem?
     var canEditFlag: Bool = true
     var user: User? 
-    var rooms: [RoomBrief] = [ ]
+    var rooms: [Room] = [ ]
     var DB: DBModel?
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
