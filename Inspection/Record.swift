@@ -40,15 +40,15 @@ struct Record {
 struct RecordsForEquipment {
     private var equipmentID: Int
     private var equipmentType: String
-    private var typeArray: [InspectionTask]
-    
-    private let inspectionTaskDir = InspectionTaskDir()
+    private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
+    private var inspectionTaskArray: [InspectionTask]
+
     private let DB: DBModel = DBModel.sharedInstance()
 
     init(equipmentID: Int, equipmentType: String) {
         self.equipmentID = equipmentID
         self.equipmentType = equipmentType
-        self.typeArray = inspectionTaskDir.getTaskArray(equipmentType)
+        self.inspectionTaskArray = inspectionTaskDir.getTaskArray(equipmentType)
     }
     var recordsArray:[Record] {
         get {
@@ -58,7 +58,7 @@ struct RecordsForEquipment {
     var mostRecentRecordsDir:[String: NSDate] {
         get {
             var recordsDir: [String: NSDate] = [: ]
-            for type in typeArray {
+            for type in inspectionTaskArray {
                 if let record = DB.loadRecentTimeForType(equipmentID, inspectionTask: type.inspectionTaskName) {
                     recordsDir[type.inspectionTaskName] = record.date
                 }
@@ -68,7 +68,7 @@ struct RecordsForEquipment {
     }
     
     private func isEquipmentCompleted() -> Bool{
-        for type in typeArray {
+        for type in inspectionTaskArray {
             if isEquipmentCompletedForType(type) == false {
                 return false
             }
