@@ -8,18 +8,13 @@
 
 import Foundation
 import SQLite
-
-class DBModel {
+class EquipmentDB {
+    private var DB: DBModel
     private var user: Connection
-    private var roomTable: Table
     private var equipmentTable: Table
-    private var recordTable: Table
-    private var inspectionTaskTable: Table
-    private var inspectionDelayTable: Table
     
     private let roomIDExpression = Expression<Int>("roomID")
     private let roomNameExpression = Expression<String>("roomName")
-    
     private let equipmentIDExpression = Expression<Int>(EquipmentInfoTitle.ID.rawValue)
     private let equipmentNameExpression = Expression<String>(EquipmentInfoTitle.Name.rawValue)
     private let equipmentTypeExpression = Expression<String>(EquipmentInfoTitle.EQType.rawValue)
@@ -29,6 +24,163 @@ class DBModel {
     private let equipmentCommissionTimeExpression = Expression<String?>(EquipmentInfoTitle.CommissionTime.rawValue)
     private let equipmentSNExpression = Expression<String?>(EquipmentInfoTitle.SN.rawValue)
     private let equipmentImageNameExpression = Expression<String?>(EquipmentInfoTitle.ImageName.rawValue)
+
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
+        self.equipmentTable = Table("equipmentTable")
+        
+        try! user.run(equipmentTable.create(ifNotExists: true) { t in
+            t.column(equipmentIDExpression, primaryKey: true)
+            t.column(equipmentNameExpression)
+            t.column(equipmentTypeExpression)
+            t.column(roomIDExpression)
+            t.column(roomNameExpression)
+            t.column(equipmentBrandExpression)
+            t.column(equipmentModelExpression)
+            t.column(equipmentCapacityExpression)
+            t.column(equipmentCommissionTimeExpression)
+            t.column(equipmentSNExpression)
+            t.column(equipmentImageNameExpression)
+            })
+    }
+    
+    func addEquipment(equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {
+        let insert = equipmentTable.insert(
+            self.equipmentNameExpression <- equipmentName,
+            self.equipmentTypeExpression <- equipmentType,
+            self.roomIDExpression <- roomID,
+            self.roomNameExpression <- roomName)
+        do {
+            try user.run(insert)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func delEquipment(equipmentToDel: Int) {
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentToDel)
+        do {
+            try user.run(alice.delete())
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    func loadEquipmentTable(roomID: Int) -> [Equipment]{
+        let rows = Array(try! user.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
+        var equipments: [Equipment] = [ ]
+        for row in rows {
+            equipments.append(
+                Equipment(ID: row[equipmentIDExpression],
+                    name: row[equipmentNameExpression],
+                    type: row[equipmentTypeExpression],
+                    roomID: row[roomIDExpression],
+                    roomName: row[roomNameExpression]))
+        }
+        return equipments
+    }
+    
+    func loadEquipment(equipmentID: Int) -> Equipment? {
+        let row = Array(try! user.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
+        if let name =  row?[equipmentNameExpression] {
+            let EQType = row?[equipmentTypeExpression]
+            let locatedRoomID = row?[roomIDExpression]
+            let locatedRoomName = row?[roomNameExpression]
+            let brand = row?[equipmentBrandExpression]
+            let model = row?[equipmentModelExpression]
+            let capacity = row?[equipmentCapacityExpression]
+            let commissionTime = row?[equipmentCommissionTimeExpression]
+            let SN = row?[equipmentSNExpression]
+            let ImageName = row?[equipmentImageNameExpression]
+            
+            return Equipment(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
+            
+        } else {
+            return nil
+        }
+    }
+    
+    func editEquipment(equipment: Equipment) {
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.ID)
+        for equipmentDetail in EquipmentDetailArrayWithTitle {
+            do {
+                try user.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+    }
+    // to edit one singel Detail
+    func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentID)
+        do {
+            if equipmentDetailTitleString != Equipment.EquipmentInfoTitle.Name.rawValue {
+                try user.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
+            } else {
+                try user.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
+            }
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+
+}
+
+class RoomDB {
+    private var DB: DBModel
+    private var user: Connection
+    private var roomTable: Table
+    
+    private let roomIDExpression = Expression<Int>("roomID")
+    private let roomNameExpression = Expression<String>("roomName")
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
+        
+        self.roomTable = Table("roomTable")
+        
+        try! user.run(roomTable.create(ifNotExists: true) { t in
+            t.column(roomIDExpression, primaryKey: true)
+            t.column(roomNameExpression)
+            })
+    }
+    
+    func loadRoomTable() -> [Room]{
+        let rows = Array(try! user.prepare(roomTable))
+        var rooms: [Room] = [ ]
+        for row in rows {
+            rooms.append(Room(roomID: row[roomIDExpression], roomName: row[roomNameExpression]))
+        }
+        return rooms
+    }
+    
+    func addRoom(roomName: String) {
+        let insert = roomTable.insert(self.roomNameExpression <- roomName)
+        do {
+            try user.run(insert)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func delRoom(roomID: Int) {
+        let roomTableAlice = roomTable.filter(self.roomIDExpression == roomID)
+        do {
+            try user.run(roomTableAlice.delete())
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+}
+class DBModel {
+    private var user: Connection
+    private var recordTable: Table
+    private var inspectionTaskTable: Table
+    private var inspectionDelayTable: Table
+    
+    private let roomIDExpression = Expression<Int>("roomID")
+    private let roomNameExpression = Expression<String>("roomName")
+    
     
     private let recordIDExpression = Expression<Int>("recordID")
     private let recordMessageExpression = Expression<String?>("recordMessage")
@@ -53,6 +205,9 @@ class DBModel {
         static let inspectionDelayHour: Int = 8
     }
     
+    func getUser() -> Connection {
+        return self.user
+    }
     
     class func sharedInstance() -> DBModel! {
         dispatch_once(&Static.token) {
@@ -79,30 +234,11 @@ class DBModel {
         dateFormatter.timeZone = NSTimeZone.systemTimeZone()
         
         user = try! Connection("\(path)/db.sqlite3")
-        self.roomTable = Table("roomTable")
-        self.equipmentTable = Table("equipmentTable")
         self.recordTable = Table("recordTable")
         self.inspectionTaskTable = Table("inspectionTaskTable")
         self.inspectionDelayTable = Table("inspectionDelayTable")
         
-        try! user.run(roomTable.create(ifNotExists: true) { t in
-            t.column(roomIDExpression, primaryKey: true)
-            t.column(roomNameExpression)
-            })
         
-        try! user.run(equipmentTable.create(ifNotExists: true) { t in
-            t.column(equipmentIDExpression, primaryKey: true)
-            t.column(equipmentNameExpression)
-            t.column(equipmentTypeExpression)
-            t.column(roomIDExpression)
-            t.column(roomNameExpression)
-            t.column(equipmentBrandExpression)
-            t.column(equipmentModelExpression)
-            t.column(equipmentCapacityExpression)
-            t.column(equipmentCommissionTimeExpression)
-            t.column(equipmentSNExpression)
-            t.column(equipmentImageNameExpression)
-            })
         
         try! user.run(recordTable.create(ifNotExists: true) { t in
             t.column(recordIDExpression, primaryKey: true)
@@ -134,119 +270,6 @@ class DBModel {
 //MARK: RoomAndEquipmentManagement
 extension DBModel {
     
-    func loadRoomTable() -> [Room]{
-        let rows = Array(try! user.prepare(roomTable))
-        var rooms: [Room] = [ ]
-        for row in rows {
-            rooms.append(Room(roomID: row[roomIDExpression], roomName: row[roomNameExpression]))
-        }
-        return rooms
-    }
-    // 需要重做equipmentBrief么？
-    func loadEquipmentTable(roomID: Int) -> [Equipment]{
-        let rows = Array(try! user.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
-        var equipments: [Equipment] = [ ]
-        for row in rows {
-            equipments.append(
-                Equipment(ID: row[equipmentIDExpression],
-                    name: row[equipmentNameExpression],
-                    type: row[equipmentTypeExpression],
-                    roomID: row[roomIDExpression],
-                    roomName: row[roomNameExpression]))
-        }
-        return equipments
-    }
-
-    func loadEquipment(equipmentID: Int) -> Equipment? {
-        let row = Array(try! user.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
-        if let name =  row?[equipmentNameExpression] {
-            let EQType = row?[equipmentTypeExpression]
-            let locatedRoomID = row?[roomIDExpression]
-            let locatedRoomName = row?[roomNameExpression]
-            let brand = row?[equipmentBrandExpression]
-            let model = row?[equipmentModelExpression]
-            let capacity = row?[equipmentCapacityExpression]
-            let commissionTime = row?[equipmentCommissionTimeExpression]
-            let SN = row?[equipmentSNExpression]
-            let ImageName = row?[equipmentImageNameExpression]
-            
-            return Equipment(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
-            
-        } else {
-            return nil
-        }
-    }
-    
-    func editEquipment(equipment: Equipment) {
-        let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.ID)
-        for equipmentDetail in equipment.editableDetailArray {
-            do {
-                try user.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
-            } catch let error as NSError {
-                print(error)
-            }
-        }
-    }
-    // to edit one singel Detail
-    func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
-        let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentID)
-        do {
-            if equipmentDetailTitleString != Equipment.EquipmentInfoTitle.Name.rawValue {
-                try user.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
-            } else {
-                try user.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
-            }
-        } catch let error as NSError {
-            print(error)
-        }
-    }
-    
-    func addRoom(roomName: String) {
-        let insert = roomTable.insert(self.roomNameExpression <- roomName)
-        do {
-            try user.run(insert)
-        } catch let error as NSError {
-            print(error)
-        }
-    }
-    
-    func delRoom(roomID: Int) {
-        let roomTableAlice = roomTable.filter(self.roomIDExpression == roomID)
-        do {
-            try user.run(roomTableAlice.delete())
-        } catch let error as NSError {
-            print(error)
-        }
-        
-        let equipmentTableAlice = equipmentTable.filter(self.roomIDExpression == roomID)
-        do {
-            try user.run(equipmentTableAlice.delete())
-        } catch let error as NSError {
-            print(error)
-        }
-    }
-    
-    func addEquipment(equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {
-        let insert = equipmentTable.insert(
-            self.equipmentNameExpression <- equipmentName,
-            self.equipmentTypeExpression <- equipmentType,
-            self.roomIDExpression <- roomID,
-            self.roomNameExpression <- roomName)
-        do {
-            try user.run(insert)
-        } catch let error as NSError {
-            print(error)
-        }
-    }
-    
-    func delEquipment(equipmentToDel: Int) {
-        let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentToDel)
-        do {
-            try user.run(alice.delete())
-        } catch let error as NSError {
-            print(error)
-        }
-    }
 }
 //MARK: testDateInit
 extension DBModel {

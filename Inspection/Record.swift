@@ -18,21 +18,22 @@ struct Record {
     private var recordID: Int?
     var equipmentID: Int
     var date: NSDate
-    var recordType: String
+    var taskType: String
+//    var recorder: String
     var message: String?
     //add a new Record
-    init(equipmentID: Int, type: String, recordData: String?) {
+    init(equipmentID: Int, task: String, recordData: String?) {
         self.equipmentID = equipmentID
-        self.recordType = type
+        self.taskType = task
         self.message = recordData
         self.date = NSDate()
     }
     //load a exist record
-    init(recordID: Int, equipmentID: Int, date: NSDate, type: String, recordData: String?) {
+    init(recordID: Int, equipmentID: Int, date: NSDate, task: String, recordData: String?) {
         self.recordID = recordID
         self.equipmentID = equipmentID
         self.date = date
-        self.recordType = type
+        self.taskType = task
         self.message = recordData
     }
 }
@@ -68,16 +69,16 @@ struct RecordsForEquipment {
     }
     
     private func isEquipmentCompleted() -> Bool{
-        for type in inspectionTaskArray {
-            if isEquipmentCompletedForType(type) == false {
+        for task in inspectionTaskArray {
+            if isEquipmentCompletedForTask(task) == false {
                 return false
             }
         }
         return true
     }
     
-    private func isEquipmentCompletedForType(inspectionTask: InspectionTask) -> Bool {
-        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, type: inspectionTask.inspectionTaskName){
+    private func isEquipmentCompletedForTask(inspectionTask: InspectionTask) -> Bool {
+        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, task: inspectionTask.inspectionTaskName){
             if let date = mostRecentRecordsDir[inspectionTask.inspectionTaskName] {
                 if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
                     return false

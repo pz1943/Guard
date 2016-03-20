@@ -58,11 +58,11 @@ struct InspectionTaskDir {
         }
     }
     
-    func getTimeCycleForEquipment(equipmentType: String, type: String) -> Double? {
+    func getTimeCycleForEquipment(equipmentType: String, task: String) -> Double? {
         var cycle: Double = 0.0
         if let typeArray = dir[equipmentType] {
             let _ = typeArray.map({
-                if $0.equipmentType == type {
+                if $0.equipmentType == task {
                     cycle = $0.inspectionCycle
                 }
             })

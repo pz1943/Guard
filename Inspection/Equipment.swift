@@ -32,6 +32,8 @@ class Equipment {
         }
     }
     
+    var isRecordsNeedReload: Bool = true
+    var inspectionDoneFlagCache: Bool = false
     let records: RecordsForEquipment
     let DB: DBModel = DBModel.sharedInstance()
     
@@ -74,6 +76,8 @@ class Equipment {
             SN: nil,
             imageName: nil)
     }
+}
+extension Equipment {
     var brief: EquipmentBrief {
         get {
             return EquipmentBrief(ID: ID, name: name, completedFlag: records.completedFlag)
@@ -82,7 +86,12 @@ class Equipment {
     
     var inspectionDoneFlag: Bool {
         get {
-            return records.completedFlag
+            if isRecordsNeedReload == false {
+                return inspectionDoneFlagCache
+            } else {
+                inspectionDoneFlagCache = records.completedFlag
+                return inspectionDoneFlagCache
+            }
         }
     }
 }
