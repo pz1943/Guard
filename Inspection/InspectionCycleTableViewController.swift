@@ -13,7 +13,7 @@ class InspectionCycleTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DB = DBModel.sharedInstance()
+        DB = InspectionTaskDB()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -27,7 +27,6 @@ class InspectionCycleTableViewController: UITableViewController {
     }
 
     override func viewWillAppear(animated: Bool) {
-        timeCycleDir = DB!.loadInspectionTypeDir()
         self.tableView.reloadData()
     }
     
@@ -41,8 +40,8 @@ class InspectionCycleTableViewController: UITableViewController {
         let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         self.presentViewController(controller, animated: true, completion: nil)
     }
-    var DB: DBModel?
-    var timeCycleDir = InspectionTypeDir()
+    var DB: InspectionTaskDB?
+    var timeCycleDir = InspectionTaskDir()
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -57,7 +56,7 @@ class InspectionCycleTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("timeCycleCell", forIndexPath: indexPath) as! InspectionCycleTableViewCell
-        cell.typeLabel.text = timeCycleDir[indexPath.section][indexPath.row].inspectionTypeName
+        cell.typeLabel.text = timeCycleDir[indexPath.section][indexPath.row].inspectionTaskName
         cell.timeCycelLabel.text = Int(timeCycleDir[indexPath.section][indexPath.row].inspectionCycle).description
         // Configure the cell...
 

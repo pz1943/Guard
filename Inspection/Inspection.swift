@@ -17,7 +17,7 @@ struct InspectionTask {
 
 struct InspectionTaskDir {
     private var dir: [String: [InspectionTask]] = [: ]
-    private let DB = DBModel.sharedInstance()
+    private let DB = InspectionTaskDB()
     init() {
         self.dir = DB.loadInspectionTaskDir()
     }
@@ -75,7 +75,7 @@ struct InspectionTaskDir {
 
 struct InspectionDelayDir {
     private var dir: [String: Int] = [: ]
-    private let DB = DBModel.sharedInstance()
+    private let DB = InspectionDelayDB()
     init(equipmentID: Int) {
         self.dir = DB.loadInspectionDelayDir(equipmentID)
     }

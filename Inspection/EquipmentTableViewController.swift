@@ -12,7 +12,7 @@ class EquipmentTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DB = DBModel.sharedInstance()
+        DB = EquipmentDB()
         NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoomID!)
             self.tableView.reloadData()
@@ -43,9 +43,9 @@ class EquipmentTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-    var DB: DBModel?
+    var DB: EquipmentDB?
     var user: User?
-    var equipmentArray: [EquipmentBrief] = []
+    var equipmentArray: [Equipment] = []
     var selectRoomID: Int?
     var selectRoomName: String?
     var rightBarButtonItems: UIBarButtonItem?
@@ -69,9 +69,9 @@ class EquipmentTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentCell", forIndexPath: indexPath) as! EquipmentTableViewCell
-            cell.equipmentTitle.text = equipmentArray[indexPath.row].equipmentName
-            cell.equipmentID = equipmentArray[indexPath.row].equipmentID
-            if equipmentArray[indexPath.row].isequipmentInspectonCompleted == false {
+            cell.equipmentTitle.text = equipmentArray[indexPath.row].name
+            cell.equipment = equipmentArray[indexPath.row]
+            if equipmentArray[indexPath.row].isRecordsNeedReload == false {
                 cell.DoneFlagImageView.alpha = 0.1
             } else {
                 cell.DoneFlagImageView.alpha = 1
@@ -100,7 +100,7 @@ class EquipmentTableViewController: UITableViewController {
         if editingStyle == .Delete {
             // Delete the row from the data source
             if selectRoomID != nil {
-                DB?.delEquipment(equipmentArray[indexPath.row].equipmentID)
+                DB?.delEquipment(equipmentArray[indexPath.row].ID)
                 equipmentArray.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             }
@@ -117,13 +117,13 @@ class EquipmentTableViewController: UITableViewController {
         if segue.identifier == "equipmentDetail" {
             if let DVC = segue.destinationViewController as? EquipmentDetailTableViewController {
                 if let cell = sender as? EquipmentTableViewCell {
-                    DVC.equipmentID = cell.equipmentID
+                    DVC.equipment = cell.equipment
                 }
             }
         } else if segue.identifier == "ToQRCodeSegue" {
             if let DVC = segue.destinationViewController as? QRCodeViewController {
-                if let equipmentID = (sender as? EquipmentTableViewCell)?.equipmentID {
-                    DVC.equipmentID = equipmentID
+                if let equipment = (sender as? EquipmentTableViewCell)?.equipment {
+                    DVC.equipment = equipment
                 }
             }
         } else if segue.identifier == "AddEquipmentSegue" {

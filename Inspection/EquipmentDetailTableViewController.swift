@@ -15,16 +15,15 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
 
-        DB = DBModel.sharedInstance()
+        DB = RecordDB()
         NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.takeANewPhoto()
         }
     }
 
     override func viewWillAppear(animated: Bool) {
-        if equipmentID != nil {
-            equipment = DB!.loadEquipment(equipmentID!)
-            equipmentRecordArray = DB!.loadInstectionRecord(equipmentID!)
+        if equipment != nil {
+            equipmentRecordArray = DB!.loadRecordFromEquipmetID(equipmentID!)
             recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
             inspectionTypeDir = DB!.loadInspectionTypeDir()
             if equipment != nil {
@@ -38,13 +37,12 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-    var DB: DBModel?
+    var DB: RecordDB?
     var equipment: Equipment?
-    var equipmentID: Int?
-    var equipmentDetail: EquipmentDetailArray = [ ]
-    var equipmentRecordArray: [InspectionRecord] = []
+    var equipmentDetail: EquipmentDetailArrayWithTitle?
+    var equipmentRecordArray: RecordsForEquipment?
     var recentInspectionTime: [String: NSDate] = [: ]
-    var inspectionTypeDir: InspectionTypeDir?
+    var inspectionTypeDir: InspectionTaskDir?
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {

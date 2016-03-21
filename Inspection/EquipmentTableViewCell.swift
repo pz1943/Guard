@@ -25,7 +25,7 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
     var DB: DBModel?
     var roomID: Int?
     var roomName: String?
-    var equipmentID: Int?
+    var equipment: Equipment?
     @IBOutlet weak var equipmentTitle: UILabel!
     @IBOutlet weak var DoneFlagImageView: UIImageView!
 

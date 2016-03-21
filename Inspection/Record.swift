@@ -19,7 +19,6 @@ struct Record {
     var equipmentID: Int
     var date: NSDate
     var taskType: String
-//    var recorder: String
     var message: String?
     //add a new Record
     init(equipmentID: Int, task: String, recordData: String?) {
@@ -44,8 +43,7 @@ struct RecordsForEquipment {
     private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
     private var inspectionTaskArray: [InspectionTask]
 
-    private let DB: DBModel = DBModel.sharedInstance()
-
+    private let DB = RecordDB()
     init(equipmentID: Int, equipmentType: String) {
         self.equipmentID = equipmentID
         self.equipmentType = equipmentType

@@ -1,29 +1,57 @@
 //
-//  songListDB.swift
-//  DBFM
-//
 //  Created by apple on 15/12/19.
 //  Copyright © 2015年 pz1943. All rights reserved.
 //
 
 import Foundation
 import SQLite
+
+enum ExpressionTitle:  String, CustomStringConvertible{
+    case RoomID = "机房 ID"
+    case RoomName = "机房名称"
+    case EQID = "设备 ID"
+    case EQName = "设备名称"
+    case EQType = "设备类型"
+    case EQBrand = "设备品牌"
+    case EQModel = "设备型号"
+    case EQCapacity = "设备容量"
+    case EQCommissionTime = "投运时间"
+    case EQSN = "设备 SN"
+    case EQImageName = "图片名称"
+    case RecordID = "recordID"
+    case RecordMessage = "recordMessage"
+    case RecordDate = "recordDate"
+    
+    case InspectionTaskID = "insepectionTaskID"
+    case InspectionTaskName = "inspectionTaskName"
+    case InspectionCycle = "inspectionCycle"
+    
+    case InspectionDelayID = "inspectionDelayID"
+    case InspectionDelayHour = "inspectionDelayHour"
+    
+    var description: String {
+        get {
+            return self.rawValue
+        }
+    }
+}
+
 class EquipmentDB {
     private var DB: DBModel
     private var user: Connection
     private var equipmentTable: Table
     
-    private let roomIDExpression = Expression<Int>("roomID")
-    private let roomNameExpression = Expression<String>("roomName")
-    private let equipmentIDExpression = Expression<Int>(EquipmentInfoTitle.ID.rawValue)
-    private let equipmentNameExpression = Expression<String>(EquipmentInfoTitle.Name.rawValue)
-    private let equipmentTypeExpression = Expression<String>(EquipmentInfoTitle.EQType.rawValue)
-    private let equipmentBrandExpression = Expression<String?>(EquipmentInfoTitle.Brand.rawValue)
-    private let equipmentModelExpression = Expression<String?>(EquipmentInfoTitle.Model.rawValue)
-    private let equipmentCapacityExpression = Expression<String?>(EquipmentInfoTitle.Capacity.rawValue)
-    private let equipmentCommissionTimeExpression = Expression<String?>(EquipmentInfoTitle.CommissionTime.rawValue)
-    private let equipmentSNExpression = Expression<String?>(EquipmentInfoTitle.SN.rawValue)
-    private let equipmentImageNameExpression = Expression<String?>(EquipmentInfoTitle.ImageName.rawValue)
+    private let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
+    private let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
+    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    private let equipmentNameExpression = Expression<String>(ExpressionTitle.EQName.description)
+    private let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
+    private let equipmentBrandExpression = Expression<String?>(ExpressionTitle.EQBrand.description)
+    private let equipmentModelExpression = Expression<String?>(ExpressionTitle.EQModel.description)
+    private let equipmentCapacityExpression = Expression<String?>(ExpressionTitle.EQCapacity.description)
+    private let equipmentCommissionTimeExpression = Expression<String?>(ExpressionTitle.EQCommissionTime.description)
+    private let equipmentSNExpression = Expression<String?>(ExpressionTitle.EQSN.description)
+    private let equipmentImageNameExpression = Expression<String?>(ExpressionTitle.EQImageName.description)
 
     init() {
         self.DB = DBModel.sharedInstance()
@@ -102,7 +130,7 @@ class EquipmentDB {
     
     func editEquipment(equipment: Equipment) {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.ID)
-        for equipmentDetail in EquipmentDetailArrayWithTitle {
+        for equipmentDetail in EquipmentDetailArrayWithTitle(equipment: equipment).editableDetailArray {
             do {
                 try user.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
             } catch let error as NSError {
@@ -114,7 +142,7 @@ class EquipmentDB {
     func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentID)
         do {
-            if equipmentDetailTitleString != Equipment.EquipmentInfoTitle.Name.rawValue {
+            if equipmentDetailTitleString != ExpressionTitle.EQName.description {
                 try user.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
             } else {
                 try user.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
@@ -172,73 +200,22 @@ class RoomDB {
         }
     }
 }
-class DBModel {
+
+class RecordDB {
+    private var DB: DBModel
     private var user: Connection
     private var recordTable: Table
-    private var inspectionTaskTable: Table
-    private var inspectionDelayTable: Table
     
-    private let roomIDExpression = Expression<Int>("roomID")
-    private let roomNameExpression = Expression<String>("roomName")
-    
-    
-    private let recordIDExpression = Expression<Int>("recordID")
-    private let recordMessageExpression = Expression<String?>("recordMessage")
-    private let inspectionTaskNameExpression = Expression<String>("inspectionTaskName")
-    private let recordDateExpression = Expression<NSDate>("recordDate")
-    
-    private let inspectionTaskIDExpression = Expression<Int>("insepectionTaskID")
-    private let inspectionCycleExpression = Expression<Double>("inspectionCycle")
-    
-    private let inspectionDelayIDExpression = Expression<Int>("inspectionDelayID")
-    private let inspectionDelayHourExpression = Expression<Int>("inspectionDelayHour")
-    
-    
-    private var inspectionDelayHoursDir: [Int: Int] = [: ]
-    
-    struct Static {
-        static var instance:DBModel? = nil
-        static var token:dispatch_once_t = 0
-    }
-    
-    struct Constants {
-        static let inspectionDelayHour: Int = 8
-    }
-    
-    func getUser() -> Connection {
-        return self.user
-    }
-    
-    class func sharedInstance() -> DBModel! {
-        dispatch_once(&Static.token) {
-            Static.instance = self.init()
-        }
-        return Static.instance!
-    }
-    
-    func reload() {
-        let path = NSSearchPathForDirectoriesInDomains(
-            .DocumentDirectory, .UserDomainMask, true
-            ).first!
-        print("new DB at \(path)")
-        user = try! Connection("\(path)/db.sqlite3")
-    }
-    
-    required init() {
-        let path = NSSearchPathForDirectoriesInDomains(
-            .DocumentDirectory, .UserDomainMask, true
-            ).first!
-        print("DB at \(path)")
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
-        dateFormatter.timeZone = NSTimeZone.systemTimeZone()
-        
-        user = try! Connection("\(path)/db.sqlite3")
+    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    private let recordIDExpression = Expression<Int>(ExpressionTitle.RecordID.description)
+    private let recordMessageExpression = Expression<String?>(ExpressionTitle.RecordMessage.description)
+    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    private let recordDateExpression = Expression<NSDate>(ExpressionTitle.RecordDate.description)
+
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
         self.recordTable = Table("recordTable")
-        self.inspectionTaskTable = Table("inspectionTaskTable")
-        self.inspectionDelayTable = Table("inspectionDelayTable")
-        
-        
         
         try! user.run(recordTable.create(ifNotExists: true) { t in
             t.column(recordIDExpression, primaryKey: true)
@@ -247,110 +224,11 @@ class DBModel {
             t.column(recordMessageExpression)
             t.column(recordDateExpression)
             })
-        
-        try! user.run(inspectionTaskTable.create(ifNotExists: true) { t in
-            t.column(inspectionTaskIDExpression, primaryKey: true)
-            t.column(inspectionTaskNameExpression)
-            t.column(equipmentTypeExpression)
-            t.column(inspectionCycleExpression)
-            })
-        
-        try! user.run(inspectionDelayTable.create(ifNotExists: true) { t in
-            t.column(inspectionDelayIDExpression, primaryKey: true)
-            t.column(equipmentIDExpression)
-            t.column(inspectionTaskNameExpression)
-            t.column(inspectionDelayHourExpression)
-        })
-
-
-        initDefaultData()
-   }
-    
-}
-//MARK: RoomAndEquipmentManagement
-extension DBModel {
-    
-}
-//MARK: testDateInit
-extension DBModel {
-    struct defaultData {
-        static let defaultRoom = ["信息北机房","传输机房","电源室","信息南机房"]
-        static let defaultEquipmentInRoom = [
-            ["北1","北2","北3"],
-            ["传1","传2","传3"],
-            ["电1","电2"],
-            ["南1","南2","南3"]]
-        static let defaultInspectionTaskArray: [InspectionTask] = [
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "日巡视", inspectionCycle: 1),
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "周测试", inspectionCycle: 7),
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "滤网更换", inspectionCycle: 90),
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "室外机清洁", inspectionCycle: 90),
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "皮带更换", inspectionCycle: 180),
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "加湿罐更换", inspectionCycle: 90),
-            InspectionTask(equipmentType: "机房精密空调",inspectionTaskName: "季度测试", inspectionCycle: 90),
-            InspectionTask(equipmentType: "蓄电池组",inspectionTaskName: "周巡视", inspectionCycle: 7)]
     }
     
-
-    func initDefaultData() {
-        var roomIndex = 0
-        if user.scalar(roomTable.count) == 0 {
-            for name in defaultData.defaultRoom {
-                let insert = roomTable.insert(self.roomNameExpression <- name)
-                do {
-                    try user.run(insert)
-                } catch let error as NSError {
-                    print(error)
-                }
-                for var i = 0; i < defaultData.defaultEquipmentInRoom[roomIndex].count; i++ {
-                    let insert = equipmentTable.insert(
-                        self.roomIDExpression <- roomIndex + 1,
-                        self.equipmentTypeExpression <- "机房精密空调",
-                        self.equipmentNameExpression <- defaultData.defaultEquipmentInRoom[roomIndex][i],
-                        self.roomNameExpression <- defaultData.defaultRoom[roomIndex])
-                    do {
-                        try user.run(insert)
-                    } catch let error as NSError {
-                        print("error when init equipments, error = \(error)")
-                    }
-                }
-                roomIndex++
-            }
-        }
-        if user.scalar(inspectionTaskTable.count) == 0 {
-            for var i = 0; i < defaultData.defaultInspectionTaskArray.count; i++ {
-                let type = defaultData.defaultInspectionTaskArray[i]
-                self.addInspectionTask(InspectionTask(equipmentType: type.equipmentType, inspectionTaskName: type.inspectionTaskName, inspectionCycle: type.inspectionCycle))
-            }
-        }
-        
-        if user.scalar(inspectionDelayTable.count) == 0 {
-            let rooms = self.loadRoomTable()
-            for room in rooms {
-                let equipments = self.loadEquipmentTable(room.roomID)
-                for equipment in equipments {
-                    let EQtype = self.loadEquipmentType(equipment.equipmentID)
-                    for type in self.loadInspectionTaskDir().getInspectionTaskArrayForEquipmentType(EQtype){
-                        self.addInspectionDelayForEquipment(equipment.equipmentID, inspectionTask: type.inspectionTaskName, hours: Constants.inspectionDelayHour)
-                    }
-
-                }
-            }
-        } else {
-            let rows = Array(try! user.prepare(inspectionDelayTable))
-            for row in rows {
-                inspectionDelayHoursDir[row[inspectionDelayIDExpression]] = row[inspectionDelayHourExpression]
-            }
-        }
-
-        
-    }
-}
-//MARK: RecordManagement
-extension DBModel {
     func addRecord(record: Record) {
         let insert = recordTable.insert(self.recordMessageExpression <- record.message,
-            self.inspectionTaskNameExpression <- record.recordType,
+            self.inspectionTaskNameExpression <- record.taskType,
             self.equipmentIDExpression <- record.equipmentID,
             self.recordDateExpression <- record.date)
         do {
@@ -380,7 +258,7 @@ extension DBModel {
             print(error)
         }
         for row in array {
-            let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
+            let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
             recordArray.insert(record, atIndex: 0)
         }
         return recordArray
@@ -388,11 +266,11 @@ extension DBModel {
     func loadRecordFromRecordID(recordID: Int) -> Record {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
         let row = Array(try! user.prepare(alice)).first!
-        let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], type: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
+        let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
         return record
-
+        
     }
-
+    
     func loadRecentTimeForType(equipmentID: Int, inspectionTask: String) -> Record? {
         let alice = recordTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         if let lastRecordID = user.scalar(alice.select(recordIDExpression.max)) {
@@ -402,51 +280,31 @@ extension DBModel {
             return nil
         }
     }
-    
-//
-//    func isEquipmentCompleted(equipmentID: Int) -> Bool {
-//        if let equipmentType = loadEquipmentType(equipmentID) {
-//            let recentInspectionTimeDir = loadRecentTimeDir(equipmentID)
-//            let inspectionTaskDir = self.loadInspectionTaskDir().getInspectionTaskArrayForEquipmentType(equipmentType)
-//            if recentInspectionTimeDir.count < inspectionTaskDir.count {
-//                return false
-//            }
-//            for (type, date) in recentInspectionTimeDir {
-//                if isEquipmentCompleted(equipmentType, type: type, date: date) == false {
-//                    return false
-//                }
-//            }
-//        }
-//        return true
-//    }
-//    
-//    func isEquipmentCompleted(equipmentType: String?, type: String, date: NSDate) -> Bool {
-//        if equipmentType == nil {
-//            return false
-//        }
-//        let timeCycleDir = self.loadInspectionTaskDir()
-//        if let timeCycle = timeCycleDir.getTimeCycleForEquipment(equipmentType!, type: type){
-//            if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
-//                return false
-//            }
-//        }
-//        return true
-//    }
-//    func isRoomCompleted(roomID: Int) -> Bool {
-//        let equipments = loadEquipmentTable(roomID)
-//        for equipment in equipments {
-//            if equipment.isequipmentInspectonCompleted == false {
-//                print("EQ \(equipment.equipmentName) UNDONE")
-//                return false
-//            }
-//        }
-//        return true
-//    }
-
 }
 
+class InspectionTaskDB {
+    private var DB: DBModel
+    private var user: Connection
+    private var inspectionTaskTable: Table
+    
+    private let inspectionTaskIDExpression = Expression<Int>(ExpressionTitle.InspectionTaskID.description)
+    private let inspectionCycleExpression = Expression<Double>(ExpressionTitle.InspectionCycle.description)
+    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    private let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
+    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
 
-extension DBModel {
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
+        self.inspectionTaskTable = Table("inspectionTaskTable")
+        
+        try! user.run(inspectionTaskTable.create(ifNotExists: true) { t in
+            t.column(inspectionTaskIDExpression, primaryKey: true)
+            t.column(inspectionTaskNameExpression)
+            t.column(equipmentTypeExpression)
+            t.column(inspectionCycleExpression)
+            })
+    }
 
     func loadInspectionTaskDir() -> [String: [InspectionTask]] {
         let rows = Array(try! user.prepare(inspectionTaskTable))
@@ -456,7 +314,7 @@ extension DBModel {
                 equipmentType: row[equipmentTypeExpression],
                 inspectionTaskName: row[inspectionTaskNameExpression],
                 inspectionCycle: row[inspectionCycleExpression])
-                inspectionTaskDir[type.equipmentType]?.append(type)
+            inspectionTaskDir[type.equipmentType]?.append(type)
         }
         return inspectionTaskDir
     }
@@ -475,28 +333,32 @@ extension DBModel {
             return false
         }
     }
-
-//    func changeInspectionTaskCycle(inspectionTaskID: Int, newValue: String) {
-//        let alice = inspectionTaskTable.filter(self.inspectionTaskIDExpression == inspectionTaskID)
-//        do {
-//            try user.run(alice.update(Expression<String>(inspectionCycleExpression) <- newValue))
-//        } catch let error as NSError {
-//            print(error)
-//        }
-//    }
-//    
-//    func delInspectionTask(inspectionTaskID: Int) {
-//        let roomTableAlice = inspectionTaskTable.filter(self.inspectionTaskIDExpression == inspectionTaskID)
-//        do {
-//            try user.run(roomTableAlice.delete())
-//        } catch let error as NSError {
-//            print(error)
-//        }
-//    }
     
 }
 
-extension DBModel {
+class InspectionDelayDB {
+    private var DB: DBModel
+    private var user: Connection
+    private var inspectionDelayTable: Table
+
+    private let inspectionDelayIDExpression = Expression<Int>("inspectionDelayID")
+    private let inspectionDelayHourExpression = Expression<Int>("inspectionDelayHour")
+    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
+        self.inspectionDelayTable = Table("inspectionDelayTable")
+        
+        try! user.run(inspectionDelayTable.create(ifNotExists: true) { t in
+            t.column(inspectionDelayIDExpression, primaryKey: true)
+            t.column(equipmentIDExpression)
+            t.column(inspectionTaskNameExpression)
+            t.column(inspectionDelayHourExpression)
+            })
+    }
+    
     func editInspectionDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
         let alice = inspectionDelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         do {
@@ -518,6 +380,44 @@ extension DBModel {
             print(error)
         }
     }
+
 }
 
-
+class DBModel {
+    private var user: Connection
+    
+    struct Static {
+        static var instance:DBModel? = nil
+        static var token:dispatch_once_t = 0
+    }
+    
+    struct Constants {
+        static let inspectionDelayHour: Int = 8
+    }
+    
+    func getUser() -> Connection {
+        return self.user
+    }
+    
+    class func sharedInstance() -> DBModel! {
+        dispatch_once(&Static.token) {
+            Static.instance = self.init()
+        }
+        return Static.instance!
+    }
+    
+    func reload() {
+        let path = NSSearchPathForDirectoriesInDomains(
+            .DocumentDirectory, .UserDomainMask, true
+            ).first!
+        user = try! Connection("\(path)/db.sqlite3")
+    }
+    
+    required init() {
+        let path = NSSearchPathForDirectoriesInDomains(
+            .DocumentDirectory, .UserDomainMask, true
+            ).first!
+        user = try! Connection("\(path)/db.sqlite3")
+   }
+    
+}

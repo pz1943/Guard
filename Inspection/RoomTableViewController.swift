@@ -14,9 +14,8 @@ class RoomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        DB = DBModel.sharedInstance()
         NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.rooms = self.DB!.loadRoomTable()
+            self.rooms = self.DB.loadRoomTable()
             self.tableView.reloadData()
         }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -35,7 +34,7 @@ class RoomTableViewController: UITableViewController {
     }
     
     func refresh() {
-        rooms = DB!.loadRoomTable()
+        rooms = DB.loadRoomTable()
         loadForUser(user)
         tableView.reloadData()
     }
@@ -78,7 +77,7 @@ class RoomTableViewController: UITableViewController {
     var canEditFlag: Bool = true
     var user: User? 
     var rooms: [Room] = [ ]
-    var DB: DBModel?
+    var DB = RoomDB()
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -97,9 +96,9 @@ class RoomTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
-            cell.roomTitle.text = rooms[indexPath.row].roomName
-            cell.roomID = rooms[indexPath.row].roomID
-            if rooms[indexPath.row].isRoomInspectonCompleted == false {
+            cell.roomTitle.text = rooms[indexPath.row].name
+            cell.roomID = rooms[indexPath.row].ID
+            if rooms[indexPath.row].isInspectionDone == false {
                 cell.DoneFlagImageView.alpha = 0.1
             } else {
                 cell.DoneFlagImageView.alpha = 1
@@ -124,7 +123,7 @@ class RoomTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            DB?.delRoom(rooms[indexPath.row].roomID)
+            DB.delRoom(rooms[indexPath.row].ID)
             rooms.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }

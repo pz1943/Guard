@@ -24,11 +24,11 @@ class EquipmentEditTableViewController: UITableViewController {
     var equipment: Equipment?{
         didSet{
             if equipment != nil {
-                equipmentDetail = equipment!.editableDetailArray
+                equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!).editableDetailArray
             }
         }
     }
-    var equipmentDetail: EquipmentDetailArray = []
+    var equipmentDetail: [EquipmentDetail] = []
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

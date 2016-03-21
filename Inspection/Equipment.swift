@@ -103,24 +103,24 @@ struct EquipmentDetailArrayWithTitle {
     var detailArray: [EquipmentDetail]
     init(equipment: Equipment) {
         self.equipment = equipment
-        editableDetailArray.append(EquipmentDetail(title: EquipmentInfoTitle.Name, info: "\(equipment.name)"))
-        editableDetailArray.append(EquipmentDetail(title: EquipmentInfoTitle.Brand, info: equipment.brand))
-        editableDetailArray.append(EquipmentDetail(title: EquipmentInfoTitle.Model, info: equipment.model))
-        editableDetailArray.append(EquipmentDetail(title: EquipmentInfoTitle.Capacity, info: equipment.capacity))
-        editableDetailArray.append(EquipmentDetail(title: EquipmentInfoTitle.CommissionTime, info: equipment.commissionTime))
-        editableDetailArray.append(EquipmentDetail(title: EquipmentInfoTitle.SN, info: equipment.SN))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQName, info: "\(equipment.name)"))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQBrand, info: equipment.brand))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQModel, info: equipment.model))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCapacity, info: equipment.capacity))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCommissionTime, info: equipment.commissionTime))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQSN, info: equipment.SN))
         detailArray = editableDetailArray
-        detailArray.insert(EquipmentDetail(title: EquipmentInfoTitle.RoomName, info: "\(equipment.roomName)"), atIndex: 1)
-        detailArray.insert(EquipmentDetail(title: EquipmentInfoTitle.EQType, info: "\(equipment.type)"), atIndex: 1)
-        detailArray.insert(EquipmentDetail(title: EquipmentInfoTitle.ID, info: "\(equipment.ID)"), atIndex: 1)
+        detailArray.insert(EquipmentDetail(title: ExpressionTitle.RoomName, info: "\(equipment.roomName)"), atIndex: 1)
+        detailArray.insert(EquipmentDetail(title: ExpressionTitle.EQType, info: "\(equipment.type)"), atIndex: 1)
+        detailArray.insert(EquipmentDetail(title: ExpressionTitle.EQID, info: "\(equipment.ID)"), atIndex: 1)
     }
 }
 struct EquipmentDetail {
     var title: String
     var info: String
     
-    init(title: EquipmentInfoTitle, info: String?) {
-        self.title = title.titleInChinese
+    init(title: ExpressionTitle, info: String?) {
+        self.title = title.description
         if info != nil {
             self.info = info!
         } else {
@@ -141,23 +141,4 @@ struct EquipmentBrief {
     }
 }
 
-enum EquipmentInfoTitle: String{
-    case ID = "设备 ID"
-    case Name = "设备名称"
-    case EQType = "设备类型"
-    case RoomID = "机房 ID"
-    case RoomName = "机房名称"
-    case Brand = "设备品牌"
-    case Model = "设备型号"
-    case Capacity = "设备容量"
-    case CommissionTime = "投运时间"
-    case SN = "设备 SN"
-    case ImageName = "图片名称"
-    
-    var titleInChinese: String {
-        get {
-            return self.rawValue
-        }
-    }
-}
 
