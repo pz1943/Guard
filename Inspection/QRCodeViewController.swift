@@ -138,7 +138,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             } else {   //无指定设备
                 let QREquipmentID = NSString(string: QRResult).integerValue
                 if let _ = EQDB?.loadEquipment(QREquipmentID) {  //扫描结果是设备 ID，进入记录页面。
-                    self.equipment!.ID = QREquipmentID
+                    self.equipment = EquipmentDB().loadEquipment(QREquipmentID)
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.performSegueWithIdentifier("AnyEQRecordSegue", sender: self)
                     })

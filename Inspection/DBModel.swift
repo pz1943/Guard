@@ -314,7 +314,11 @@ class InspectionTaskDB {
                 equipmentType: row[equipmentTypeExpression],
                 inspectionTaskName: row[inspectionTaskNameExpression],
                 inspectionCycle: row[inspectionCycleExpression])
-            inspectionTaskDir[type.equipmentType]?.append(type)
+            if inspectionTaskDir[type.equipmentType] != nil {
+                inspectionTaskDir[type.equipmentType]?.append(type)
+            } else {
+                inspectionTaskDir[type.equipmentType] = [type]
+            }
         }
         return inspectionTaskDir
     }
