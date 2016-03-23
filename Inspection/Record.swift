@@ -91,4 +91,8 @@ struct RecordsForEquipment {
     var completedFlag: Bool {
         return isEquipmentCompleted()
     }
+    
+    var count: Int {
+        return recordsArray.count
+    }
 }

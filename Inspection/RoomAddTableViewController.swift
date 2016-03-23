@@ -14,8 +14,8 @@ class RoomAddTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        DB = DBModel.sharedInstance()
-        roomsArray = DB!.loadRoomTable()
+        roomDB = RoomDB()
+        roomsArray = roomDB!.loadRoomTable()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "newNameGot:", name: "newRoomNameGotNotification", object: nil)
         
     }
@@ -23,11 +23,11 @@ class RoomAddTableViewController: UITableViewController {
     func newNameGot(notification: NSNotification) {
         if let newRoomName = notification.userInfo?["newRoomName"] as? String {
             for room in roomsArray {
-                if room.roomName == newRoomName {
+                if room.name == newRoomName {
                     return
                 }
             }
-            DB?.addRoom(newRoomName)
+            roomDB?.addRoom(newRoomName)
             NSNotificationCenter.defaultCenter().postNotificationName("RoomTableNeedRefreshNotification", object: nil)
         }
     }
@@ -40,8 +40,8 @@ class RoomAddTableViewController: UITableViewController {
     override func viewWillDisappear(animated: Bool) {
     }
 
-    var DB: DBModel?
-    var roomsArray: [RoomBrief] = []
+    var roomDB: RoomDB?
+    var roomsArray: [Room] = []
     // MARK: - Table view data source
     
     

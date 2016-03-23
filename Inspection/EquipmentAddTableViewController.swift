@@ -14,31 +14,13 @@ class EquipmentAddTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        DB = DBModel.sharedInstance()
-        if roomID != nil {
-            equipmentsArray = DB!.loadEquipmentTable(roomID!)
-        }
-        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "newNameGot:", name: "newRoomNameGotNotification", object: nil)
-        
+        EQDB = EquipmentDB()
     }
-    
-    //    func newNameGot(notification: NSNotification) {
-    //        if let newRoomName = notification.userInfo?["newRoomName"] as? String {
-    //            for room in roomsArray {
-    //                if room.roomName == newRoomName {
-    //                    return
-    //                }
-    //            }
-    //            DB?.addRoom(newRoomName)
-    //            NSNotificationCenter.defaultCenter().postNotificationName("RoomTableNeedRefreshNotification", object: nil)
-    //        }
-    //    }
-    //
     
     @IBAction func equipmentAddDone(sender: UIBarButtonItem) {
         if let equipmentName = equipmentNameTextField.text {
             if equipmentName != "" && equipmentType != nil {
-                DB?.addEquipment(equipmentName,equipmentType: equipmentType!, roomID: self.roomID!, roomName: self.roomName!)
+                EQDB?.addEquipment(equipmentName,equipmentType: equipmentType!, roomID: self.room!.ID, roomName: self.room!.name)
                 self.performSegueWithIdentifier("newEquipmentGotSegue", sender: self)
             }
         }
@@ -52,10 +34,8 @@ class EquipmentAddTableViewController: UITableViewController {
     
     @IBOutlet weak var equipmentNameTextField: UITextField!
     @IBOutlet weak var equipmentTypeLabel: UILabel!
-    var DB: DBModel?
-    var roomID: Int?
-    var roomName: String?
-    var equipmentsArray: [EquipmentBrief] = []
+    var EQDB: EquipmentDB?
+    var room: Room?
     var equipmentType: String?
     
     // MARK: - Table view data source

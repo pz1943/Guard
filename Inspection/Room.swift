@@ -30,6 +30,7 @@ class Room {
     init(roomID: Int, roomName: String) {
         self.name = roomName
         self.ID = roomID
-        self.equipmentsArray = []
+        self.equipmentsArray = EquipmentDB().loadEquipmentTable(roomID)
     }
+    
 }

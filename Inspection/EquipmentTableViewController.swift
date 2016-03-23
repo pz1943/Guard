@@ -14,14 +14,14 @@ class EquipmentTableViewController: UITableViewController {
         super.viewDidLoad()
         DB = EquipmentDB()
         NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoomID!)
+            self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID)
             self.tableView.reloadData()
         }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func viewWillAppear(animated: Bool) {
-        if selectRoomID != nil {
+        if selectRoom != nil {
             refresh()
         }
     }
@@ -30,7 +30,7 @@ class EquipmentTableViewController: UITableViewController {
     }
 
     func refresh() {
-        equipmentArray = DB!.loadEquipmentTable(selectRoomID!)
+        equipmentArray = DB!.loadEquipmentTable(selectRoom!.ID)
         self.loginForUser()
         self.tableView.reloadData()
     }
@@ -46,8 +46,7 @@ class EquipmentTableViewController: UITableViewController {
     var DB: EquipmentDB?
     var user: User?
     var equipmentArray: [Equipment] = []
-    var selectRoomID: Int?
-    var selectRoomName: String?
+    var selectRoom: Room?
     var rightBarButtonItems: UIBarButtonItem?
     var canEditFlag = true
     
@@ -79,8 +78,8 @@ class EquipmentTableViewController: UITableViewController {
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddCell", forIndexPath: indexPath)
-            (cell as? EquipmentTableViewCell)?.roomID = selectRoomID
-            (cell as? EquipmentTableViewCell)?.roomName = selectRoomName
+            (cell as? EquipmentTableViewCell)?.roomID = selectRoom!.ID
+            (cell as? EquipmentTableViewCell)?.roomName = selectRoom!.name
             return cell
         }
     }
@@ -99,7 +98,7 @@ class EquipmentTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            if selectRoomID != nil {
+            if selectRoom != nil {
                 DB?.delEquipment(equipmentArray[indexPath.row].ID)
                 equipmentArray.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
@@ -128,8 +127,7 @@ class EquipmentTableViewController: UITableViewController {
             }
         } else if segue.identifier == "AddEquipmentSegue" {
             if let DVC = segue.destinationViewController as? EquipmentAddTableViewController {
-                DVC.roomID = self.selectRoomID
-                DVC.roomName = self.selectRoomName
+                DVC.room = self.selectRoom
             }
         }
     }

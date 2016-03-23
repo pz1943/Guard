@@ -15,7 +15,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
 
-        DB = RecordDB()
         NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.takeANewPhoto()
         }
@@ -23,13 +22,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     override func viewWillAppear(animated: Bool) {
         if equipment != nil {
-            equipmentRecordArray = DB!.loadRecordFromEquipmetID(equipmentID!)
-            recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
-            inspectionTypeDir = DB!.loadInspectionTypeDir()
-            if equipment != nil {
-                equipmentDetail = equipment!.detailArray
-                tableView.reloadData()
-            }
+            equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!)
+            tableView.reloadData()
         }
     }
     
@@ -37,12 +31,9 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-    var DB: RecordDB?
     var equipment: Equipment?
     var equipmentDetail: EquipmentDetailArrayWithTitle?
-    var equipmentRecordArray: RecordsForEquipment?
-    var recentInspectionTime: [String: NSDate] = [: ]
-    var inspectionTypeDir: InspectionTaskDir?
+    var inspectionTaskDir = InspectionTaskDir()
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
@@ -54,12 +45,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             }
         }
     }
-    /**
-     本次增加了图片的命名规则。
-     
-     - parameter picker: picker description
-     - parameter info:   info description
-     */
+
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
@@ -67,7 +53,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(fileName).path {
                 let jpg = UIImageJPEGRepresentation(image, 0.5)
                 jpg?.writeToFile(path, atomically: true)
-                DB?.editEquipment(self.equipment!.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
+                EquipmentDB().editEquipment(self.equipment!.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
             }
         }
     }
@@ -80,22 +66,20 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            if equipment != nil {
-                return equipment!.detailArray.count
-            } else { return 0 }
-        case 1:
-            return 1
-        case 2:
-            if inspectionTypeDir != nil {
-                return inspectionTypeDir!.getInspectionTypeArrayForEquipmentType(equipment?.type).count
-            } else { return 0 }
-        case 3:
-            return equipmentRecordArray.count
-        default:
-            return 0
-        }
+        if equipment != nil {
+            switch section {
+            case 0:
+                return equipmentDetail!.count
+            case 1:
+                return 1
+            case 2:
+                return inspectionTaskDir.getTaskArray(equipment!.type).count
+            case 3:
+                return equipment!.records.count
+            default:
+                return 0
+            }
+        } else { return 0}
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -103,8 +87,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            cell.equipmentInfoTitleLabel.text = equipmentDetail[indexPath.row].title
-            cell.equipmentInfoContentLabel.text = equipmentDetail[indexPath.row].info ?? "暂无"
+            cell.equipmentInfoTitleLabel.text = equipmentDetail![indexPath.row].title
+            cell.equipmentInfoContentLabel.text = equipmentDetail![indexPath.row].info ?? "暂无"
             return cell
             
         case 1:
@@ -123,10 +107,10 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             }
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            if let type = inspectionTypeDir?.getInspectionTypeArrayForEquipmentType(equipment?.type)[indexPath.row] {
-                cell.equipmentInfoTitleLabel.text = type.inspectionTypeName
-                if let date = recentInspectionTime[type.inspectionTypeName] {
-                    if DB?.isEquipmentInspectionCompleted(equipment?.type, type: type.inspectionTypeName, date: date) == false{
+            let type = inspectionTaskDir.getTaskArray(equipment?.type)[indexPath.row]
+                cell.equipmentInfoTitleLabel.text = type.inspectionTaskName
+                if let date = equipment?.records.mostRecentRecordsDir[type.inspectionTaskName] {
+                    if equipment?.records.completedFlag == false{
                         cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
                     }
                     cell.equipmentInfoContentLabel.text = date.datatypeValue
@@ -134,16 +118,17 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                     cell.equipmentInfoContentLabel.text = nil
                     cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
                 }
-            }
+            
             return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            let record = equipmentRecordArray[indexPath.row]
-            if record.message != nil {
-                cell.recordMessageLabel.text = record.message
+            if let record = equipment?.records.recordsArray[indexPath.row] {
+                if record.message != nil {
+                    cell.recordMessageLabel.text = record.message
+                }
+                cell.recordTimeLabel.text = record.date.datatypeValue
+                cell.recordTypeLabel.text = record.taskType
             }
-            cell.recordTimeLabel.text = record.date.datatypeValue
-            cell.recordTypeLabel.text = record.recordType
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
@@ -188,13 +173,15 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return false
         }
     }
+    
+    //MARK:- TODO
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            DB?.delInspectionRecord(equipmentRecordArray[indexPath.row].ID)
-            equipmentRecordArray.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
-            self.tableView.reloadData()
+//            RecordDB().delRecord(equipment!.records.recordsArray[indexPath.row].ID)
+//            equipment?.records.recordsArray.removeAtIndex(indexPath.row)
+//            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+//            recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
+//            self.tableView.reloadData()
         }
     }
 

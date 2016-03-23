@@ -13,7 +13,7 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DB = DBModel.sharedInstance()
-        equipmentTypeArray = DB!.loadInspectionTypeDir().equipmentTypeArray
+        equipmentTypeArray = InspectionTaskDir().getTaskArray(selectedEQType!)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -22,7 +22,7 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
     }
     
     var DB: DBModel?
-    var equipmentTypeArray: [String] = []
+    var equipmentTypeArray: [InspectionTask] = []
     var selectedEQType: String?
     
     override func didReceiveMemoryWarning() {
@@ -44,14 +44,14 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("EquipmentTypeSelectCell", forIndexPath: indexPath)
-        cell.textLabel?.text = equipmentTypeArray[indexPath.row]
+        cell.textLabel?.text = equipmentTypeArray[indexPath.row].inspectionTaskName
         // Configure the cell...
 
         return cell
     }
 
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        selectedEQType = equipmentTypeArray[indexPath.row]
+        selectedEQType = equipmentTypeArray[indexPath.row].inspectionTaskName
         return indexPath
     }
     /*

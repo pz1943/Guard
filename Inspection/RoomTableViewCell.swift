@@ -19,7 +19,7 @@ class RoomTableViewCell: UITableViewCell {
     @IBOutlet weak var DoneFlagImageView: UIView!
     @IBOutlet weak var roomTitle: UILabel!
     
-    var roomID: Int?
+    var room: Room?
     var DB: DBModel?
 
     override func setSelected(selected: Bool, animated: Bool) {

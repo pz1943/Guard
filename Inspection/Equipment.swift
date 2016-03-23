@@ -33,9 +33,8 @@ class Equipment {
     }
     
     var isRecordsNeedReload: Bool = true
-    var inspectionDoneFlagCache: Bool = false
+    var inspectionDoneFlagCache: Bool = true
     let records: RecordsForEquipment
-    let DB: DBModel = DBModel.sharedInstance()
     
     init(ID: Int,
         name: String,
@@ -114,6 +113,18 @@ struct EquipmentDetailArrayWithTitle {
         detailArray.insert(EquipmentDetail(title: ExpressionTitle.EQType, info: "\(equipment.type)"), atIndex: 1)
         detailArray.insert(EquipmentDetail(title: ExpressionTitle.EQID, info: "\(equipment.ID)"), atIndex: 1)
     }
+    var count: Int {
+        get {
+            return self.editableDetailArray.count
+        }
+    }
+    
+    subscript(index: Int) -> EquipmentDetail {
+        get {
+            return detailArray[index]
+        }
+    }
+
 }
 struct EquipmentDetail {
     var title: String

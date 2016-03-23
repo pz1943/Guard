@@ -12,13 +12,12 @@ import AVFoundation
 class QRCodeForAnyEquipmentViewController: QRCodeViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AnyEQRecordSegue" {
-            if let NVC = segue.destinationViewController as? UINavigationController {
-                if let DVC = NVC.viewControllers[0] as? QRCodeForAnyEquipmentTableViewController{
-                    let equipment = DB?.loadEquipment(equipmentID!)
-                    DVC.equipmentID = self.equipmentID
-                    DVC.inspectionTypeArrayForEQ = self.DB!.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment?.type)
-                }
+            if let DVC = segue.destinationViewController.contentViewController as? QRCodeForAnyEquipmentTableViewController{
+                let equipment = EQDB?.loadEquipment(self.equipment!.ID)
+                DVC.equipment = self.equipment
+                DVC.taskArray = InspectionTaskDir().getTaskArray(equipment!.type)
             }
+            
         }
     }
 
@@ -31,10 +30,10 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
 class QRCodeForOneEquipmentViewController: QRCodeViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "OneEQRecordSegue" {
-            if let DVC = segue.destinationViewController as? QRCodeRecordTableViewController{
-                let equipment = DB?.loadEquipment(equipmentID!)
-                DVC.equipmentID = self.equipmentID
-                DVC.inspectionTypeArrayForEQ = self.DB!.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment?.type)
+            if let DVC = segue.destinationViewController.contentViewController as? QRCodeRecordTableViewController{
+                let equipment = EQDB?.loadEquipment(self.equipment!.ID)
+                DVC.equipment = self.equipment
+                DVC.taskArray = InspectionTaskDir().getTaskArray(equipment!.type)
             }
         }
     }
@@ -47,9 +46,10 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        DB = DBModel.sharedInstance()
-        if equipmentID != nil {
-            if let equipment = DB?.loadEquipment(equipmentID!) {
+        EQDB = EquipmentDB()
+        inspectionTaskDB = InspectionTaskDB()
+        if equipment != nil {
+            if let equipment = EQDB?.loadEquipment(equipment!.ID) {
                 self.navigationItem.title = "\(equipment.roomName)\(equipment.name)"
             }
         }
@@ -72,11 +72,12 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    var DB: DBModel?
+    var EQDB: EquipmentDB?
+    var inspectionTaskDB: InspectionTaskDB?
     var QRLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
     var session: AVCaptureSession?
-    var equipmentID: Int?
+    var equipment: Equipment?
     
     func loadQRCode() {
         let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
@@ -120,8 +121,8 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             let QRResult = metadataObj.stringValue
             session?.stopRunning()
             qrCodeFrameView?.frame = metadataObj.bounds
-            if equipmentID != nil {
-                if "\(equipmentID!)" != QRResult {
+            if equipment != nil {
+                if "\(equipment!.ID)" != QRResult {
                     let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，提示后返回
                     let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
                         self.session?.startRunning()
@@ -136,8 +137,8 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
                 }
             } else {   //无指定设备
                 let QREquipmentID = NSString(string: QRResult).integerValue
-                if let _ = DB?.loadEquipment(QREquipmentID) {  //扫描结果是设备 ID，进入记录页面。
-                    self.equipmentID = QREquipmentID
+                if let _ = EQDB?.loadEquipment(QREquipmentID) {  //扫描结果是设备 ID，进入记录页面。
+                    self.equipment!.ID = QREquipmentID
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.performSegueWithIdentifier("AnyEQRecordSegue", sender: self)
                     })
@@ -156,3 +157,14 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
 }
+
+extension UIViewController {
+    var contentViewController: UIViewController {
+        if let navcon = self as? UINavigationController {
+            return navcon.visibleViewController!
+        } else {
+            return self
+        }
+    }
+}
+

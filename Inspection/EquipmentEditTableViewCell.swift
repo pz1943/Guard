@@ -12,11 +12,11 @@ class EquipmentEditTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        DB = DBModel.sharedInstance()
+        DB = EquipmentDB()
         // Initialization code
     }
     
-    var DB: DBModel?
+    var DB: EquipmentDB?
     var equipment: Equipment?
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoTextField: UITextField!

@@ -7,7 +7,7 @@ import Foundation
 import SQLite
 
 enum ExpressionTitle:  String, CustomStringConvertible{
-    case RoomID = "机房 ID"
+    case RoomID = "机房ID"
     case RoomName = "机房名称"
     case EQID = "设备 ID"
     case EQName = "设备名称"
@@ -16,18 +16,18 @@ enum ExpressionTitle:  String, CustomStringConvertible{
     case EQModel = "设备型号"
     case EQCapacity = "设备容量"
     case EQCommissionTime = "投运时间"
-    case EQSN = "设备 SN"
+    case EQSN = "设备SN"
     case EQImageName = "图片名称"
-    case RecordID = "recordID"
-    case RecordMessage = "recordMessage"
-    case RecordDate = "recordDate"
+    case RecordID = "记录ID"
+    case RecordMessage = "检修内容"
+    case RecordDate = "时间"
     
-    case InspectionTaskID = "insepectionTaskID"
-    case InspectionTaskName = "inspectionTaskName"
-    case InspectionCycle = "inspectionCycle"
+    case InspectionTaskID = "类别ID"
+    case InspectionTaskName = "类别名称"
+    case InspectionCycle = "巡检周期"
     
-    case InspectionDelayID = "inspectionDelayID"
-    case InspectionDelayHour = "inspectionDelayHour"
+    case InspectionDelayID = "延时ID"
+    case InspectionDelayHour = "延时时间"
     
     var description: String {
         get {
@@ -159,8 +159,8 @@ class RoomDB {
     private var user: Connection
     private var roomTable: Table
     
-    private let roomIDExpression = Expression<Int>("roomID")
-    private let roomNameExpression = Expression<String>("roomName")
+    private let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
+    private let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
     init() {
         self.DB = DBModel.sharedInstance()
         self.user = DB.getUser()

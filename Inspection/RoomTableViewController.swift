@@ -97,7 +97,7 @@ class RoomTableViewController: UITableViewController {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
             cell.roomTitle.text = rooms[indexPath.row].name
-            cell.roomID = rooms[indexPath.row].ID
+            cell.room = rooms[indexPath.row]
             if rooms[indexPath.row].isInspectionDone == false {
                 cell.DoneFlagImageView.alpha = 0.1
             } else {
@@ -152,8 +152,7 @@ class RoomTableViewController: UITableViewController {
         if segue.identifier == "showEquipment" {
             if let DVC = segue.destinationViewController as? EquipmentTableViewController{
                 if let cell = sender as? RoomTableViewCell {
-                    DVC.selectRoomID = cell.roomID
-                    DVC.selectRoomName = cell.roomTitle.text
+                    DVC.selectRoom = cell.room
                     DVC.user = self.user
                 }
             }

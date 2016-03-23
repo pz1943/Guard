@@ -14,8 +14,8 @@ class QRCodeRecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        record = InspectionRecord(equipmentID: equipment!.ID, type: inspectionTypeArrayForEQ.first?.inspectionTypeName ?? "无", recordData: nil)
+        taskArray = InspectionTaskDir().getTaskArray(equipment?.type)
+        record = Record(equipmentID: equipment!.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
         selectFirst()
@@ -26,19 +26,10 @@ class QRCodeRecordTableViewController: UITableViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-    var equipmentID: Int? {
-        didSet {
-            DB = DBModel.sharedInstance()
-            if equipmentID != nil {
-                equipment = DB!.loadEquipment(equipmentID!)
-                inspectionTypeArrayForEQ = DB!.loadInspectionTypeDir().getInspectionTypeArrayForEquipmentType(equipment?.type)
-            }
-        }
-    }
     var equipment: Equipment?
     var DB: DBModel?
-    var record: InspectionRecord?
-    var inspectionTypeArrayForEQ: [InspectionTask] = []
+    var record: Record?
+    var taskArray: [InspectionTask] = []
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -55,7 +46,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     
     func changeRecordType(notification: NSNotification) {
         if let newType = notification.userInfo?["recordType"] as? String {
-            record?.recordType = newType
+            record?.taskType = newType
         }
         reloadTableView()
     }
@@ -75,18 +66,18 @@ class QRCodeRecordTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {
-            return inspectionTypeArrayForEQ.count
+            return taskArray.count
         } else { return 1 }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("InspectionTypeCell", forIndexPath: indexPath)
-            cell.textLabel?.text = inspectionTypeArrayForEQ[indexPath.row].inspectionTypeName
+            cell.textLabel?.text = taskArray[indexPath.row].inspectionTaskName
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("RecordCell", forIndexPath: indexPath) as! QRCodeTableViewCell
-            cell.recordType.text = record?.recordType
+            cell.recordType.text = record?.taskType
             return cell
         }
     }
@@ -113,7 +104,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        record?.recordType = inspectionTypeArrayForEQ[indexPath.row].inspectionTypeName
+        record?.taskType = taskArray[indexPath.row].inspectionTaskName
         reloadTableView()
     }
     
@@ -157,7 +148,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "QRDone" {
-            DB?.addInspectionRecord(record!)
+            RecordDB().addRecord(record!)
         }
     }
 }

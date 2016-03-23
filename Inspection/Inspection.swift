@@ -73,13 +73,13 @@ struct InspectionTaskDir {
     }
 }
 
-struct InspectionDelayDir {
-    private var dir: [String: Int] = [: ]
-    private let DB = InspectionDelayDB()
-    init(equipmentID: Int) {
-        self.dir = DB.loadInspectionDelayDir(equipmentID)
-    }
-    
-}
+//struct InspectionDelayDir {
+//    private var dir: [String: Int] = [: ]
+//    private let DB = InspectionDelayDB()
+//    init(equipmentID: Int) {
+//        self.dir = DB.loadInspectionDelayDir(equipmentID)
+//    }
+//    
+//}
 
 
