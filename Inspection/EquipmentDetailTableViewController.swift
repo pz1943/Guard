@@ -22,6 +22,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     override func viewWillAppear(animated: Bool) {
         if equipment != nil {
+            equipment?.reloadDetails()
             equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!)
             tableView.reloadData()
         }
@@ -92,19 +93,20 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return cell
             
         case 1:
+            var cell = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             if equipment?.imageName != nil {
-                let cell = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
                 if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
                     if let image = UIImage(data: data) {
                         cell.imageView?.image = image
                         cell.imageHeightConstraint.constant = (UIScreen.mainScreen().bounds.width - 44) / image.size.width * image.size.height
                     }
+                } else {
+                    cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
                 }
-                return cell
             } else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-                return cell
+                cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             }
+            return cell
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
             let type = inspectionTaskDir.getTaskArray(equipment?.type)[indexPath.row]

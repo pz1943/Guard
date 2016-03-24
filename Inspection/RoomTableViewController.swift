@@ -34,6 +34,7 @@ class RoomTableViewController: UITableViewController {
     }
     
     func refresh() {
+        DB.reload()
         rooms = DB.loadRoomTable()
         loadForUser(user)
         tableView.reloadData()

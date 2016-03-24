@@ -82,4 +82,107 @@ struct InspectionTaskDir {
 //    
 //}
 
+class InspectionDelayDB {
+    private var DB: DBModel
+    private var user: Connection
+    private var inspectionDelayTable: Table
+    
+    private let inspectionDelayIDExpression = Expression<Int>("inspectionDelayID")
+    private let inspectionDelayHourExpression = Expression<Int>("inspectionDelayHour")
+    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
+        self.inspectionDelayTable = Table("inspectionDelayTable")
+        
+        try! user.run(inspectionDelayTable.create(ifNotExists: true) { t in
+            t.column(inspectionDelayIDExpression, primaryKey: true)
+            t.column(equipmentIDExpression)
+            t.column(inspectionTaskNameExpression)
+            t.column(inspectionDelayHourExpression)
+            })
+    }
+    
+    func editInspectionDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+        let alice = inspectionDelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
+        do {
+            try user.run(alice.update(Expression<Int>(inspectionDelayHourExpression) <- hours))
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+    func addInspectionDelayForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+        let insert = inspectionDelayTable.insert(self.inspectionTaskNameExpression <- inspectionTask,
+            self.equipmentIDExpression <- equipmentID,
+            self.inspectionTaskNameExpression <- inspectionTask,
+            self.inspectionDelayHourExpression <- hours
+        )
+        do {
+            try user.run(insert)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
+}
+class InspectionTaskDB {
+    private var DB: DBModel
+    private var user: Connection
+    private var inspectionTaskTable: Table
+    
+    private let inspectionTaskIDExpression = Expression<Int>(ExpressionTitle.InspectionTaskID.description)
+    private let inspectionCycleExpression = Expression<Double>(ExpressionTitle.InspectionCycle.description)
+    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    private let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
+    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    
+    init() {
+        self.DB = DBModel.sharedInstance()
+        self.user = DB.getUser()
+        self.inspectionTaskTable = Table("inspectionTaskTable")
+        
+        try! user.run(inspectionTaskTable.create(ifNotExists: true) { t in
+            t.column(inspectionTaskIDExpression, primaryKey: true)
+            t.column(inspectionTaskNameExpression)
+            t.column(equipmentTypeExpression)
+            t.column(inspectionCycleExpression)
+            })
+    }
+    
+    func loadInspectionTaskDir() -> [String: [InspectionTask]] {
+        let rows = Array(try! user.prepare(inspectionTaskTable))
+        var inspectionTaskDir: [String: [InspectionTask]] = [: ]
+        for row in rows {
+            let type = InspectionTask(
+                equipmentType: row[equipmentTypeExpression],
+                inspectionTaskName: row[inspectionTaskNameExpression],
+                inspectionCycle: row[inspectionCycleExpression])
+            if inspectionTaskDir[type.equipmentType] != nil {
+                inspectionTaskDir[type.equipmentType]?.append(type)
+            } else {
+                inspectionTaskDir[type.equipmentType] = [type]
+            }
+        }
+        return inspectionTaskDir
+    }
+    
+    func addInspectionTask(type: InspectionTask) -> Bool {
+        let insert = inspectionTaskTable.insert(
+            self.inspectionTaskNameExpression <- type.inspectionTaskName,
+            self.equipmentTypeExpression <- type.equipmentType,
+            self.inspectionCycleExpression <- type.inspectionCycle
+        )
+        do {
+            try user.run(insert)
+            return true
+        } catch let error as NSError {
+            print(error)
+            return false
+        }
+    }
+    
+}
 

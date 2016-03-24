@@ -68,6 +68,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate
             scrollView.delegate = self
             scrollView.minimumZoomScale = 0.1
             scrollView.maximumZoomScale = 10
+            scrollView.zoomScale = 0.4
         }
     }
     
