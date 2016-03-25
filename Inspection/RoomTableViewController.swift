@@ -15,6 +15,7 @@ class RoomTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+            self.DB.reload()
             self.rooms = self.DB.loadRoomTable()
             self.tableView.reloadData()
         }

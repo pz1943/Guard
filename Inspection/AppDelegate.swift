@@ -18,8 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let DB = DBModel.sharedInstance()
         let fromPath = url.path!
-        let fileName = url.lastPathComponent
-        print(fileName)
         let toPath = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true
             ).first! + "/db.sqlite3"

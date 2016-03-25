@@ -41,6 +41,7 @@
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
 		499B40A81C62E08700FD6425 /* Inspection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B40A71C62E08700FD6425 /* Inspection.swift */; };
+		49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 49AB8C7D1CA4DCC500D93EA5 /* .gitignore */; };
 		49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */ = {isa = PBXBuildFile; fileRef = 49EE2BB31C71A5D500871F8F /* 工作记录 */; };
 		590CC1FC8F8F9C4BD07DF375 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C45D85E3F38A700E259C0 /* Pods.framework */; };
 /* End PBXBuildFile section */
@@ -104,6 +105,7 @@
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
 		499B40A71C62E08700FD6425 /* Inspection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspection.swift; sourceTree = "<group>"; };
+		49AB8C7D1CA4DCC500D93EA5 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		49EE2BB31C71A5D500871F8F /* 工作记录 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "工作记录"; sourceTree = "<group>"; };
 		7988BE7B4F86F30202425F39 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A0283FEF7611512015DFE086 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				18933E2C1C47D8E100357F74 /* AppDelegate.swift */,
+				49AB8C7D1CA4DCC500D93EA5 /* .gitignore */,
 				18933E361C47D8E100357F74 /* Assets.xcassets */,
 				18933E381C47D8E100357F74 /* LaunchScreen.storyboard */,
 				18933E3B1C47D8E100357F74 /* Info.plist */,
@@ -375,6 +378,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */,
 				18933E3A1C47D8E100357F74 /* LaunchScreen.storyboard in Resources */,
 				18933E371C47D8E100357F74 /* Assets.xcassets in Resources */,
 				49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */,

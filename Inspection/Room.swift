@@ -57,6 +57,7 @@ class RoomDB {
     
     func reload() {
         DB.reload()
+        user = DB.getUser()
     }
     
     func loadRoomTable() -> [Room]{
