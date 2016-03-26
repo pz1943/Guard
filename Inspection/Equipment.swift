@@ -32,9 +32,13 @@ class Equipment {
             }
         }
     }
-    
-    var isRecordsNeedReload: Bool = true
-    var inspectionDoneFlagCache: Bool = true
+
+    var isRecordsNeedReload: Bool {
+        get {
+            return records.recentNeedRefresh
+        }
+    }
+    private var inspectionDoneFlagCache: Bool = false
     var records: RecordsForEquipment
     
     init(ID: Int,
@@ -62,20 +66,10 @@ class Equipment {
         self.imageName = imageName
         records = RecordsForEquipment(equipmentID: ID, equipmentType: type)
     }
-    
-    convenience init(ID: Int, name: String, type: EquipmentType, roomID: Int, roomName: String) {
-        self.init(ID: ID,
-            name: name,
-            type: type,
-            roomID: roomID,
-            roomName: roomName,
-            brand: nil,
-            model: nil,
-            capacity: nil,
-            commissionTime: nil,
-            SN: nil,
-            imageName: nil)
+    deinit {
+        print("deinit equipment \(ID)")
     }
+
 }
 extension Equipment {
     var brief: EquipmentBrief {
@@ -87,25 +81,15 @@ extension Equipment {
     var inspectionDoneFlag: Bool {
         get {
             if isRecordsNeedReload == false {
+                print("\(name) use cache")
                 return inspectionDoneFlagCache
             } else {
+                print("\(name) use reload")
+
                 inspectionDoneFlagCache = records.completedFlag
                 return inspectionDoneFlagCache
             }
         }
-    }
-    
-    func reloadDetails() {
-        if let equipment = EquipmentDB().loadEquipment(ID) {
-            self.brand = equipment.brand
-            self.model = equipment.model
-            self.capacity = equipment.capacity
-            self.commissionTime = equipment.commissionTime
-            self.SN = equipment.SN
-            self.imageName = equipment.imageName
-            self.records = equipment.records
-        }
-
     }
 }
 
@@ -129,7 +113,7 @@ struct EquipmentDetailArrayWithTitle {
     }
     var count: Int {
         get {
-            return self.editableDetailArray.count
+            return self.detailArray.count
         }
     }
     
@@ -167,8 +151,7 @@ struct EquipmentBrief {
 }
 
 class EquipmentDB {
-    private var DB: DBModel
-    private var user: Connection
+    private var db: Connection
     private var equipmentTable: Table
     
     private let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
@@ -184,11 +167,10 @@ class EquipmentDB {
     private let equipmentImageNameExpression = Expression<String?>(ExpressionTitle.EQImageName.description)
     
     init() {
-        self.DB = DBModel.sharedInstance()
-        self.user = DB.getUser()
+        self.db = DBModel.sharedInstance().getDB()
         self.equipmentTable = Table("equipmentTable")
         
-        try! user.run(equipmentTable.create(ifNotExists: true) { t in
+        try! db.run(equipmentTable.create(ifNotExists: true) { t in
             t.column(equipmentIDExpression, primaryKey: true)
             t.column(equipmentNameExpression)
             t.column(equipmentTypeExpression)
@@ -210,7 +192,7 @@ class EquipmentDB {
             self.roomIDExpression <- roomID,
             self.roomNameExpression <- roomName)
         do {
-            try user.run(insert)
+            try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
@@ -219,13 +201,13 @@ class EquipmentDB {
     func delEquipment(equipmentToDel: Int) {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentToDel)
         do {
-            try user.run(alice.delete())
+            try db.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
     }
     func loadEquipmentTable(roomID: Int) -> [Equipment]{
-        let rows = Array(try! user.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
+        let rows = Array(try! db.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
         var equipments: [Equipment] = [ ]
         for row in rows {
             equipments.append(
@@ -233,13 +215,20 @@ class EquipmentDB {
                     name: row[equipmentNameExpression],
                     type: row[equipmentTypeExpression],
                     roomID: row[roomIDExpression],
-                    roomName: row[roomNameExpression]))
+                    roomName: row[roomNameExpression],
+                    brand: row[equipmentBrandExpression],
+                    model: row[equipmentModelExpression],
+                    capacity: row[equipmentCapacityExpression],
+                    commissionTime: row[equipmentCommissionTimeExpression],
+                    SN: row[equipmentSNExpression],
+                    imageName: row[equipmentImageNameExpression]
+                ))
         }
         return equipments
     }
     
     func loadEquipment(equipmentID: Int) -> Equipment? {
-        let row = Array(try! user.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
+        let row = Array(try! db.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
         if let name =  row?[equipmentNameExpression] {
             let EQType = row?[equipmentTypeExpression]
             let locatedRoomID = row?[roomIDExpression]
@@ -262,7 +251,7 @@ class EquipmentDB {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.ID)
         for equipmentDetail in EquipmentDetailArrayWithTitle(equipment: equipment).editableDetailArray {
             do {
-                try user.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
+                try db.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
             } catch let error as NSError {
                 print(error)
             }
@@ -273,9 +262,9 @@ class EquipmentDB {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentID)
         do {
             if equipmentDetailTitleString != ExpressionTitle.EQName.description {
-                try user.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
+                try db.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
             } else {
-                try user.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
+                try db.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
             }
         } catch let error as NSError {
             print(error)

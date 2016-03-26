@@ -38,9 +38,9 @@ enum ExpressionTitle:  String, CustomStringConvertible{
 
 
 class DBModel {
-    private var user: Connection
+    private var db: Connection
     
-    struct Static {
+    struct Static { 
         static var instance:DBModel? = nil
         static var token:dispatch_once_t = 0
     }
@@ -49,8 +49,8 @@ class DBModel {
         static let inspectionDelayHour: Int = 8
     }
     
-    func getUser() -> Connection {
-        return self.user
+    func getDB() -> Connection {
+        return self.db
     }
     
     class func sharedInstance() -> DBModel! {
@@ -64,15 +64,16 @@ class DBModel {
         let path = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true
             ).first!
-        user = try! Connection("\(path)/db.sqlite3")
+        db = try! Connection("\(path)/db.sqlite3")
     }
     
     required init() {
+        dateFormatter.timeZone = NSTimeZone(name: "Asia/Shanghai")
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         let path = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory, .UserDomainMask, true
             ).first!
-        user = try! Connection("\(path)/db.sqlite3")
+        db = try! Connection("\(path)/db.sqlite3")
    }
     
 }

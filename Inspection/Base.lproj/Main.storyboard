@@ -454,7 +454,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="编辑" id="TnP-Hl-zfy">
                             <connections>
-                                <segue destination="3rP-gI-wwN" kind="show" identifier="equipmentEditSegue" id="ccM-TO-iUn"/>
+                                <segue destination="3rP-gI-wwN" kind="show" identifier="equipmentEditSegue" animates="NO" id="ccM-TO-iUn"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

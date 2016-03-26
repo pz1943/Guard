@@ -35,56 +35,71 @@ struct Record {
         self.taskType = task
         self.message = recordData
     }
+    
 }
 
-struct RecordsForEquipment {
+class RecordsForEquipment {
     private var equipmentID: Int
     private var equipmentType: String
     private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
     private var inspectionTaskArray: [InspectionTask]
+    private var recentRecoredsDir: [String: NSDate] = [: ]
+    var recentNeedRefresh: Bool = true
 
     private let DB = RecordDB()
     init(equipmentID: Int, equipmentType: String) {
         self.equipmentID = equipmentID
         self.equipmentType = equipmentType
         self.inspectionTaskArray = inspectionTaskDir.getTaskArray(equipmentType)
+        self.recentRecoredsDir = getRecentRecords()
     }
-    var recordsArray:[Record] {
-        get {
-            return DB.loadRecordFromEquipmetID(equipmentID)
-        }
+    
+    deinit {
+        print("deinit record \(equipmentID)")
     }
-    var mostRecentRecordsDir:[String: NSDate] {
+
+    var mostRecentRecordsDir: [String: NSDate] {
         get {
-            var recordsDir: [String: NSDate] = [: ]
-            for type in inspectionTaskArray {
-                if let record = DB.loadRecentTimeForType(equipmentID, inspectionTask: type.inspectionTaskName) {
-                    recordsDir[type.inspectionTaskName] = record.date
-                }
+            if recentNeedRefresh == true {
+                recentRecoredsDir = getRecentRecords()
+                recentNeedRefresh = false
             }
-            return recordsDir
+            return recentRecoredsDir
         }
+    }
+    
+    private func getRecentRecords() -> [String: NSDate]{
+        var recent: [String: NSDate] = [: ]
+        for type in inspectionTaskArray {
+            if let record = DB.loadRecentTimeForType(equipmentID, inspectionTask: type.inspectionTaskName) {
+                recent[type.inspectionTaskName] = record.date
+            }
+        }
+        return recent
     }
     
     private func isEquipmentCompleted() -> Bool{
         for task in inspectionTaskArray {
-            if isEquipmentCompletedForTask(task) == false {
+            if CompletedForTask(task) == false {
                 return false
             }
         }
         return true
     }
     
-    private func isEquipmentCompletedForTask(inspectionTask: InspectionTask) -> Bool {
-        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, task: inspectionTask.inspectionTaskName){
+    private func CompletedForTask(inspectionTask: InspectionTask) -> Bool {
+        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, taskName: inspectionTask.inspectionTaskName){
             if let date = mostRecentRecordsDir[inspectionTask.inspectionTaskName] {
                 if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
+                    print("small")
                     return false
                 }
             } else {
+                print("not enough")
                 return false
             }
         }
+        print("done")
         return true
     }
     
@@ -93,12 +108,30 @@ struct RecordsForEquipment {
     }
     
     var count: Int {
-        return recordsArray.count
+        return DB.count
+    }
+    
+    func isCompletedForTask(inspectionTask: InspectionTask) -> Bool {
+        return self.CompletedForTask(inspectionTask)
+    }
+    //new record comes first
+    func getRecord(index: Int) -> Record? {
+        print(index)
+        return DB.loadRecordFromIndex(equipmentID, index: count - 1 - index)
+    }
+    
+    func addRecord(record: Record) {
+        recentNeedRefresh = true
+        DB.addRecord(record)
+    }
+    
+    func delRecord(record: Record) {
+        recentNeedRefresh = true
+        DB.delRecord(record.ID)
     }
 }
 class RecordDB {
-    private var DB: DBModel
-    private var user: Connection
+    private var db: Connection
     private var recordTable: Table
     
     private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
@@ -107,12 +140,17 @@ class RecordDB {
     private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
     private let recordDateExpression = Expression<NSDate>(ExpressionTitle.RecordDate.description)
     
+    var count: Int {
+        get {
+            return self.db.scalar(recordTable.count)
+        }
+    }
+    
     init() {
-        self.DB = DBModel.sharedInstance()
-        self.user = DB.getUser()
+        self.db = DBModel.sharedInstance().getDB()
         self.recordTable = Table("recordTable")
         
-        try! user.run(recordTable.create(ifNotExists: true) { t in
+        try! db.run(recordTable.create(ifNotExists: true) { t in
             t.column(recordIDExpression, primaryKey: true)
             t.column(equipmentIDExpression)
             t.column(inspectionTaskNameExpression)
@@ -127,7 +165,7 @@ class RecordDB {
             self.equipmentIDExpression <- record.equipmentID,
             self.recordDateExpression <- record.date)
         do {
-            try user.run(insert)
+            try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
@@ -136,31 +174,21 @@ class RecordDB {
     func delRecord(recordID: Int) {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
         do {
-            try user.run(alice.delete())
+            try db.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
     }
     //MARK: - low efficiency when records became more.
-    func loadRecordFromEquipmetID(equipmentID: Int) -> [Record]{
-        let alice = recordTable.filter(self.equipmentIDExpression == equipmentID)
-        var array: [Row] = []
-        var recordArray: [Record] = []
-        do {
-            let rows = try user.prepare(alice)
-            array = Array(rows)
-        } catch let error as NSError {
-            print(error)
-        }
-        for row in array {
-            let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
-            recordArray.insert(record, atIndex: 0)
-        }
-        return recordArray
+    func loadRecordFromIndex(equipmentID: Int, index: Int) -> Record? {
+        let alice = recordTable.filter(self.equipmentIDExpression == equipmentID).limit(1, offset: index)
+        if let row = db.pluck(alice) {
+            return Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
+        } else { return nil }
     }
     func loadRecordFromRecordID(recordID: Int) -> Record {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
-        let row = Array(try! user.prepare(alice)).first!
+        let row = Array(try! db.prepare(alice)).first!
         let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
         return record
         
@@ -168,7 +196,7 @@ class RecordDB {
     
     func loadRecentTimeForType(equipmentID: Int, inspectionTask: String) -> Record? {
         let alice = recordTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
-        if let lastRecordID = user.scalar(alice.select(recordIDExpression.max)) {
+        if let lastRecordID = db.scalar(alice.select(recordIDExpression.max)) {
             let record = loadRecordFromRecordID(lastRecordID)
             return record
         } else {

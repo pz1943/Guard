@@ -22,7 +22,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     override func viewWillAppear(animated: Bool) {
         if equipment != nil {
-            equipment?.reloadDetails()
             equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!)
             tableView.reloadData()
         }
@@ -109,10 +108,10 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return cell
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            let type = inspectionTaskDir.getTaskArray(equipment?.type)[indexPath.row]
-                cell.equipmentInfoTitleLabel.text = type.inspectionTaskName
-                if let date = equipment?.records.mostRecentRecordsDir[type.inspectionTaskName] {
-                    if equipment?.records.completedFlag == false{
+            let task = inspectionTaskDir.getTaskArray(equipment?.type)[indexPath.row]
+                cell.equipmentInfoTitleLabel.text = task.inspectionTaskName
+                if let date = equipment?.records.mostRecentRecordsDir[task.inspectionTaskName] {
+                    if equipment?.records.isCompletedForTask(task) == false{
                         cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
                     }
                     cell.equipmentInfoContentLabel.text = date.datatypeValue
@@ -124,7 +123,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            if let record = equipment?.records.recordsArray[indexPath.row] {
+            if let record = equipment?.records.getRecord(indexPath.row) {
                 if record.message != nil {
                     cell.recordMessageLabel.text = record.message
                 }
@@ -179,11 +178,10 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     //MARK:- TODO
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-//            RecordDB().delRecord(equipment!.records.recordsArray[indexPath.row].ID)
-//            equipment?.records.recordsArray.removeAtIndex(indexPath.row)
-//            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-//            recentInspectionTime = DB!.loadRecentInspectionTime(equipmentID!)
-//            self.tableView.reloadData()
+            if let record = equipment?.records.getRecord(indexPath.row) {
+                equipment?.records.delRecord(record)
+            }
+            self.tableView.reloadData()
         }
     }
 

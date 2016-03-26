@@ -12,7 +12,6 @@ class RoomTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        DB = DBModel.sharedInstance()
 
     }
     
@@ -20,7 +19,6 @@ class RoomTableViewCell: UITableViewCell {
     @IBOutlet weak var roomTitle: UILabel!
     
     var room: Room?
-    var DB: DBModel?
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

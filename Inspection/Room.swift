@@ -23,11 +23,6 @@ class Room {
             return true
         }
     }
-    init(roomID: Int, roomName: String, equipments: [Equipment]){
-        self.name = roomName
-        self.ID = roomID
-        self.equipmentsArray = equipments
-    }
     init(roomID: Int, roomName: String) {
         self.name = roomName
         self.ID = roomID
@@ -37,31 +32,29 @@ class Room {
 }
 
 class RoomDB {
-    private var DB: DBModel
-    private var user: Connection
+    private var db: Connection
     private var roomTable: Table
     
     private let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
     private let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
     init() {
-        self.DB = DBModel.sharedInstance()
-        self.user = DB.getUser()
+        self.db = DBModel.sharedInstance().getDB()
         
         self.roomTable = Table("roomTable")
         
-        try! user.run(roomTable.create(ifNotExists: true) { t in
+        try! db.run(roomTable.create(ifNotExists: true) { t in
             t.column(roomIDExpression, primaryKey: true)
             t.column(roomNameExpression)
             })
     }
     
     func reload() {
-        DB.reload()
-        user = DB.getUser()
+        DBModel.sharedInstance().reload()
+        db = DBModel.sharedInstance().getDB()
     }
     
     func loadRoomTable() -> [Room]{
-        let rows = Array(try! user.prepare(roomTable))
+        let rows = Array(try! db.prepare(roomTable))
         var rooms: [Room] = [ ]
         for row in rows {
             rooms.append(Room(roomID: row[roomIDExpression], roomName: row[roomNameExpression]))
@@ -72,7 +65,7 @@ class RoomDB {
     func addRoom(roomName: String) {
         let insert = roomTable.insert(self.roomNameExpression <- roomName)
         do {
-            try user.run(insert)
+            try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
@@ -81,7 +74,7 @@ class RoomDB {
     func delRoom(roomID: Int) {
         let roomTableAlice = roomTable.filter(self.roomIDExpression == roomID)
         do {
-            try user.run(roomTableAlice.delete())
+            try db.run(roomTableAlice.delete())
         } catch let error as NSError {
             print(error)
         }

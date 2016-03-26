@@ -13,7 +13,6 @@ class InspectionCycleTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        DB = InspectionTaskDB()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -40,7 +39,6 @@ class InspectionCycleTableViewController: UITableViewController {
         let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         self.presentViewController(controller, animated: true, completion: nil)
     }
-    var DB: InspectionTaskDB?
     var timeCycleDir = InspectionTaskDir()
     // MARK: - Table view data source
 

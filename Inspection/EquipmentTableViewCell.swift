@@ -12,7 +12,6 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        DB = DBModel.sharedInstance()
 
         // Initialization code
     }
@@ -22,9 +21,6 @@ class EquipmentTableViewCell: UITableViewCell, UITextFieldDelegate{
         // Configure the view for the selected state
     }
     
-    var DB: DBModel?
-    var roomID: Int?
-    var roomName: String?
     var equipment: Equipment?
     @IBOutlet weak var equipmentTitle: UILabel!
     @IBOutlet weak var DoneFlagImageView: UIImageView!

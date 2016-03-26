@@ -30,7 +30,7 @@ class EquipmentTableViewController: UITableViewController {
     }
 
     func refresh() {
-        equipmentArray = DB!.loadEquipmentTable(selectRoom!.ID)
+        equipmentArray = selectRoom?.equipmentsArray ?? []
         self.loginForUser()
         self.tableView.reloadData()
     }
@@ -57,31 +57,20 @@ class EquipmentTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if section == 0 {
-            return equipmentArray.count
-        } else{
-            return 0
-        }
+        return equipmentArray.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentCell", forIndexPath: indexPath) as! EquipmentTableViewCell
-            cell.equipmentTitle.text = equipmentArray[indexPath.row].name
-            cell.equipment = equipmentArray[indexPath.row]
-            if equipmentArray[indexPath.row].isRecordsNeedReload == false {
-                cell.DoneFlagImageView.alpha = 0.1
-            } else {
-                cell.DoneFlagImageView.alpha = 1
-            }
-            return cell
+        let cell = tableView.dequeueReusableCellWithIdentifier("equipmentCell", forIndexPath: indexPath) as! EquipmentTableViewCell
+        cell.equipmentTitle.text = equipmentArray[indexPath.row].name
+        cell.equipment = equipmentArray[indexPath.row]
+        if equipmentArray[indexPath.row].inspectionDoneFlag == false {
+            cell.DoneFlagImageView.alpha = 0.1
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddCell", forIndexPath: indexPath)
-            (cell as? EquipmentTableViewCell)?.roomID = selectRoom!.ID
-            (cell as? EquipmentTableViewCell)?.roomName = selectRoom!.name
-            return cell
+            cell.DoneFlagImageView.alpha = 1
         }
+        return cell
     }
     
     
@@ -120,7 +109,7 @@ class EquipmentTableViewController: UITableViewController {
                 }
             }
         } else if segue.identifier == "ToQRCodeSegue" {
-            if let DVC = segue.destinationViewController as? QRCodeViewController {
+            if let DVC = segue.destinationViewController as? QRCodeForOneEquipmentViewController {
                 if let equipment = (sender as? EquipmentTableViewCell)?.equipment {
                     DVC.equipment = equipment
                 }

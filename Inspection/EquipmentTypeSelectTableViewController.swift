@@ -12,7 +12,6 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        DB = DBModel.sharedInstance()
         equipmentTypeArray = InspectionTaskDir().getTaskArray(selectedEQType!)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -21,7 +20,6 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
-    var DB: DBModel?
     var equipmentTypeArray: [InspectionTask] = []
     var selectedEQType: String?
     

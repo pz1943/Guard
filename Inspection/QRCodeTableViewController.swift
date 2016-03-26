@@ -20,14 +20,13 @@ class QRCodeRecordTableViewController: UITableViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
         selectFirst()
         self.clearsSelectionOnViewWillAppear = false
-        self.navigationItem.title = equipment!.roomName + equipment!.name
+        self.navigationItem.title = equipment!.name
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     var equipment: Equipment?
-    var DB: DBModel?
     var record: Record?
     var taskArray: [InspectionTask] = []
 
@@ -148,7 +147,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "QRDone" {
-            RecordDB().addRecord(record!)
+            equipment?.records.addRecord(record!)
         }
     }
 }

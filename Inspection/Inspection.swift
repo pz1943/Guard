@@ -58,14 +58,15 @@ struct InspectionTaskDir {
         }
     }
     
-    func getTimeCycleForEquipment(equipmentType: String, task: String) -> Double? {
+    func getTimeCycleForEquipment(equipmentType: String, taskName: String) -> Double? {
         var cycle: Double = 0.0
+        
         if let typeArray = dir[equipmentType] {
-            let _ = typeArray.map({
-                if $0.equipmentType == task {
-                    cycle = $0.inspectionCycle
+            for task in typeArray {
+                if task.inspectionTaskName == taskName {
+                    cycle = task.inspectionCycle
                 }
-            })
+            }
             return cycle
         } else {
             return nil
@@ -83,8 +84,7 @@ struct InspectionTaskDir {
 //}
 
 class InspectionDelayDB {
-    private var DB: DBModel
-    private var user: Connection
+    private var db: Connection
     private var inspectionDelayTable: Table
     
     private let inspectionDelayIDExpression = Expression<Int>("inspectionDelayID")
@@ -93,11 +93,10 @@ class InspectionDelayDB {
     private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
     
     init() {
-        self.DB = DBModel.sharedInstance()
-        self.user = DB.getUser()
+        self.db = DBModel.sharedInstance().getDB()
         self.inspectionDelayTable = Table("inspectionDelayTable")
         
-        try! user.run(inspectionDelayTable.create(ifNotExists: true) { t in
+        try! db.run(inspectionDelayTable.create(ifNotExists: true) { t in
             t.column(inspectionDelayIDExpression, primaryKey: true)
             t.column(equipmentIDExpression)
             t.column(inspectionTaskNameExpression)
@@ -108,7 +107,7 @@ class InspectionDelayDB {
     func editInspectionDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
         let alice = inspectionDelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         do {
-            try user.run(alice.update(Expression<Int>(inspectionDelayHourExpression) <- hours))
+            try db.run(alice.update(Expression<Int>(inspectionDelayHourExpression) <- hours))
         } catch let error as NSError {
             print(error)
         }
@@ -121,7 +120,7 @@ class InspectionDelayDB {
             self.inspectionDelayHourExpression <- hours
         )
         do {
-            try user.run(insert)
+            try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
@@ -129,8 +128,7 @@ class InspectionDelayDB {
     
 }
 class InspectionTaskDB {
-    private var DB: DBModel
-    private var user: Connection
+    private var db: Connection
     private var inspectionTaskTable: Table
     
     private let inspectionTaskIDExpression = Expression<Int>(ExpressionTitle.InspectionTaskID.description)
@@ -140,11 +138,10 @@ class InspectionTaskDB {
     private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
     
     init() {
-        self.DB = DBModel.sharedInstance()
-        self.user = DB.getUser()
+        self.db = DBModel.sharedInstance().getDB()
         self.inspectionTaskTable = Table("inspectionTaskTable")
         
-        try! user.run(inspectionTaskTable.create(ifNotExists: true) { t in
+        try! db.run(inspectionTaskTable.create(ifNotExists: true) { t in
             t.column(inspectionTaskIDExpression, primaryKey: true)
             t.column(inspectionTaskNameExpression)
             t.column(equipmentTypeExpression)
@@ -153,7 +150,7 @@ class InspectionTaskDB {
     }
     
     func loadInspectionTaskDir() -> [String: [InspectionTask]] {
-        let rows = Array(try! user.prepare(inspectionTaskTable))
+        let rows = Array(try! db.prepare(inspectionTaskTable))
         var inspectionTaskDir: [String: [InspectionTask]] = [: ]
         for row in rows {
             let type = InspectionTask(
@@ -176,7 +173,7 @@ class InspectionTaskDB {
             self.inspectionCycleExpression <- type.inspectionCycle
         )
         do {
-            try user.run(insert)
+            try db.run(insert)
             return true
         } catch let error as NSError {
             print(error)
