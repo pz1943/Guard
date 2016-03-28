@@ -102,13 +102,20 @@ class RecordsForEquipment {
         print("done")
         return true
     }
-    
+    private var completedFlagNeedRefresh: Bool = true
+    private var completedFlagCache: Bool = false
     var completedFlag: Bool {
-        return isEquipmentCompleted()
+        if completedFlagNeedRefresh == true {
+            completedFlagCache = isEquipmentCompleted()
+            completedFlagNeedRefresh = false
+            return completedFlagCache
+        } else {
+            return completedFlagCache
+        }
     }
     
     var count: Int {
-        return DB.count
+        return DB.countForEQ(equipmentID)
     }
     
     func isCompletedForTask(inspectionTask: InspectionTask) -> Bool {
@@ -121,11 +128,13 @@ class RecordsForEquipment {
     }
     
     func addRecord(record: Record) {
+        completedFlagNeedRefresh = true
         recentNeedRefresh = true
         DB.addRecord(record)
     }
     
     func delRecord(record: Record) {
+        completedFlagNeedRefresh = true
         recentNeedRefresh = true
         DB.delRecord(record.ID)
     }
@@ -140,10 +149,8 @@ class RecordDB {
     private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
     private let recordDateExpression = Expression<NSDate>(ExpressionTitle.RecordDate.description)
     
-    var count: Int {
-        get {
-            return self.db.scalar(recordTable.count)
-        }
+    func countForEQ(equipmentID: Int) -> Int {
+        return self.db.scalar(recordTable.filter(self.equipmentIDExpression == equipmentID).count)
     }
     
     init() {

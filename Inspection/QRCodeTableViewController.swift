@@ -16,11 +16,15 @@ class QRCodeRecordTableViewController: UITableViewController {
         super.viewDidLoad()
         taskArray = InspectionTaskDir().getTaskArray(equipment?.type)
         record = Record(equipmentID: equipment!.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
         selectFirst()
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.title = equipment!.name
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
+
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self)

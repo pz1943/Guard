@@ -15,12 +15,12 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
 
-        NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.takeANewPhoto()
-        }
     }
 
     override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+            self.takeANewPhoto()
+        }
         if equipment != nil {
             equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!)
             tableView.reloadData()

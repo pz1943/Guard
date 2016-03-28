@@ -13,14 +13,13 @@ class EquipmentTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DB = EquipmentDB()
-        NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.equipmentArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID)
-            self.tableView.reloadData()
-        }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+            self.selectRoom?.equipmentsArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID)
+        }
         if selectRoom != nil {
             refresh()
         }
@@ -89,8 +88,8 @@ class EquipmentTableViewController: UITableViewController {
             // Delete the row from the data source
             if selectRoom != nil {
                 DB?.delEquipment(equipmentArray[indexPath.row].ID)
-                equipmentArray.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+//                self.selectRoom?.equipmentsArray.removeAtIndex(indexPath.row)
             }
             //MARK: TODO add notification to del
         }

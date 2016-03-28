@@ -14,11 +14,6 @@ class RoomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.DB.reload()
-            self.rooms = self.DB.loadRoomTable()
-            self.tableView.reloadData()
-        }
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
@@ -26,6 +21,10 @@ class RoomTableViewController: UITableViewController {
         refresh()
     }
     override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+            self.DB.reload()
+            self.rooms = self.DB.loadRoomTable()
+        }
         loadForUser(user)
         tableView.reloadData()
     }

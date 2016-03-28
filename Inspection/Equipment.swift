@@ -33,12 +33,6 @@ class Equipment {
         }
     }
 
-    var isRecordsNeedReload: Bool {
-        get {
-            return records.recentNeedRefresh
-        }
-    }
-    private var inspectionDoneFlagCache: Bool = false
     var records: RecordsForEquipment
     
     init(ID: Int,
@@ -80,15 +74,8 @@ extension Equipment {
     
     var inspectionDoneFlag: Bool {
         get {
-            if isRecordsNeedReload == false {
-                print("\(name) use cache")
-                return inspectionDoneFlagCache
-            } else {
-                print("\(name) use reload")
-
-                inspectionDoneFlagCache = records.completedFlag
-                return inspectionDoneFlagCache
-            }
+            print("\(records.completedFlag) use reload")
+            return records.completedFlag
         }
     }
 }

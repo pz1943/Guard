@@ -12,7 +12,7 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        equipmentTypeArray = InspectionTaskDir().getTaskArray(selectedEQType!)
+        equipmentTypeArray = InspectionTaskDir().equipmentTypeArray
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -20,7 +20,7 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
-    var equipmentTypeArray: [InspectionTask] = []
+    var equipmentTypeArray: [String] = []
     var selectedEQType: String?
     
     override func didReceiveMemoryWarning() {
@@ -42,14 +42,14 @@ class EquipmentTypeSelectTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("EquipmentTypeSelectCell", forIndexPath: indexPath)
-        cell.textLabel?.text = equipmentTypeArray[indexPath.row].inspectionTaskName
+        cell.textLabel?.text = equipmentTypeArray[indexPath.row]
         // Configure the cell...
 
         return cell
     }
 
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        selectedEQType = equipmentTypeArray[indexPath.row].inspectionTaskName
+        selectedEQType = equipmentTypeArray[indexPath.row]
         return indexPath
     }
     /*

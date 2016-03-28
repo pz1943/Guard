@@ -16,7 +16,6 @@ class RoomAddTableViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         roomDB = RoomDB()
         roomsArray = roomDB!.loadRoomTable()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "newNameGot:", name: "newRoomNameGotNotification", object: nil)
         
     }
 
@@ -38,6 +37,7 @@ class RoomAddTableViewController: UITableViewController {
 
     }
     override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "newNameGot:", name: "newRoomNameGotNotification", object: nil)
     }
 
     var roomDB: RoomDB?

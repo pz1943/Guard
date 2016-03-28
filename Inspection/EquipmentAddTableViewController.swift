@@ -21,12 +21,12 @@ class EquipmentAddTableViewController: UITableViewController {
         if let equipmentName = equipmentNameTextField.text {
             if equipmentName != "" && equipmentType != nil {
                 EQDB?.addEquipment(equipmentName,equipmentType: equipmentType!, roomID: self.room!.ID, roomName: self.room!.name)
+                NSNotificationCenter.defaultCenter().postNotificationName("EquipmentTableNeedRefreshNotification", object: nil)
                 self.performSegueWithIdentifier("newEquipmentGotSegue", sender: self)
             }
         }
     }
     override func viewDidDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
         
     }
     override func viewWillDisappear(animated: Bool) {
