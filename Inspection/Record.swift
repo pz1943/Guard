@@ -9,7 +9,7 @@
 import Foundation
 import SQLite
 
-struct Record {
+struct Record { 
     var ID: Int {
         get {
             return recordID!
@@ -35,7 +35,6 @@ struct Record {
         self.taskType = task
         self.message = recordData
     }
-    
 }
 
 class RecordsForEquipment {

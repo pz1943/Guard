@@ -44,7 +44,6 @@
 		492D1C9B1CB3A3750061C2A3 /* InspectionDelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */; };
 		499B40A81C62E08700FD6425 /* Inspection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B40A71C62E08700FD6425 /* Inspection.swift */; };
 		49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 49AB8C7D1CA4DCC500D93EA5 /* .gitignore */; };
-		49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */ = {isa = PBXBuildFile; fileRef = 49EE2BB31C71A5D500871F8F /* 工作记录 */; };
 		590CC1FC8F8F9C4BD07DF375 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C45D85E3F38A700E259C0 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -110,7 +109,6 @@
 		492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionDelay.swift; sourceTree = "<group>"; };
 		499B40A71C62E08700FD6425 /* Inspection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspection.swift; sourceTree = "<group>"; };
 		49AB8C7D1CA4DCC500D93EA5 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		49EE2BB31C71A5D500871F8F /* 工作记录 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "工作记录"; sourceTree = "<group>"; };
 		7988BE7B4F86F30202425F39 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A0283FEF7611512015DFE086 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,7 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				1866594F1CB3D9BB0077F8E4 /* LICENSE */,
-				49EE2BB31C71A5D500871F8F /* 工作记录 */,
 				18933E2B1C47D8E100357F74 /* Inspection */,
 				18933E431C47D8E100357F74 /* InspectionTests */,
 				18933E4E1C47D8E100357F74 /* InspectionUITests */,
@@ -388,7 +385,6 @@
 				49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */,
 				18933E3A1C47D8E100357F74 /* LaunchScreen.storyboard in Resources */,
 				18933E371C47D8E100357F74 /* Assets.xcassets in Resources */,
-				49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */,
 				18933E321C47D8E100357F74 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
