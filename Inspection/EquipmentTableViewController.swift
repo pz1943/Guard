@@ -29,7 +29,6 @@ class EquipmentTableViewController: UITableViewController {
     }
 
     func refresh() {
-        equipmentArray = selectRoom?.equipmentsArray ?? []
         self.loginForUser()
         self.tableView.reloadData()
     }
@@ -44,7 +43,11 @@ class EquipmentTableViewController: UITableViewController {
     // MARK: - Table view data source
     var DB: EquipmentDB?
     var user: User?
-    var equipmentArray: [Equipment] = []
+    var equipmentArray: [Equipment] {
+        get {
+            return selectRoom?.equipmentsArray ?? []
+        }
+    }
     var selectRoom: Room?
     var rightBarButtonItems: UIBarButtonItem?
     var canEditFlag = true
@@ -88,8 +91,8 @@ class EquipmentTableViewController: UITableViewController {
             // Delete the row from the data source
             if selectRoom != nil {
                 DB?.delEquipment(equipmentArray[indexPath.row].ID)
+                self.selectRoom?.equipmentsArray.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-//                self.selectRoom?.equipmentsArray.removeAtIndex(indexPath.row)
             }
             //MARK: TODO add notification to del
         }

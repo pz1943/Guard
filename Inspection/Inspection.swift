@@ -83,50 +83,6 @@ struct InspectionTaskDir {
 //    
 //}
 
-class InspectionDelayDB {
-    private var db: Connection
-    private var inspectionDelayTable: Table
-    
-    private let inspectionDelayIDExpression = Expression<Int>("inspectionDelayID")
-    private let inspectionDelayHourExpression = Expression<Int>("inspectionDelayHour")
-    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
-    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
-    
-    init() {
-        self.db = DBModel.sharedInstance().getDB()
-        self.inspectionDelayTable = Table("inspectionDelayTable")
-        
-        try! db.run(inspectionDelayTable.create(ifNotExists: true) { t in
-            t.column(inspectionDelayIDExpression, primaryKey: true)
-            t.column(equipmentIDExpression)
-            t.column(inspectionTaskNameExpression)
-            t.column(inspectionDelayHourExpression)
-            })
-    }
-    
-    func editInspectionDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
-        let alice = inspectionDelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
-        do {
-            try db.run(alice.update(Expression<Int>(inspectionDelayHourExpression) <- hours))
-        } catch let error as NSError {
-            print(error)
-        }
-    }
-    
-    func addInspectionDelayForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
-        let insert = inspectionDelayTable.insert(self.inspectionTaskNameExpression <- inspectionTask,
-            self.equipmentIDExpression <- equipmentID,
-            self.inspectionTaskNameExpression <- inspectionTask,
-            self.inspectionDelayHourExpression <- hours
-        )
-        do {
-            try db.run(insert)
-        } catch let error as NSError {
-            print(error)
-        }
-    }
-    
-}
 class InspectionTaskDB {
     private var db: Connection
     private var inspectionTaskTable: Table

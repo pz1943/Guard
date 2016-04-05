@@ -40,6 +40,7 @@
 		18F89F741C99B57D00F0F054 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F89F731C99B57D00F0F054 /* Record.swift */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
+		492D1C9B1CB3A3750061C2A3 /* InspectionDelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */; };
 		499B40A81C62E08700FD6425 /* Inspection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B40A71C62E08700FD6425 /* Inspection.swift */; };
 		49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 49AB8C7D1CA4DCC500D93EA5 /* .gitignore */; };
 		49EE2BB41C71A5D500871F8F /* 工作记录 in Resources */ = {isa = PBXBuildFile; fileRef = 49EE2BB31C71A5D500871F8F /* 工作记录 */; };
@@ -104,6 +105,7 @@
 		18F89F731C99B57D00F0F054 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
+		492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionDelay.swift; sourceTree = "<group>"; };
 		499B40A71C62E08700FD6425 /* Inspection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspection.swift; sourceTree = "<group>"; };
 		49AB8C7D1CA4DCC500D93EA5 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		49EE2BB31C71A5D500871F8F /* 工作记录 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "工作记录"; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			children = (
 				18933E5D1C47DA5200357F74 /* DBModel.swift */,
 				499B40A71C62E08700FD6425 /* Inspection.swift */,
+				492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */,
 				1843F2571C49EFB4002BB69A /* Equipment.swift */,
 				18F89F731C99B57D00F0F054 /* Record.swift */,
 				18F89F711C96EE1900F0F054 /* Room.swift */,
@@ -460,6 +463,7 @@
 				18F89F721C96EE1900F0F054 /* Room.swift in Sources */,
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
 				18F89F741C99B57D00F0F054 /* Record.swift in Sources */,
+				492D1C9B1CB3A3750061C2A3 /* InspectionDelay.swift in Sources */,
 				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
 				18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */,
 				18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */,

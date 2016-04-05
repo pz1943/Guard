@@ -23,6 +23,9 @@ class Equipment {
     var commissionTime: String?
     var SN: String?
     var imageName: String?
+    
+    var inspectionTaskDir: [InspectionTask]
+    
     var imageAbsoluteFilePath: NSURL? {
         get {
             if imageName != nil {
@@ -59,6 +62,7 @@ class Equipment {
         self.SN = SN
         self.imageName = imageName
         records = RecordsForEquipment(equipmentID: ID, equipmentType: type)
+        self.inspectionTaskDir = InspectionTaskDir().getTaskArray(type)
     }
     deinit {
         print("deinit equipment \(ID)")
@@ -74,7 +78,9 @@ extension Equipment {
     
     var inspectionDoneFlag: Bool {
         get {
-            print("\(records.completedFlag) use reload")
+            if records.completedFlag == false {
+                print("\(records.completedFlag) use reload")
+            }
             return records.completedFlag
         }
     }

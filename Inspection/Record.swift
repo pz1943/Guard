@@ -91,15 +91,12 @@ class RecordsForEquipment {
         if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, taskName: inspectionTask.inspectionTaskName){
             if let date = mostRecentRecordsDir[inspectionTask.inspectionTaskName] {
                 if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
-                    print("small")
                     return false
                 }
             } else {
-                print("not enough")
                 return false
             }
         }
-        print("done")
         return true
     }
     private var completedFlagNeedRefresh: Bool = true

@@ -19,6 +19,8 @@ class RoomTableViewController: UITableViewController {
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
         loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
         refresh()
+//        initDelayDB()
+
     }
     override func viewWillAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
@@ -31,6 +33,19 @@ class RoomTableViewController: UITableViewController {
     @IBAction func refresh(sender: UIRefreshControl) {
         refresh()
         sender.endRefreshing()
+    }
+    
+    func initDelayDB() {
+        let DB = DelayDB()
+        let defaultDelayHours = 10
+        let taskDir = InspectionTaskDir()
+        for room in rooms {
+            for equipment in room.equipmentsArray {
+                for task in taskDir.getTaskArray(equipment.type) {
+                    DB.addDelayForEquipment(equipment.ID, inspectionTask: task.inspectionTaskName, hours: defaultDelayHours)
+                }
+            }
+        }
     }
     
     func refresh() {
