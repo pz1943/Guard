@@ -15,7 +15,6 @@ class RoomAddTableViewController: UITableViewController {
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         roomDB = RoomDB()
-        roomsArray = roomDB!.loadRoomTable()
         
     }
 

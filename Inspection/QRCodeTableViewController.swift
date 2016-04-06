@@ -14,11 +14,11 @@ class QRCodeRecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        taskArray = InspectionTaskDir().getTaskArray(equipment?.type)
-        record = Record(equipmentID: equipment!.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil)
+        taskArray = equipment!.inspectionTaskArray
+        record = Record(equipmentID: equipment!.info.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil)
         selectFirst()
         self.clearsSelectionOnViewWillAppear = false
-        self.navigationItem.title = equipment!.name
+        self.navigationItem.title = equipment!.info.name
     }
     
     override func viewWillAppear(animated: Bool) {

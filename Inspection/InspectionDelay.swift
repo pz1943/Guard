@@ -12,9 +12,9 @@ import SQLite
 
 class DelayHourDir {
     var delayDir: [String: Int] = [: ]
-    init(equipment: Equipment) {
+    init(info: EquipmentInfo, taskArray: [InspectionTask]) {
         let DB = DelayDB()
-        self.delayDir = DB.loadDelayHourDir(equipment)
+        self.delayDir = DB.loadDelayHourDir(info,taskArray: taskArray)
     }
     
     subscript(key: String) -> Int? {
@@ -67,8 +67,8 @@ class DelayDB {
         }
     }
     
-    func loadDelayHourDir(equipment: Equipment) -> [String: Int] {
-        let filter = DelayTable.filter(self.equipmentIDExpression == equipment.ID)
+    func loadDelayHourDir(info: EquipmentInfo, taskArray: [InspectionTask]) -> [String: Int] {
+        let filter = DelayTable.filter(self.equipmentIDExpression == info.ID)
         let rows = Array(try! db.prepare(filter))
         var delayDir: [String: Int] = [: ]
         if rows.count != 0 {
@@ -76,8 +76,8 @@ class DelayDB {
                 delayDir[row[inspectionTaskNameExpression]] = row[delayHourExpression]
             }
         } else {
-            for task in equipment.inspectionTaskDir {
-                addDelayForEquipment(equipment.ID, inspectionTask: task.inspectionTaskName, hours: 8)
+            for task in taskArray {
+                addDelayForEquipment(info.ID, inspectionTask: task.inspectionTaskName, hours: 8)
                 delayDir[task.inspectionTaskName] = 8
             }
         }

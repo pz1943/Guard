@@ -42,6 +42,7 @@
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
 		492D1C9B1CB3A3750061C2A3 /* InspectionDelay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */; };
+		49637D841CB4FE5B00398BB2 /* DelayHourEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49637D831CB4FE5B00398BB2 /* DelayHourEditViewController.swift */; };
 		499B40A81C62E08700FD6425 /* Inspection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499B40A71C62E08700FD6425 /* Inspection.swift */; };
 		49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 49AB8C7D1CA4DCC500D93EA5 /* .gitignore */; };
 		590CC1FC8F8F9C4BD07DF375 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C45D85E3F38A700E259C0 /* Pods.framework */; };
@@ -107,6 +108,7 @@
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
 		492D1C9A1CB3A3750061C2A3 /* InspectionDelay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionDelay.swift; sourceTree = "<group>"; };
+		49637D831CB4FE5B00398BB2 /* DelayHourEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelayHourEditViewController.swift; sourceTree = "<group>"; };
 		499B40A71C62E08700FD6425 /* Inspection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspection.swift; sourceTree = "<group>"; };
 		49AB8C7D1CA4DCC500D93EA5 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7988BE7B4F86F30202425F39 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				18C59C7E1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift */,
 				18933E611C47DA5200357F74 /* EquipmentTableViewController.swift */,
 				18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */,
+				49637D831CB4FE5B00398BB2 /* DelayHourEditViewController.swift */,
 				184616871C49DEE00047E3EE /* ImageViewController.swift */,
 				18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */,
 				18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */,
@@ -470,6 +473,7 @@
 				18933E351C47D8E100357F74 /* Inspection.xcdatamodeld in Sources */,
 				1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */,
 				18C59C7D1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift in Sources */,
+				49637D841CB4FE5B00398BB2 /* DelayHourEditViewController.swift in Sources */,
 				18933E2D1C47D8E100357F74 /* AppDelegate.swift in Sources */,
 				18933E6A1C47DA5200357F74 /* EquipmentTableViewController.swift in Sources */,
 				18C59C811C8F05DC00CA1428 /* EquipmentAddTableViewController.swift in Sources */,

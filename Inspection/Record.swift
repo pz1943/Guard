@@ -38,25 +38,24 @@ struct Record {
 }
 
 class RecordsForEquipment {
-    private var equipmentID: Int
-    private var equipmentType: String
+    private var info: EquipmentInfo
     private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
     private var inspectionTaskArray: [InspectionTask]
-    private var recentRecoredsDir: [String: NSDate] = [: ]
-    var recentNeedRefresh: Bool = true
 
     private let DB = RecordDB()
-    init(equipmentID: Int, equipmentType: String) {
-        self.equipmentID = equipmentID
-        self.equipmentType = equipmentType
-        self.inspectionTaskArray = inspectionTaskDir.getTaskArray(equipmentType)
+    init(info: EquipmentInfo, taskArray: [InspectionTask]) {
+        self.info = info
+        self.inspectionTaskArray = taskArray
+        self.delayHourDirCache = DelayHourDir(info: self.info, taskArray: self.inspectionTaskArray)
         self.recentRecoredsDir = getRecentRecords()
     }
     
     deinit {
-        print("deinit record \(equipmentID)")
+        print("deinit record \(info.ID)")
     }
-
+    
+    private var recentRecoredsDir: [String: NSDate] = [: ]
+    private var recentNeedRefresh: Bool = true
     var mostRecentRecordsDir: [String: NSDate] {
         get {
             if recentNeedRefresh == true {
@@ -67,10 +66,36 @@ class RecordsForEquipment {
         }
     }
     
+    private var completedFlagNeedRefresh: Bool = true
+    private var completedFlagCache: Bool = false
+    var completedFlag: Bool {
+        if completedFlagNeedRefresh == true {
+            completedFlagCache = isEquipmentCompleted()
+            completedFlagNeedRefresh = false
+            return completedFlagCache
+        } else {
+            return completedFlagCache
+        }
+    }
+
+    private var delayHourDirCache: DelayHourDir
+    private var delayHourNeedRefreshFlag: Bool = false
+    private var delayHourDir: DelayHourDir {
+        get {
+            if delayHourNeedRefreshFlag == false {
+                return delayHourDirCache
+            } else {
+                delayHourNeedRefreshFlag = false
+                delayHourDirCache = DelayHourDir(info: self.info, taskArray: self.inspectionTaskArray)
+                return delayHourDirCache
+            }
+        }
+    }
+    
     private func getRecentRecords() -> [String: NSDate]{
         var recent: [String: NSDate] = [: ]
         for type in inspectionTaskArray {
-            if let record = DB.loadRecentTimeForType(equipmentID, inspectionTask: type.inspectionTaskName) {
+            if let record = DB.loadRecentTimeForType(info.ID, inspectionTask: type.inspectionTaskName) {
                 recent[type.inspectionTaskName] = record.date
             }
         }
@@ -87,10 +112,13 @@ class RecordsForEquipment {
     }
     
     private func CompletedForTask(inspectionTask: InspectionTask) -> Bool {
-        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(equipmentType, taskName: inspectionTask.inspectionTaskName){
+        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: inspectionTask.inspectionTaskName){
             if let date = mostRecentRecordsDir[inspectionTask.inspectionTaskName] {
-                if -date.timeIntervalSinceNow.datatypeValue > Double(timeCycle) * 24 * 3600{
-                    return false
+                if let delayHour = delayHourDir[inspectionTask.inspectionTaskName] {
+                    let timeCycleInSeconds = Double(timeCycle) * 86400 + Double(delayHour) * 3600
+                    if -date.timeIntervalSinceNow.datatypeValue > timeCycleInSeconds {
+                        return false
+                    }
                 }
             } else {
                 return false
@@ -98,20 +126,9 @@ class RecordsForEquipment {
         }
         return true
     }
-    private var completedFlagNeedRefresh: Bool = true
-    private var completedFlagCache: Bool = false
-    var completedFlag: Bool {
-        if completedFlagNeedRefresh == true {
-            completedFlagCache = isEquipmentCompleted()
-            completedFlagNeedRefresh = false
-            return completedFlagCache
-        } else {
-            return completedFlagCache
-        }
-    }
     
     var count: Int {
-        return DB.countForEQ(equipmentID)
+        return DB.countForEQ(info.ID)
     }
     
     func isCompletedForTask(inspectionTask: InspectionTask) -> Bool {
@@ -120,7 +137,7 @@ class RecordsForEquipment {
     //new record comes first
     func getRecord(index: Int) -> Record? {
         print(index)
-        return DB.loadRecordFromIndex(equipmentID, index: count - 1 - index)
+        return DB.loadRecordFromIndex(info.ID, index: count - 1 - index)
     }
     
     func addRecord(record: Record) {
@@ -133,6 +150,10 @@ class RecordsForEquipment {
         completedFlagNeedRefresh = true
         recentNeedRefresh = true
         DB.delRecord(record.ID)
+    }
+    
+    func setDelayHour() {
+        
     }
 }
 class RecordDB {

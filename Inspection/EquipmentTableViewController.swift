@@ -18,7 +18,9 @@ class EquipmentTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.selectRoom?.equipmentsArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID)
+            self.selectRoom?.equipmentsArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID).map({ (info) -> Equipment in
+                Equipment(info: info)
+            })
         }
         if selectRoom != nil {
             refresh()
@@ -65,7 +67,7 @@ class EquipmentTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("equipmentCell", forIndexPath: indexPath) as! EquipmentTableViewCell
-        cell.equipmentTitle.text = equipmentArray[indexPath.row].name
+        cell.equipmentTitle.text = equipmentArray[indexPath.row].info.name
         cell.equipment = equipmentArray[indexPath.row]
         if equipmentArray[indexPath.row].inspectionDoneFlag == false {
             cell.DoneFlagImageView.alpha = 0.1
@@ -90,7 +92,7 @@ class EquipmentTableViewController: UITableViewController {
         if editingStyle == .Delete {
             // Delete the row from the data source
             if selectRoom != nil {
-                DB?.delEquipment(equipmentArray[indexPath.row].ID)
+                DB?.delEquipment(equipmentArray[indexPath.row].info.ID)
                 self.selectRoom?.equipmentsArray.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             }

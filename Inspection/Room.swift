@@ -26,7 +26,7 @@ class Room {
     init(roomID: Int, roomName: String) {
         self.name = roomName
         self.ID = roomID
-        self.equipmentsArray = EquipmentDB().loadEquipmentTable(roomID)
+        self.equipmentsArray = EquipmentArray(roomID: roomID).arr
     }
     
 }
@@ -53,11 +53,11 @@ class RoomDB {
         db = DBModel.sharedInstance().getDB()
     }
     
-    func loadRoomTable() -> [Room]{
+    func loadRoomTable() -> [Int: String]{
         let rows = Array(try! db.prepare(roomTable))
-        var rooms: [Room] = [ ]
+        var rooms: [Int: String] = [: ]
         for row in rows {
-            rooms.append(Room(roomID: row[roomIDExpression], roomName: row[roomNameExpression]))
+            rooms[row[roomIDExpression]] = row[roomNameExpression]
         }
         return rooms
     }

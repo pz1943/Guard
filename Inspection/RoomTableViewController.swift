@@ -25,7 +25,7 @@ class RoomTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.DB.reload()
-            self.rooms = self.DB.loadRoomTable()
+            self.rooms = self.loadRoomArray()
         }
         loadForUser(user)
         tableView.reloadData()
@@ -35,14 +35,21 @@ class RoomTableViewController: UITableViewController {
         sender.endRefreshing()
     }
     
+    func loadRoomArray() -> [Room] {
+        var rooms: [Room] = []
+        for (key, value) in DB.loadRoomTable() {
+            rooms.append(Room(roomID: key, roomName: value))
+        }
+        return rooms
+    }
+    
     func initDelayDB() {
         let DB = DelayDB()
         let defaultDelayHours = 10
-        let taskDir = InspectionTaskDir()
         for room in rooms {
             for equipment in room.equipmentsArray {
-                for task in taskDir.getTaskArray(equipment.type) {
-                    DB.addDelayForEquipment(equipment.ID, inspectionTask: task.inspectionTaskName, hours: defaultDelayHours)
+                for task in equipment.inspectionTaskArray {
+                    DB.addDelayForEquipment(equipment.info.ID, inspectionTask: task.inspectionTaskName, hours: defaultDelayHours)
                 }
             }
         }
@@ -50,7 +57,7 @@ class RoomTableViewController: UITableViewController {
     
     func refresh() {
         DB.reload()
-        rooms = DB.loadRoomTable()
+        rooms = loadRoomArray()
         loadForUser(user)
         tableView.reloadData()
     }
@@ -171,6 +178,10 @@ class RoomTableViewController: UITableViewController {
                     DVC.selectRoom = cell.room
                     DVC.user = self.user
                 }
+            }
+        } else if segue.identifier == "newRoomSegue" {
+            if let DVC = segue.destinationViewController as? RoomAddTableViewController {
+                DVC.roomsArray = self.rooms
             }
         }
     }

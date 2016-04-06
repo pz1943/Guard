@@ -34,7 +34,7 @@ class EquipmentEditTableViewCell: UITableViewCell, UITextFieldDelegate {
     func textFieldDidEndEditing(textField: UITextField) {
         if let newText = textField.text {
             if  let title = titleLabel.text {
-                DB?.editEquipment(equipment!.ID, equipmentDetailTitleString: title, newValue: newText)
+                DB?.editEquipment(equipment!.info.ID, equipmentDetailTitleString: title, newValue: newText)
             }
         }
     }

@@ -8,13 +8,13 @@
 
 import UIKit
 
-class EquipmentDetailTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class EquipmentDetailTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-
+        self.tableView.addGestureRecognizer(UIGestureRecognizer(target: self.tableView, action: "setDelayHourSegue:"))
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -22,7 +22,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             self.takeANewPhoto()
         }
         if equipment != nil {
-            equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!)
+            equipmentDetail = equipment?.detailArray
+            inspectionTaskArray = equipment!.inspectionTaskArray
             tableView.reloadData()
         }
     }
@@ -33,7 +34,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
 
     var equipment: Equipment?
     var equipmentDetail: EquipmentDetailArrayWithTitle?
-    var inspectionTaskDir = InspectionTaskDir()
+    var inspectionTaskArray: [InspectionTask] = []
+    var indexPathForlongPressed: NSIndexPath?
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
@@ -49,15 +51,34 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            let fileName = "/\(equipment?.roomName)\(equipment?.name)(room\(equipment?.roomID)ID\(equipment?.ID))"
+            let fileName = "/\(equipment?.info.roomName)\(equipment?.info.name)(room\(equipment?.info.roomID)ID\(equipment?.info.ID))"
             if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(fileName).path {
                 let jpg = UIImageJPEGRepresentation(image, 0.5)
                 jpg?.writeToFile(path, atomically: true)
-                EquipmentDB().editEquipment(self.equipment!.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
+                EquipmentDB().editEquipment(self.equipment!.info.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
             }
         }
     }
     
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceivePress press: UIPress) -> Bool {
+        print(0)
+        return true
+    }
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let point = gestureRecognizer.locationInView(self.tableView)
+        
+        let indexPath = self.tableView.indexPathForRowAtPoint(point)
+        if indexPath?.section == 2 {
+            return true
+        } else { return false }
+    }
+    func setDelayHourSegue(sender: UIGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.Began {
+            let point = sender.locationInView(self.tableView)
+            indexPathForlongPressed = self.tableView.indexPathForRowAtPoint(point)
+            self.performSegueWithIdentifier("editDelayHourSegue", sender: self)
+        }
+    }
     
     // MARK: - Table view data source
     
@@ -73,7 +94,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             case 1:
                 return 1
             case 2:
-                return inspectionTaskDir.getTaskArray(equipment!.type).count
+                return inspectionTaskArray.count
             case 3:
                 return equipment!.records.count
             default:
@@ -93,7 +114,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             
         case 1:
             var cell = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            if equipment?.imageName != nil {
+            if equipment?.info.imageName != nil {
                 if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
                     if let image = UIImage(data: data) {
                         cell.imageView?.image = image
@@ -108,7 +129,7 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
             return cell
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            let task = inspectionTaskDir.getTaskArray(equipment?.type)[indexPath.row]
+            let task = inspectionTaskArray[indexPath.row]
                 cell.equipmentInfoTitleLabel.text = task.inspectionTaskName
                 if let date = equipment?.records.mostRecentRecordsDir[task.inspectionTaskName] {
                     if equipment?.records.isCompletedForTask(task) == false{
@@ -199,6 +220,13 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         } else if segue.identifier == "equipmentEditSegue" {
             if let DVC = segue.destinationViewController as?  EquipmentEditTableViewController {
                     DVC.equipment = self.equipment
+            }
+        } else if segue.identifier == "editDelayHourSegue" {
+            if let DVC = segue.destinationViewController as? DelayHourEditViewController {
+                if indexPathForlongPressed != nil {
+                    DVC.task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row]
+                    DVC.equipment = self.equipment
+                }
             }
         }
     }

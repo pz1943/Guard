@@ -10,8 +10,19 @@ import Foundation
 import SQLite
 
 typealias EquipmentType = String
-class Equipment {
-    //MARK: -info
+
+class EquipmentArray {
+    var arr: [Equipment]
+    
+    init(roomID: Int) {
+        arr = []
+        for info in EquipmentDB().loadEquipmentTable(roomID) {
+            arr.append(Equipment(info: info))
+        }
+    }
+}
+
+class EquipmentInfo {
     var ID: Int
     var name: String
     var type: EquipmentType
@@ -23,20 +34,6 @@ class Equipment {
     var commissionTime: String?
     var SN: String?
     var imageName: String?
-    
-    var inspectionTaskDir: [InspectionTask]
-    
-    var imageAbsoluteFilePath: NSURL? {
-        get {
-            if imageName != nil {
-                return NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(imageName!)
-            } else {
-                return nil
-            }
-        }
-    }
-
-    var records: RecordsForEquipment
     
     init(ID: Int,
         name: String,
@@ -61,18 +58,40 @@ class Equipment {
         self.commissionTime = commissionTime
         self.SN = SN
         self.imageName = imageName
-        records = RecordsForEquipment(equipmentID: ID, equipmentType: type)
-        self.inspectionTaskDir = InspectionTaskDir().getTaskArray(type)
     }
+}
+
+class Equipment {
+    //MARK: -info
+    var info: EquipmentInfo
+    var inspectionTaskArray: [InspectionTask]
+    var detailArray: EquipmentDetailArrayWithTitle
+    var records: RecordsForEquipment
+    
+    init(info: EquipmentInfo) {
+        self.info = info
+        self.detailArray = EquipmentDetailArrayWithTitle(info: info)
+        self.inspectionTaskArray = InspectionTaskDir().getTaskArray(info.type)
+        self.records = RecordsForEquipment(info: info, taskArray: inspectionTaskArray)
+    }
+    
+    var imageAbsoluteFilePath: NSURL? {
+        get {
+            if info.imageName != nil {
+                return NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(info.imageName!)
+            } else {
+                return nil
+            }
+        }
+    }
+    
     deinit {
-        print("deinit equipment \(ID)")
+        print("deinit equipment \(info.ID)")
     }
 
-}
-extension Equipment {
     var brief: EquipmentBrief {
         get {
-            return EquipmentBrief(ID: ID, name: name, completedFlag: records.completedFlag)
+            return EquipmentBrief(ID: info.ID, name: info.name, completedFlag: records.completedFlag)
         }
     }
     
@@ -88,31 +107,31 @@ extension Equipment {
 
 
 struct EquipmentDetailArrayWithTitle {
-    var equipment: Equipment
+    var info: EquipmentInfo
     var editableDetailArray: [EquipmentDetail] = []
-    var detailArray: [EquipmentDetail]
-    init(equipment: Equipment) {
-        self.equipment = equipment
-        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQName, info: "\(equipment.name)"))
-        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQBrand, info: equipment.brand))
-        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQModel, info: equipment.model))
-        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCapacity, info: equipment.capacity))
-        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCommissionTime, info: equipment.commissionTime))
-        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQSN, info: equipment.SN))
-        detailArray = editableDetailArray
-        detailArray.insert(EquipmentDetail(title: ExpressionTitle.RoomName, info: "\(equipment.roomName)"), atIndex: 1)
-        detailArray.insert(EquipmentDetail(title: ExpressionTitle.EQType, info: "\(equipment.type)"), atIndex: 1)
-        detailArray.insert(EquipmentDetail(title: ExpressionTitle.EQID, info: "\(equipment.ID)"), atIndex: 1)
+    var allDetailArray: [EquipmentDetail]
+    init(info: EquipmentInfo) {
+        self.info = info
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQName, info: "\(info.name)"))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQBrand, info: info.brand))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQModel, info: info.model))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCapacity, info: info.capacity))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCommissionTime, info: info.commissionTime))
+        editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQSN, info: info.SN))
+        allDetailArray = editableDetailArray
+        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.RoomName, info: "\(info.roomName)"), atIndex: 1)
+        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.EQType, info: "\(info.type)"), atIndex: 1)
+        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.EQID, info: "\(info.ID)"), atIndex: 1)
     }
     var count: Int {
         get {
-            return self.detailArray.count
+            return self.allDetailArray.count
         }
     }
     
     subscript(index: Int) -> EquipmentDetail {
         get {
-            return detailArray[index]
+            return allDetailArray[index]
         }
     }
 
@@ -199,12 +218,12 @@ class EquipmentDB {
             print(error)
         }
     }
-    func loadEquipmentTable(roomID: Int) -> [Equipment]{
+    func loadEquipmentTable(roomID: Int) -> [EquipmentInfo]{
         let rows = Array(try! db.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
-        var equipments: [Equipment] = [ ]
+        var info: [EquipmentInfo] = [ ]
         for row in rows {
-            equipments.append(
-                Equipment(ID: row[equipmentIDExpression],
+            info.append(
+                EquipmentInfo(ID: row[equipmentIDExpression],
                     name: row[equipmentNameExpression],
                     type: row[equipmentTypeExpression],
                     roomID: row[roomIDExpression],
@@ -217,7 +236,7 @@ class EquipmentDB {
                     imageName: row[equipmentImageNameExpression]
                 ))
         }
-        return equipments
+        return info
     }
     
     func loadEquipment(equipmentID: Int) -> Equipment? {
@@ -233,7 +252,7 @@ class EquipmentDB {
             let SN = row?[equipmentSNExpression]
             let ImageName = row?[equipmentImageNameExpression]
             
-            return Equipment(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
+            return Equipment(info: EquipmentInfo(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName))
             
         } else {
             return nil
@@ -241,8 +260,8 @@ class EquipmentDB {
     }
     
     func editEquipment(equipment: Equipment) {
-        let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.ID)
-        for equipmentDetail in EquipmentDetailArrayWithTitle(equipment: equipment).editableDetailArray {
+        let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.info.ID)
+        for equipmentDetail in equipment.detailArray.editableDetailArray {
             do {
                 try db.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
             } catch let error as NSError {

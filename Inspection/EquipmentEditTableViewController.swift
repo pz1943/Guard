@@ -21,14 +21,16 @@ class EquipmentEditTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    var equipment: Equipment?{
-        didSet{
+    var equipment: Equipment?
+    var equipmentDetail: [EquipmentDetail] {
+        get {
             if equipment != nil {
-                equipmentDetail = EquipmentDetailArrayWithTitle(equipment: equipment!).editableDetailArray
+                return equipment!.detailArray.allDetailArray
+            } else {
+                return []
             }
         }
     }
-    var equipmentDetail: [EquipmentDetail] = []
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

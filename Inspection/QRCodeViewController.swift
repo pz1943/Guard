@@ -48,7 +48,7 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
         if segue.identifier == "AnyEQRecordSegue" {
             if let DVC = segue.destinationViewController.contentViewController as? QRCodeForAnyEquipmentTableViewController{
                 DVC.equipment = self.equipment
-                DVC.taskArray = InspectionTaskDir().getTaskArray(equipment!.type)
+                DVC.taskArray = InspectionTaskDir().getTaskArray(equipment!.info.type)
             }
             
         }
@@ -64,7 +64,7 @@ class QRCodeForOneEquipmentViewController: QRCodeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if equipment != nil {
-            self.navigationItem.title = "\(equipment!.name)"
+            self.navigationItem.title = "\(equipment!.info.name)"
         }
 
     }
@@ -80,7 +80,7 @@ class QRCodeForOneEquipmentViewController: QRCodeViewController {
             let QRResult = metadataObj.stringValue
             session?.stopRunning()
             qrCodeFrameView?.frame = metadataObj.bounds
-            if "\(equipment!.ID)" != QRResult {
+            if "\(equipment!.info.ID)" != QRResult {
                 let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，提示后返回
                 let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
                     self.session?.startRunning()
@@ -100,7 +100,7 @@ class QRCodeForOneEquipmentViewController: QRCodeViewController {
         if segue.identifier == "OneEQRecordSegue" {
             if let DVC = segue.destinationViewController.contentViewController as? QRCodeRecordTableViewController{
                 DVC.equipment = self.equipment
-                DVC.taskArray = InspectionTaskDir().getTaskArray(equipment!.type)
+                DVC.taskArray = equipment!.inspectionTaskArray
             }
         }
     }
