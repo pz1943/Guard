@@ -21,8 +21,9 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         if sender.state == UIGestureRecognizerState.Began {
             let point = sender.locationInView(self.tableView)
             indexPathForlongPressed = self.tableView.indexPathForRowAtPoint(point)
-            self.performSegueWithIdentifier("editDelayHourSegue", sender: self)
-            
+            if indexPathForlongPressed?.section == 2 {
+                self.performSegueWithIdentifier("editDelayHourSegue", sender: self)
+            }
         }
     }
 
@@ -124,6 +125,8 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 if let date = equipment?.records.mostRecentRecordsDir[task.inspectionTaskName] {
                     if equipment?.records.isCompletedForTask(task) == false{
                         cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
+                    } else {
+                        cell.equipmentInfoTitleLabel.textColor = UIColor.blackColor()
                     }
                     cell.equipmentInfoContentLabel.text = date.datatypeValue
                 } else {

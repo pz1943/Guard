@@ -15,7 +15,7 @@ class QRCodeRecordTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         taskArray = equipment!.inspectionTaskArray
-        record = Record(equipmentID: equipment!.info.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil)
+        record = Record(equipmentID: equipment!.info.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil, recordDate: nil)
         selectFirst()
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.title = equipment!.info.name

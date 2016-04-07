@@ -19,14 +19,23 @@ class DelayHourDir {
         self.delayDir = DB.loadDelayHourDir(info,taskArray: taskArray)
     }
     
+    struct Constants {
+        static let defaultDelayHour: Int = 10
+    }
+    
     subscript(key: String) -> Int? {
         get {
             return delayDir[key]
         }
     }
     
-    func editDelayHour(hours: Int, task: InspectionTask) {
-//        DB.editDelayHourForEquipment(self.info.ID, inspectionTask: task.inspectionTaskName, hours: hours)
+    func editDelayHour(hours: Int, task: String) {
+        DB.editDelayHourForEquipment(self.info.ID, inspectionTask: task, hours: hours)
+        delayDir[task] = hours
+    }
+    
+    func setDefault(task: String) {
+        editDelayHour(Constants.defaultDelayHour, task: task)
     }
 }
 

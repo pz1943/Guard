@@ -21,11 +21,15 @@ struct Record {
     var taskType: String
     var message: String?
     //add a new Record
-    init(equipmentID: Int, task: String, recordData: String?) {
+    init(equipmentID: Int, task: String, recordData: String?, recordDate: NSDate?) {
         self.equipmentID = equipmentID
         self.taskType = task
         self.message = recordData
-        self.date = NSDate()
+        if recordDate == nil {
+            self.date = NSDate()
+        } else {
+            self.date = recordDate!
+        }
     }
     //load a exist record
     init(recordID: Int, equipmentID: Int, date: NSDate, task: String, recordData: String?) {
@@ -104,7 +108,7 @@ class RecordsForEquipment {
             }
         }
         return recent
-    }
+    }       
     
     private func isEquipmentCompleted() -> Bool{
         for task in inspectionTaskArray {
@@ -147,6 +151,7 @@ class RecordsForEquipment {
     func addRecord(record: Record) {
         completedFlagNeedRefresh = true
         recentNeedRefresh = true
+        delayHourDir.setDefault(record.taskType)
         DB.addRecord(record)
     }
     
@@ -156,13 +161,21 @@ class RecordsForEquipment {
         DB.delRecord(record.ID)
     }
     
-    func taskDelayToTime(time: NSDate, task: InspectionTask) {
-        if let recentInspectionTime = recentRecoredsDir[task.inspectionTaskName] {
-            if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task.inspectionTaskName){
-                let timeInterval = time.timeIntervalSinceDate(recentInspectionTime) as Double
-                let delayHour = Int(timeInterval) / 3600 - timeCycle
-                    delayHourDir.editDelayHour(delayHour , task: task)
+    func taskDelayToTime(toTime: NSDate, task: String) {
+        completedFlagNeedRefresh = true
+        if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task){
+            
+            if let recentInspectionTime = recentRecoredsDir[task] {
+                let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double
+                let delayHour = Int(timeInterval) / 3600 - Int(timeCycle)
+                delayHourDir.editDelayHour(delayHour , task: task)
                 print(delayHour )
+            } else {
+                if let delayHour = delayHourDir[task] {
+                    let delaySeconds = Double(delayHour) * 3600.0
+                let record = Record(equipmentID: self.info.ID, task: task, recordData: "推迟巡检记录", recordDate: NSDate(timeInterval: -timeCycle * 86400 - delaySeconds, sinceDate: toTime))
+                addRecord(record)
+                }
             }
         }
     }
