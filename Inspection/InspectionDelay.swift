@@ -11,9 +11,11 @@ import UIKit
 import SQLite
 
 class DelayHourDir {
-    var delayDir: [String: Int] = [: ]
+    private var delayDir: [String: Int] = [: ]
+    private var info: EquipmentInfo
+    private let DB = DelayDB()
     init(info: EquipmentInfo, taskArray: [InspectionTask]) {
-        let DB = DelayDB()
+        self.info = info
         self.delayDir = DB.loadDelayHourDir(info,taskArray: taskArray)
     }
     
@@ -21,6 +23,10 @@ class DelayHourDir {
         get {
             return delayDir[key]
         }
+    }
+    
+    func editDelayHour(hours: Int, task: InspectionTask) {
+//        DB.editDelayHourForEquipment(self.info.ID, inspectionTask: task.inspectionTaskName, hours: hours)
     }
 }
 
@@ -46,6 +52,7 @@ class DelayDB {
     }
     
     func editDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+        
         let alice = DelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         do {
             try db.run(alice.update(Expression<Int>(delayHourExpression) <- hours))

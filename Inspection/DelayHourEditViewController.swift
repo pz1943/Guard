@@ -7,12 +7,17 @@
 //
 
 import UIKit
-
 class DelayHourEditViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        dateFormatter = NSDateFormatter()
+        dateFormatter!.dateStyle = .MediumStyle
+        dateFormatter!.timeStyle = .NoStyle
+        dateFormatter!.locale = NSLocale(localeIdentifier: "zh_CN")
 
+        print("viewDidLoad")
+        print(datePicker.date)
         // Do any additional setup after loading the view.
     }
 
@@ -21,21 +26,19 @@ class DelayHourEditViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    var equipment: Equipment? {
-        didSet {
-            print("123134")
-        }
-    }
+    @IBInspectable
+    @IBOutlet weak var datePicker: UIDatePicker!
+    var dateFormatter: NSDateFormatter?
+    var equipment: Equipment?
     var task: InspectionTask?
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        print(datePicker.date)
+        if task != nil {
+            equipment?.records.taskDelayToTime(datePicker.date, task: task!)
+        }
     }
-    */
 
 }

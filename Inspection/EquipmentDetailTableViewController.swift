@@ -14,7 +14,16 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.addGestureRecognizer(UIGestureRecognizer(target: self.tableView, action: "setDelayHourSegue:"))
+        self.tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "setDelayHourSegue:"))
+    }
+    
+    func setDelayHourSegue(sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.Began {
+            let point = sender.locationInView(self.tableView)
+            indexPathForlongPressed = self.tableView.indexPathForRowAtPoint(point)
+            self.performSegueWithIdentifier("editDelayHourSegue", sender: self)
+            
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -60,25 +69,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         }
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceivePress press: UIPress) -> Bool {
-        print(0)
-        return true
-    }
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let point = gestureRecognizer.locationInView(self.tableView)
-        
-        let indexPath = self.tableView.indexPathForRowAtPoint(point)
-        if indexPath?.section == 2 {
-            return true
-        } else { return false }
-    }
-    func setDelayHourSegue(sender: UIGestureRecognizer) {
-        if sender.state == UIGestureRecognizerState.Began {
-            let point = sender.locationInView(self.tableView)
-            indexPathForlongPressed = self.tableView.indexPathForRowAtPoint(point)
-            self.performSegueWithIdentifier("editDelayHourSegue", sender: self)
-        }
-    }
     
     // MARK: - Table view data source
     

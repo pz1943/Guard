@@ -551,7 +551,7 @@
         <!--设置延时-->
         <scene sceneID="wKo-Ga-JRz">
             <objects>
-                <viewController title="设置延时" id="ALK-dn-QYw" sceneMemberID="viewController">
+                <viewController title="设置延时" id="ALK-dn-QYw" customClass="DelayHourEditViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HpW-B1-6o9"/>
                         <viewControllerLayoutGuide type="bottom" id="aYq-X0-75C"/>
@@ -560,28 +560,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="fqH-sL-EKS">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="216"/>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="fqH-sL-EKS">
+                                <rect key="frame" x="0.0" y="192" width="600" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="481621898.87467599">
                                     <!--2016-04-06 07:51:38 +0000-->
                                 </date>
+                                <locale key="locale" localeIdentifier="zh_CN"/>
                             </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eHs-hc-8tb">
-                                <rect key="frame" x="285" y="224" width="30" height="30"/>
+                                <rect key="frame" x="285" y="416" width="30" height="30"/>
                                 <state key="normal" title="确定"/>
+                                <connections>
+                                    <segue destination="x3L-Mq-hga" kind="unwind" unwindAction="backToEquipmentDetailTable:" id="FKl-Gt-jga"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="fqH-sL-EKS" firstAttribute="centerY" secondItem="RTR-rC-9xt" secondAttribute="centerY" id="0kt-sZ-pTg"/>
                             <constraint firstItem="fqH-sL-EKS" firstAttribute="leading" secondItem="RTR-rC-9xt" secondAttribute="leading" id="7yI-wN-M1l"/>
                             <constraint firstAttribute="trailing" secondItem="fqH-sL-EKS" secondAttribute="trailing" id="DEL-4T-ILJ"/>
                             <constraint firstItem="eHs-hc-8tb" firstAttribute="centerX" secondItem="fqH-sL-EKS" secondAttribute="centerX" id="QCO-hC-tCf"/>
                             <constraint firstItem="eHs-hc-8tb" firstAttribute="top" secondItem="fqH-sL-EKS" secondAttribute="bottom" constant="8" symbolic="YES" id="g48-zY-Tt1"/>
-                            <constraint firstItem="fqH-sL-EKS" firstAttribute="top" secondItem="HpW-B1-6o9" secondAttribute="bottom" id="rNd-H6-TOK"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="datePicker" destination="fqH-sL-EKS" id="p7D-cb-z1L"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZqX-3h-FuB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="x3L-Mq-hga" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4836" y="1152"/>
         </scene>

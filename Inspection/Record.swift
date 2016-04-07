@@ -54,7 +54,11 @@ class RecordsForEquipment {
         print("deinit record \(info.ID)")
     }
     
-    private var recentRecoredsDir: [String: NSDate] = [: ]
+    private var recentRecoredsDir: [String: NSDate] = [: ] {
+        didSet {
+            print(recentRecoredsDir)
+        }
+    }
     private var recentNeedRefresh: Bool = true
     var mostRecentRecordsDir: [String: NSDate] {
         get {
@@ -152,8 +156,15 @@ class RecordsForEquipment {
         DB.delRecord(record.ID)
     }
     
-    func setDelayHour() {
-        
+    func taskDelayToTime(time: NSDate, task: InspectionTask) {
+        if let recentInspectionTime = recentRecoredsDir[task.inspectionTaskName] {
+            if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task.inspectionTaskName){
+                let timeInterval = time.timeIntervalSinceDate(recentInspectionTime) as Double
+                let delayHour = Int(timeInterval) / 3600 - timeCycle
+                    delayHourDir.editDelayHour(delayHour , task: task)
+                print(delayHour )
+            }
+        }
     }
 }
 class RecordDB {
