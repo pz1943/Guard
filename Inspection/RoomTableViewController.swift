@@ -36,11 +36,7 @@ class RoomTableViewController: UITableViewController {
     }
     
     func loadRoomArray() -> [Room] {
-        var rooms: [Room] = []
-        for (key, value) in DB.loadRoomTable() {
-            rooms.append(Room(roomID: key, roomName: value))
-        }
-        return rooms
+        return DB.loadRoomTable()
     }
     
     func initDelayDB() {

@@ -53,11 +53,11 @@ class RoomDB {
         db = DBModel.sharedInstance().getDB()
     }
     
-    func loadRoomTable() -> [Int: String]{
+    func loadRoomTable() -> [Room]{
         let rows = Array(try! db.prepare(roomTable))
-        var rooms: [Int: String] = [: ]
+        var rooms: [Room] = []
         for row in rows {
-            rooms[row[roomIDExpression]] = row[roomNameExpression]
+            rooms.append(Room(roomID: row[roomIDExpression], roomName: row[roomNameExpression]))
         }
         return rooms
     }

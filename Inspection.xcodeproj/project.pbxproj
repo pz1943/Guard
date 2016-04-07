@@ -93,6 +93,7 @@
 		18933E641C47DA5200357F74 /* RoomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
 		18933E651C47DA5200357F74 /* RoomTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewController.swift; sourceTree = "<group>"; };
 		18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentDetailTableViewController.swift; sourceTree = "<group>"; };
+		189F5E161CB6B0F500AE4BED /* db.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = db.sqlite3; sourceTree = "<group>"; };
 		18B2F32A1C88669C00BAF776 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		18C59C761C8C79C000CA1428 /* RoomAddTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomAddTableViewController.swift; sourceTree = "<group>"; };
 		18C59C781C8C7A9900CA1428 /* RoomAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomAddTableViewCell.swift; sourceTree = "<group>"; };
@@ -248,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				18933E2C1C47D8E100357F74 /* AppDelegate.swift */,
+				189F5E161CB6B0F500AE4BED /* db.sqlite3 */,
 				49AB8C7D1CA4DCC500D93EA5 /* .gitignore */,
 				18933E361C47D8E100357F74 /* Assets.xcassets */,
 				18933E381C47D8E100357F74 /* LaunchScreen.storyboard */,
