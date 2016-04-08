@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EquipmentDetailTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+class EquipmentDetailTableViewController: UITableViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +28,11 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     }
 
     override func viewWillAppear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+        observer = center.addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.takeANewPhoto()
         }
         if equipment != nil {
+            equipment?.reloadInfo()
             equipmentDetail = equipment?.detailArray
             inspectionTaskArray = equipment!.inspectionTaskArray
             tableView.reloadData()
@@ -39,9 +40,12 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
     }
     
     override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        if observer != nil {
+            center.removeObserver(observer!)
+        }
     }
-
+    var observer: NSObjectProtocol?
+    var center: NSNotificationCenter = NSNotificationCenter.defaultCenter()
     var equipment: Equipment?
     var equipmentDetail: EquipmentDetailArrayWithTitle?
     var inspectionTaskArray: [InspectionTask] = []
@@ -54,18 +58,6 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
                 imagePicker.mediaTypes = ["public.image"]
                 imagePicker.delegate = self
                 self.presentViewController(imagePicker, animated: false, completion: nil)
-            }
-        }
-    }
-
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            let fileName = "/\(equipment?.info.roomName)\(equipment?.info.name)(room\(equipment?.info.roomID)ID\(equipment?.info.ID))"
-            if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(fileName).path {
-                let jpg = UIImageJPEGRepresentation(image, 0.5)
-                jpg?.writeToFile(path, atomically: true)
-                EquipmentDB().editEquipment(self.equipment!.info.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
             }
         }
     }
@@ -217,8 +209,11 @@ class EquipmentDetailTableViewController: UITableViewController, UIImagePickerCo
         } else if segue.identifier == "editDelayHourSegue" {
             if let DVC = segue.destinationViewController as? DelayHourEditViewController {
                 if indexPathForlongPressed != nil {
-                    DVC.task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row]
-                    DVC.equipment = self.equipment
+                    if let task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row] {
+                        DVC.task = task
+                        DVC.equipment = self.equipment
+                        DVC.defaultTime = self.equipment?.records.getExpectInspectionTime(task.inspectionTaskName)
+                    }
                 }
             }
         }

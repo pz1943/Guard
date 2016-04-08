@@ -167,7 +167,7 @@ class RecordsForEquipment {
             
             if let recentInspectionTime = recentRecoredsDir[task] {
                 let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double
-                let delayHour = Int(timeInterval) / 3600 - Int(timeCycle)
+                let delayHour = Int(timeInterval) / 3600
                 delayHourDir.editDelayHour(delayHour , task: task)
                 print(delayHour )
             } else {
@@ -178,6 +178,15 @@ class RecordsForEquipment {
                 }
             }
         }
+    }
+    
+    func getExpectInspectionTime(task: String) -> NSDate?{
+        if let recentInspectionTime = recentRecoredsDir[task] {
+            if let delayHour = delayHourDir[task] {
+                return NSDate(timeInterval: Double(delayHour) * 3600 , sinceDate: recentInspectionTime)
+            }
+        }
+        return nil
     }
 }
 class RecordDB {

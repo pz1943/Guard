@@ -1234,6 +1234,6 @@
     </scenes>
     <resources>
         <image name="9febd5448b793109750ad48cd4f29fe9" width="220" height="220"/>
-        <image name="check" width="256" height="256"/>
+        <image name="check" width="58" height="58"/>
     </resources>
 </document>

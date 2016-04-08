@@ -28,7 +28,7 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
             session?.stopRunning()
             qrCodeFrameView?.frame = metadataObj.bounds
             let QREquipmentID = NSString(string: QRResult).integerValue
-            equipment = EquipmentDB().loadEquipment(QREquipmentID)
+            equipment = Equipment(ID: QREquipmentID)
             if equipment != nil {  //扫描结果是设备 ID，进入记录页面。
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.performSegueWithIdentifier("AnyEQRecordSegue", sender: self)

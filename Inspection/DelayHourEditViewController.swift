@@ -11,13 +11,14 @@ class DelayHourEditViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dateFormatter = NSDateFormatter()
-        dateFormatter!.dateStyle = .MediumStyle
-        dateFormatter!.timeStyle = .NoStyle
-        dateFormatter!.locale = NSLocale(localeIdentifier: "zh_CN")
-
-        print("viewDidLoad")
-        print(datePicker.date)
+//        dateFormatter = NSDateFormatter()
+//        dateFormatter!.dateStyle = .MediumStyle
+//        dateFormatter!.timeStyle = .NoStyle
+//        dateFormatter!.locale = NSLocale(localeIdentifier: "zh_CN")
+        if defaultTime != nil {
+            datePicker.setDate(defaultTime!, animated: true)
+        }
+        
         // Do any additional setup after loading the view.
     }
 
@@ -26,11 +27,11 @@ class DelayHourEditViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBInspectable
     @IBOutlet weak var datePicker: UIDatePicker!
-    var dateFormatter: NSDateFormatter?
+//    var dateFormatter: NSDateFormatter?
     var equipment: Equipment?
     var task: InspectionTask?
+    var defaultTime: NSDate?
 
     // MARK: - Navigation
 

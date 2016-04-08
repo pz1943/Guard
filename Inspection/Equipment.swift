@@ -75,6 +75,14 @@ class Equipment {
         self.records = RecordsForEquipment(info: info, taskArray: inspectionTaskArray)
     }
     
+    init(ID: Int) {
+        self.info = EquipmentDB().loadEquipmentInfo(ID)!
+        self.detailArray = EquipmentDetailArrayWithTitle(info: info)
+        self.inspectionTaskArray = InspectionTaskDir().getTaskArray(info.type)
+        self.records = RecordsForEquipment(info: info, taskArray: inspectionTaskArray)
+
+    }
+    
     var imageAbsoluteFilePath: NSURL? {
         get {
             if info.imageName != nil {
@@ -82,6 +90,12 @@ class Equipment {
             } else {
                 return nil
             }
+        }
+    }
+    
+    func reloadInfo() {
+        if let info = EquipmentDB().loadEquipmentInfo(self.info.ID) {
+            self.info = info
         }
     }
     
@@ -181,20 +195,6 @@ class EquipmentDB {
     init() {
         self.db = DBModel.sharedInstance().getDB()
         self.equipmentTable = Table("equipmentTable")
-        
-        try! db.run(equipmentTable.create(ifNotExists: true) { t in
-            t.column(equipmentIDExpression, primaryKey: true)
-            t.column(equipmentNameExpression)
-            t.column(equipmentTypeExpression)
-            t.column(roomIDExpression)
-            t.column(roomNameExpression)
-            t.column(equipmentBrandExpression)
-            t.column(equipmentModelExpression)
-            t.column(equipmentCapacityExpression)
-            t.column(equipmentCommissionTimeExpression)
-            t.column(equipmentSNExpression)
-            t.column(equipmentImageNameExpression)
-            })
     }
     
     func addEquipment(equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {
@@ -239,7 +239,7 @@ class EquipmentDB {
         return info
     }
     
-    func loadEquipment(equipmentID: Int) -> Equipment? {
+    func loadEquipmentInfo(equipmentID: Int) -> EquipmentInfo? {
         let row = Array(try! db.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
         if let name =  row?[equipmentNameExpression] {
             let EQType = row?[equipmentTypeExpression]
@@ -252,8 +252,7 @@ class EquipmentDB {
             let SN = row?[equipmentSNExpression]
             let ImageName = row?[equipmentImageNameExpression]
             
-            return Equipment(info: EquipmentInfo(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName))
-            
+            return EquipmentInfo(ID: equipmentID, name: name, type: EQType!, roomID: locatedRoomID!, roomName: locatedRoomName!, brand: brand, model: model, capacity: capacity, commissionTime: commissionTime, SN: SN, imageName: ImageName)
         } else {
             return nil
         }
