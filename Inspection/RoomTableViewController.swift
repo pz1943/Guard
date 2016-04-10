@@ -8,6 +8,10 @@
 //
 
 
+struct Constants {
+    static var NavColor = UIColor(red: 5, green: 5, blue: 5, alpha: 1)
+}
+
 import UIKit
 
 class RoomTableViewController: UITableViewController {
@@ -18,6 +22,8 @@ class RoomTableViewController: UITableViewController {
         editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
         loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
+        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         refresh()
 //        initDelayDB()
 

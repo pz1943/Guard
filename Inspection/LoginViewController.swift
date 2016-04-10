@@ -10,6 +10,11 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationItem.title = "用户登录"
+    }
+    
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passWordTextField: UITextField!
     
