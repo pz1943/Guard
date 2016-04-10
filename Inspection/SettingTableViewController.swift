@@ -1,73 +1,81 @@
 //
-//  InspectionCycleTableViewController.swift
+//  SettingTableViewController.swift
 //  Inspection
 //
-//  Created by apple on 16/1/28.
+//  Created by apple on 16/4/9.
 //  Copyright © 2016年 pz1943. All rights reserved.
 //
 
 import UIKit
 
-class InspectionCycleTableViewController: UITableViewController {
+class SettingTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barStyle = .Black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
-
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+    
+    var loginVC: LoginViewController?
+    var DBImportVC: UIViewController?
+    var DBExportVC: UIViewController?
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillAppear(animated: Bool) {
-        self.tableView.reloadData()
-    }
-    
-    @IBAction func shareDataBase(sender: UIBarButtonItem) {
-        let path = NSSearchPathForDirectoriesInDomains(
-            .DocumentDirectory, .UserDomainMask, true
-            ).first!
-        let fullPath = "\(path)/db.sqlite3"
-        let url = NSURL(fileURLWithPath: fullPath)
-
-        let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        self.presentViewController(controller, animated: true, completion: nil)
-    }
-    var timeCycleDir = InspectionTaskDir()
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return timeCycleDir.equipmentTypeCount
+        return 3
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return timeCycleDir[section].count
+        return 1
     }
 
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 20
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("timeCycleCell", forIndexPath: indexPath) as! InspectionCycleTableViewCell
-        cell.typeLabel.text = timeCycleDir[indexPath.section][indexPath.row].inspectionTaskName
-        cell.timeCycelLabel.text = Int(timeCycleDir[indexPath.section][indexPath.row].inspectionCycle).description
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCellWithIdentifier("settingsCell", forIndexPath: indexPath)
 
+        // Configure the cell...
+        switch indexPath.section {
+        case 0:
+            cell.textLabel?.text = "登录"
+            break
+        case 1:
+            cell.textLabel?.text = "数据库导入"
+            break
+        case 2:
+            cell.textLabel?.text = "数据库导出"
+            break
+        default: break
+        }
         return cell
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return timeCycleDir.equipmentTypeArray[section]
-    }
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.section {
+        case 0:
+            self.performSegueWithIdentifier("", sender: self)
+            break
+        case 1:
+            break
+        case 2:
+            break
+        default: break
+        }
     }
 
     /*
