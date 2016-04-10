@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EquipmentDetailTableViewController: UITableViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+class EquipmentDetailTableViewController: UITableViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,19 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
     var equipmentDetail: EquipmentDetailArrayWithTitle?
     var inspectionTaskArray: [InspectionTask] = []
     var indexPathForlongPressed: NSIndexPath?
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            let fileName = "/\(equipment?.info.roomName)\(equipment?.info.name)(room\(equipment?.info.roomID)ID\(equipment?.info.ID))"
+            if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(fileName).path {
+                let jpg = UIImageJPEGRepresentation(image, 0.5)
+                jpg?.writeToFile(path, atomically: true)
+                EquipmentDB().editEquipment(self.equipment!.info.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
+            }
+        }
+    }
+
     func takeANewPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
             if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
@@ -201,6 +214,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         if segue.identifier == "showEquipmentView" {
             if let DVC = segue.destinationViewController as? ImageViewController {
                 DVC.imageURL = equipment?.imageAbsoluteFilePath
+                DVC.equipment = equipment
             }
         } else if segue.identifier == "equipmentEditSegue" {
             if let DVC = segue.destinationViewController as?  EquipmentEditTableViewController {

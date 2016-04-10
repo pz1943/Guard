@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePickerControllerDelegate
+class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     
     override func viewDidLoad() {
@@ -16,9 +16,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
         scrollView.addSubview(imageView)
     }
     override func viewWillAppear(animated: Bool) {
-        if image == nil{
-            fetchImage()
-        }
+        fetchImage()
     }
     
     var imageURL: NSURL?{
@@ -33,8 +31,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     var equipment: Equipment?
     
     @IBAction func needANewPhoto(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)
+        takeANewPhoto()
     }
     
     
@@ -46,6 +43,18 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
                 let jpg = UIImageJPEGRepresentation(image, 0.5)
                 jpg?.writeToFile(path, atomically: true)
                 EquipmentDB().editEquipment(self.equipment!.info.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
+            }
+        }
+    }
+    
+    func takeANewPhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
+                let imagePicker = UIImagePickerController()
+                imagePicker.sourceType = .Camera
+                imagePicker.mediaTypes = ["public.image"]
+                imagePicker.delegate = self
+                self.presentViewController(imagePicker, animated: false, completion: nil)
             }
         }
     }
