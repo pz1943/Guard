@@ -58,11 +58,7 @@ class RecordsForEquipment {
         print("deinit record \(info.ID)")
     }
     
-    private var recentRecoredsDir: [String: NSDate] = [: ] {
-        didSet {
-            print(recentRecoredsDir)
-        }
-    }
+    private var recentRecoredsDir: [String: NSDate] = [: ]
     private var recentNeedRefresh: Bool = true
     var mostRecentRecordsDir: [String: NSDate] {
         get {

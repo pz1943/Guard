@@ -111,9 +111,6 @@ class Equipment {
     
     var inspectionDoneFlag: Bool {
         get {
-            if records.completedFlag == false {
-                print("\(records.completedFlag) use reload")
-            }
             return records.completedFlag
         }
     }

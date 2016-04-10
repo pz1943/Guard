@@ -28,6 +28,7 @@ class User {
 
 class UserCenter {
     static var userDB: [User] = [
+        User(userName: "test", userPassWord: "", authorty: .admin),
         User(userName: "default", userPassWord: "default", authorty: .defaultUser),
         User(userName: "admin", userPassWord: "admin", authorty: .admin)
     ]

@@ -20,11 +20,26 @@ class SettingTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    
-    var loginVC: LoginViewController?
-    var DBImportVC: UIViewController?
-    var DBExportVC: UIViewController?
+    deinit {
+        print("SettingTableViewController deinit")
+    }
 
+    var user: User? {
+        return (self.tabBarController as? RootViewController)?.user
+    }
+
+    
+    private func shareDataBase() {
+        let path = NSSearchPathForDirectoriesInDomains(
+            .DocumentDirectory, .UserDomainMask, true
+            ).first!
+        let fullPath = "\(path)/db.sqlite3"
+        let url = NSURL(fileURLWithPath: fullPath)
+        
+        let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -46,19 +61,41 @@ class SettingTableViewController: UITableViewController {
         return 20
     }
     
+    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 2 {
+            return 100
+        } else { return 0 }
+    }
+    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 2 {
+            let view = UITextView()
+            view.text = "直接打开手机中后缀为 .sqlite3的数据库文件完成导入"
+            view.editable = false
+            view.backgroundColor = Constants.GrayColor
+            view.sizeToFit()
+            return view
+        } else { return nil }
+
+    }
+    
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("settingsCell", forIndexPath: indexPath)
 
         // Configure the cell...
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = "登录"
+            if user != nil {
+                cell.textLabel?.text = "\(user!.name) 登出"
+            }
             break
         case 1:
-            cell.textLabel?.text = "数据库导入"
+            cell.textLabel?.text = "数据库导出"
             break
         case 2:
-            cell.textLabel?.text = "数据库导出"
+            if indexPath.row == 0 {
+                cell.textLabel?.text = "数据库导入"
+            }
             break
         default: break
         }
@@ -68,14 +105,19 @@ class SettingTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.section {
         case 0:
-            self.performSegueWithIdentifier("", sender: self)
+            if user != nil {
+                self.performSegueWithIdentifier("logoutSegue", sender: self)
+            }
             break
         case 1:
+            self.shareDataBase()
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
             break
         case 2:
             break
         default: break
         }
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
 
     /*
