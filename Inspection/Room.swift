@@ -12,7 +12,9 @@ import SQLite
 class Room {
     var name: String
     var ID: Int
-    var equipmentsArray: [Equipment]
+    lazy var equipmentsArray: [Equipment] = {
+       return EquipmentArray(roomID: self.ID).arr
+    }()
     var isInspectionDone: Bool {
         get {
             for equipment in equipmentsArray {
@@ -26,7 +28,6 @@ class Room {
     init(roomID: Int, roomName: String) {
         self.name = roomName
         self.ID = roomID
-        self.equipmentsArray = EquipmentArray(roomID: roomID).arr
     }
     
 }

@@ -36,7 +36,6 @@ class DelayHourEditViewController: UIViewController {
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print(datePicker.date)
         if task != nil {
             equipment?.records.taskDelayToTime(datePicker.date, task: task!.inspectionTaskName)
         }

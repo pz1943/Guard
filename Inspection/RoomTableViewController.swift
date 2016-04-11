@@ -10,6 +10,7 @@
 
 struct Constants {
     static var NavColor = UIColor(red: 5, green: 5, blue: 5, alpha: 1)
+    static var GrayColor = UIColor(red: 242, green: 242, blue: 242, alpha: 1.0)
 }
 
 import UIKit
@@ -18,16 +19,22 @@ class RoomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
         loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
-        self.navigationController?.navigationBar.barStyle = .Black
-        self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         refresh()
+        self.user = (self.navigationController?.tabBarController as? RootViewController)?.user
 //        initDelayDB()
 
     }
+    deinit {
+        print("RoomTableViewController deinit")
+    }
+
     override func viewWillAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
             self.DB.reload()

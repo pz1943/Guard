@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxG-0b-97y">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxG-0b-97y">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
@@ -11,7 +11,6 @@
         <!--机房信息-->
         <scene sceneID="tps-t3-bmQ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="P60-pt-l9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController title="机房信息" id="ugY-EF-sdN" customClass="RoomTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xOG-Vc-YbH">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -82,13 +81,13 @@
                         </connections>
                     </refreshControl>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P60-pt-l9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2691" y="-162"/>
         </scene>
         <!--机房信息导航-->
         <scene sceneID="Ufh-rS-ENJ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="J1b-TF-VSg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController title="机房信息导航" automaticallyAdjustsScrollViewInsets="NO" id="zxG-0b-97y" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="设备详情" id="kSM-OB-MRP"/>
                     <toolbarItems/>
@@ -101,14 +100,13 @@
                         <segue destination="ugY-EF-sdN" kind="relationship" relationship="rootViewController" id="Is0-Xd-UB2"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J1b-TF-VSg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2019" y="-162"/>
         </scene>
         <!--设备信息-->
         <scene sceneID="btP-pL-Xbl">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gBR-QD-pJU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="u5g-8r-ser" userLabel="Exit" sceneMemberID="exit"/>
                 <tableViewController title="设备信息" id="Xtl-rl-daF" customClass="EquipmentTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="sHh-JF-Var">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -182,14 +180,14 @@
                         </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gBR-QD-pJU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="u5g-8r-ser" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3442" y="-162"/>
         </scene>
         <!--特定设备扫码-->
         <scene sceneID="x1S-hZ-Rru">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MCD-d5-K6w" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="vVp-ih-7ku" userLabel="Exit" sceneMemberID="exit"/>
                 <viewController title="特定设备扫码" id="9JU-DV-2m7" customClass="QRCodeForOneEquipmentViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uDU-DV-rHx"/>
@@ -214,14 +212,14 @@
                         </segue>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MCD-d5-K6w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="vVp-ih-7ku" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3442" y="606"/>
         </scene>
         <!--设备详情-->
         <scene sceneID="tcU-cF-wJR">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KHP-QG-haF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="eaw-aX-xrl" userLabel="Exit" sceneMemberID="exit"/>
                 <tableViewController title="设备详情" id="NiB-tt-XSb" customClass="EquipmentDetailTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="aR4-Te-hCU">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -466,14 +464,14 @@
                         <segue destination="LdE-Yq-9Js" kind="presentation" identifier="editDelayHourSegue" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="S7o-d1-BDU"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KHP-QG-haF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="eaw-aX-xrl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4115" y="-164"/>
         </scene>
         <!--特定设备扫码记录-->
         <scene sceneID="qcg-GU-UvJ">
             <objects>
-                <exit id="gLe-mK-xE8" userLabel="Exit" sceneMemberID="exit"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="htO-5W-5Jn" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController title="特定设备扫码记录" id="4Bm-kY-yI9" customClass="QRCodeRecordTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="sYv-LA-r9B">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -547,14 +545,14 @@
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
+                <exit id="gLe-mK-xE8" userLabel="Exit" sceneMemberID="exit"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="htO-5W-5Jn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4115" y="606"/>
         </scene>
         <!--设置延时-->
         <scene sceneID="zzl-Rr-mtn">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rvn-pb-D7L" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="eUZ-ve-Ze4" userLabel="Exit" sceneMemberID="exit"/>
                 <viewController title="设置延时" id="LdE-Yq-9Js" customClass="DelayHourEditViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="XG1-2n-LH4"/>
@@ -592,14 +590,14 @@
                         <outlet property="datePicker" destination="elv-Cw-MCe" id="1Le-cl-Idm"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rvn-pb-D7L" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="eUZ-ve-Ze4" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4852" y="712"/>
         </scene>
         <!--设备图片-->
         <scene sceneID="xCu-jI-Ydr">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3D4-Q3-5Zh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="75R-nD-PTo" userLabel="Exit" sceneMemberID="exit"/>
                 <viewController title="设备图片" id="QrD-Ek-Ylt" customClass="ImageViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bKh-mg-Cfi"/>
@@ -647,14 +645,14 @@
                         <outlet property="scrollView" destination="hHp-HE-xL3" id="fhq-LJ-PMO"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3D4-Q3-5Zh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="75R-nD-PTo" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4852" y="4"/>
         </scene>
         <!--编辑设备-->
         <scene sceneID="ta2-SH-oPb">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tl7-9T-M8A" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="Aol-54-MyH" userLabel="Exit" sceneMemberID="exit"/>
                 <tableViewController title="编辑设备" id="YmE-Yu-Bim" customClass="EquipmentEditTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="Szk-1D-2H9">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -712,14 +710,14 @@
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tl7-9T-M8A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Aol-54-MyH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4852" y="-676"/>
         </scene>
         <!--新增设备-->
         <scene sceneID="b2O-77-spe">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0uq-1j-9wn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="SG0-n2-Hha" userLabel="Exit" sceneMemberID="exit"/>
                 <tableViewController title="新增设备" id="dhk-aL-Rhc" customClass="EquipmentAddTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="lfn-uT-Bfq">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -827,14 +825,14 @@
                         <segue destination="SG0-n2-Hha" kind="unwind" identifier="newEquipmentGotSegue" unwindAction="backToEquipmentTable:" id="roM-qY-n7h"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0uq-1j-9wn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="SG0-n2-Hha" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3442" y="-837"/>
         </scene>
         <!--Equipment Type Select Table View Controller-->
         <scene sceneID="dOk-bq-316">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="g6v-Uh-lo8" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="UeY-tU-bDV" userLabel="Exit" sceneMemberID="exit"/>
                 <tableViewController id="ALH-pl-Bp4" customClass="EquipmentTypeSelectTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="NZ1-ag-BZu">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -868,14 +866,14 @@
                         </connections>
                     </tableView>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g6v-Uh-lo8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="UeY-tU-bDV" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4109" y="-837"/>
         </scene>
         <!--新增机房-->
         <scene sceneID="dlu-Cp-74L">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ybe-wI-XHs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="xko-Za-a2w" userLabel="Exit" sceneMemberID="exit"/>
                 <tableViewController title="新增机房" id="IcX-C4-1YK" customClass="RoomAddTableViewController" customModule="Inspection" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="kyL-2V-1eP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -939,6 +937,8 @@
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ybe-wI-XHs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="xko-Za-a2w" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2691" y="-837"/>
         </scene>

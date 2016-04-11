@@ -33,19 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName("RoomTableNeedRefreshNotification", object: nil)
         return true
     }
-    
-    func getRoomTableViewController(presentVC: UIViewController?) -> RoomTableViewController?{
-        if presentVC != nil {
-            if let VC = presentVC as? RoomTableViewController {
-                return VC
-            }
-            if let VC = presentVC!.presentingViewController {
-                return getRoomTableViewController(VC)
-            }
-            return nil
-        } else { return nil }
-    }
-
     // MARK: - Core Data stack
 
     lazy var applicationDocumentsDirectory: NSURL = {
@@ -109,6 +96,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-}
-extension UIViewController {
 }
