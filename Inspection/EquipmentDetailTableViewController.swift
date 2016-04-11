@@ -15,6 +15,11 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "setDelayHourSegue:"))
+        if let roomVC = self.navigationController?.viewControllers[0] as? RoomTableViewController {
+            if let rootVC = roomVC.tabBarController as? RootViewController {
+                self.user = rootVC.user
+            }
+        }
     }
     
     func setDelayHourSegue(sender: UILongPressGestureRecognizer) {
@@ -44,6 +49,8 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
             center.removeObserver(observer!)
         }
     }
+    
+    var user: User?
     var observer: NSObjectProtocol?
     var center: NSNotificationCenter = NSNotificationCenter.defaultCenter()
     var equipment: Equipment?
@@ -148,6 +155,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
                 }
                 cell.recordTimeLabel.text = record.date.datatypeValue
                 cell.recordTypeLabel.text = record.taskType
+                cell.recorderLabel.text = record.recorder
             }
             return cell
         default:
