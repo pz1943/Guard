@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		181483641CBA5C82006714AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 181483631CBA5C82006714AD /* Images.xcassets */; };
-		181483661CBA602E006714AD /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 181483651CBA602E006714AD /* Images-2.xcassets */; };
 		181483681CBA679F006714AD /* LS.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 181483671CBA679F006714AD /* LS.storyboard */; };
 		1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843F2571C49EFB4002BB69A /* Equipment.swift */; };
 		184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184616871C49DEE00047E3EE /* ImageViewController.swift */; };
@@ -73,7 +72,6 @@
 /* Begin PBXFileReference section */
 		068C45D85E3F38A700E259C0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		181483631CBA5C82006714AD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		181483651CBA602E006714AD /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Images-2.xcassets"; sourceTree = "<group>"; };
 		181483671CBA679F006714AD /* LS.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LS.storyboard; sourceTree = "<group>"; };
 		1843F2571C49EFB4002BB69A /* Equipment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Equipment.swift; sourceTree = "<group>"; };
 		184616871C49DEE00047E3EE /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 				18933E711C47DAED00357F74 /* Controller */,
 				18933E721C47DAF600357F74 /* Support Files */,
 				181483631CBA5C82006714AD /* Images.xcassets */,
-				181483651CBA602E006714AD /* Images-2.xcassets */,
 			);
 			path = Inspection;
 			sourceTree = "<group>";
@@ -403,7 +400,6 @@
 			files = (
 				187C69A11CB93C9A00D69375 /* Equipment.storyboard in Resources */,
 				186659501CB3D9BB0077F8E4 /* LICENSE in Resources */,
-				181483661CBA602E006714AD /* Images-2.xcassets in Resources */,
 				181483641CBA5C82006714AD /* Images.xcassets in Resources */,
 				18646D171CBA9D8200CB8026 /* 116 - 1.jpg in Resources */,
 				49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */,
