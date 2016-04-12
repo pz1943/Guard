@@ -8,14 +8,16 @@
 
 import UIKit
 
-class QRCodeForAnyEquipmentTableViewController: QRCodeRecordTableViewController { }
+class QRCodeForAnyEquipmentTableViewController: QRCodeRecordTableViewController {
+
+}
 
 class QRCodeRecordTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         taskArray = equipment!.inspectionTaskArray
-        record = Record(equipmentID: equipment!.info.ID, task: taskArray.first?.inspectionTaskName ?? "无", recordData: nil, recordDate: nil)
+        initRecord()
         selectFirst()
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.title = equipment!.info.name
@@ -33,10 +35,25 @@ class QRCodeRecordTableViewController: UITableViewController {
     var equipment: Equipment?
     var record: Record?
     var taskArray: [InspectionTask] = []
+    var user: User!
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func initRecord(){
+        if let rootVC = self.presentingViewController as? RootViewController {
+            self.user = rootVC.user
+            record = Record(equipmentID: equipment!.info.ID, task: taskArray.first?.inspectionTaskName ?? "无", recorder: user.name, recordData: nil, recordDate: nil)
+        } else {
+            if let roomVC = self.navigationController?.viewControllers[0] as? RoomTableViewController {
+                if let rootVC = roomVC.tabBarController as? RootViewController {
+                    self.user = rootVC.user
+                    record = Record(equipmentID: equipment!.info.ID, task: taskArray.first?.inspectionTaskName ?? "无", recorder: user.name, recordData: nil, recordDate: nil)
+                }
+            }
+        }
     }
     func selectFirst() {
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: false, scrollPosition: UITableViewScrollPosition.None)

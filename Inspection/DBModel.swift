@@ -21,6 +21,7 @@ enum ExpressionTitle:  String, CustomStringConvertible{
     case RecordID = "记录ID"
     case RecordMessage = "检修内容"
     case RecordDate = "时间"
+    case Recorder = "记录人"
     
     case InspectionTaskID = "类别ID"
     case InspectionTaskName = "类别名称"
