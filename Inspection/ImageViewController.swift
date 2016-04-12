@@ -13,13 +13,14 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navBar.backgroundColor = Constants.NavColor
+        
+        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         scrollView.addSubview(imageView)
     }
     override func viewWillAppear(animated: Bool) {
         fetchImage()
     }
-    @IBOutlet weak var navBar: UINavigationBar!
     
     var imageURL: NSURL?{
         didSet{
@@ -95,7 +96,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     
     var scrollViewContentOffsetY:CGFloat{
         if self.navigationController != nil{
-            return (600 - UIScreen.mainScreen().bounds.height - self.navigationController!.toolbar.frame.height) / 2 - UIApplication.sharedApplication().statusBarFrame.height
+            return (600 - UIScreen.mainScreen().bounds.height + self.navigationController!.toolbar.frame.height) / 2
         } else {return 0}
     }
     @IBOutlet weak var scrollView: UIScrollView!{

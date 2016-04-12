@@ -8,10 +8,6 @@
 //
 
 
-struct Constants {
-    static var NavColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-    static var GrayColor = UIColor(red: 242, green: 242, blue: 242, alpha: 1.0)
-}
 
 import UIKit
 
