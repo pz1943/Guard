@@ -21,6 +21,9 @@ class QRCodeRecordTableViewController: UITableViewController {
         selectFirst()
         self.clearsSelectionOnViewWillAppear = false
         self.navigationItem.title = equipment!.info.name
+        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
+
     }
     
     override func viewWillAppear(animated: Bool) {

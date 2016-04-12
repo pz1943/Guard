@@ -163,17 +163,20 @@ class RecordsForEquipment {
     func taskDelayToTime(toTime: NSDate, task: String) {
         completedFlagNeedRefresh = true
         if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task){
-            
             if let recentInspectionTime = recentRecoredsDir[task] {
                 let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double
-                let delayHour = Int(timeInterval) / 3600
+                let delayHour = timeInterval / 3600
                 delayHourDir.editDelayHour(delayHour , task: task)
                 print(delayHour )
             } else {
                 if let delayHour = delayHourDir[task] {
+                    print(delayHour)
+                    print(timeCycle)
+                    
                     let delaySeconds = Double(delayHour) * 3600.0
+                    print(-timeCycle * 86400 - delaySeconds)
                     let record = Record(equipmentID: self.info.ID, task: task, recorder: "system", recordData: "推迟巡检记录", recordDate: NSDate(timeInterval: -timeCycle * 86400 - delaySeconds, sinceDate: toTime))
-                addRecord(record)
+                    addRecord(record)
                 }
             }
         }

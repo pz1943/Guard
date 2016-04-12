@@ -13,11 +13,13 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navBar.backgroundColor = Constants.NavColor
         scrollView.addSubview(imageView)
     }
     override func viewWillAppear(animated: Bool) {
         fetchImage()
     }
+    @IBOutlet weak var navBar: UINavigationBar!
     
     var imageURL: NSURL?{
         didSet{

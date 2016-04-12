@@ -11,7 +11,7 @@ import UIKit
 import SQLite
 
 class DelayHourDir {
-    private var delayDir: [String: Int] = [: ]
+    private var delayDir: [String: Double] = [: ]
     private var info: EquipmentInfo
     private let DB = DelayDB()
     init(info: EquipmentInfo, taskArray: [InspectionTask]) {
@@ -20,16 +20,16 @@ class DelayHourDir {
     }
     
     struct Constants {
-        static let defaultDelayHour: Int = 10
+        static let defaultDelayHour: Double = 10
     }
     
-    subscript(key: String) -> Int? {
+    subscript(key: String) -> Double? {
         get {
             return delayDir[key]
         }
     }
     
-    func editDelayHour(hours: Int, task: String) {
+    func editDelayHour(hours: Double, task: String) {
         DB.editDelayHourForEquipment(self.info.ID, inspectionTask: task, hours: hours)
         delayDir[task] = hours
     }
@@ -44,7 +44,7 @@ class DelayDB {
     private var DelayTable: Table
     
     private let delayIDExpression = Expression<Int>("DelayID")
-    private let delayHourExpression = Expression<Int>("DelayHour")
+    private let delayHourExpression = Expression<Double>("DelayHour")
     private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
     private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
     
@@ -60,17 +60,17 @@ class DelayDB {
             })
     }
     
-    func editDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+    func editDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Double) {
         
         let alice = DelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         do {
-            try db.run(alice.update(Expression<Int>(delayHourExpression) <- hours))
+            try db.run(alice.update(Expression<Double>(delayHourExpression) <- hours))
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func addDelayForEquipment(equipmentID: Int, inspectionTask: String, hours: Int) {
+    func addDelayForEquipment(equipmentID: Int, inspectionTask: String, hours: Double) {
         let insert = DelayTable.insert(self.inspectionTaskNameExpression <- inspectionTask,
             self.equipmentIDExpression <- equipmentID,
             self.inspectionTaskNameExpression <- inspectionTask,
@@ -83,10 +83,10 @@ class DelayDB {
         }
     }
     
-    func loadDelayHourDir(info: EquipmentInfo, taskArray: [InspectionTask]) -> [String: Int] {
+    func loadDelayHourDir(info: EquipmentInfo, taskArray: [InspectionTask]) -> [String: Double] {
         let filter = DelayTable.filter(self.equipmentIDExpression == info.ID)
         let rows = Array(try! db.prepare(filter))
-        var delayDir: [String: Int] = [: ]
+        var delayDir: [String: Double] = [: ]
         if rows.count != 0 {
             for row in rows {
                 delayDir[row[inspectionTaskNameExpression]] = row[delayHourExpression]
