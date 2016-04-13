@@ -31,13 +31,13 @@ class EquipmentEditTableViewCell: UITableViewCell, UITextFieldDelegate {
         return true
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        infoTextField.resignFirstResponder()
         if let newText = textField.text {
             if  let title = titleLabel.text {
                 DB?.editEquipment(equipment!.info.ID, equipmentDetailTitleString: title, newValue: newText)
             }
         }
+        return true
     }
-    
-    
 }

@@ -11,14 +11,17 @@ class DelayHourEditViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        dateFormatter = NSDateFormatter()
-//        dateFormatter!.dateStyle = .MediumStyle
-//        dateFormatter!.timeStyle = .NoStyle
-//        dateFormatter!.locale = NSLocale(localeIdentifier: "zh_CN")
+        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         if defaultTime != nil {
             datePicker.setDate(defaultTime!, animated: true)
         }
-        
+        if timeCycle != nil {
+            timeCycleLabel.text = "\(timeCycle!)"
+        }
+        if delayHour != nil {
+            delayHourLabel.text = "\(delayHour!)"
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -32,12 +35,18 @@ class DelayHourEditViewController: UIViewController {
     var equipment: Equipment?
     var task: InspectionTask?
     var defaultTime: NSDate?
+    var timeCycle: Double?
+    var delayHour: Double?
 
+    @IBOutlet weak var timeCycleLabel: UILabel!
+    @IBOutlet weak var delayHourLabel: UILabel!
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if task != nil {
-            equipment?.records.taskDelayToTime(datePicker.date, task: task!.inspectionTaskName)
+        if segue.identifier == "delayHourSetDone" {
+            if task != nil {
+                equipment?.records.taskDelayToTime(datePicker.date, task: task!.inspectionTaskName)
+            }
         }
     }
 

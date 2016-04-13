@@ -96,6 +96,7 @@ class Equipment {
     func reloadInfo() {
         if let info = EquipmentDB().loadEquipmentInfo(self.info.ID) {
             self.info = info
+            self.detailArray = EquipmentDetailArrayWithTitle(info: info)
         }
     }
     

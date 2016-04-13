@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxG-0b-97y">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxG-0b-97y">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
@@ -477,7 +477,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="LdE-Yq-9Js" kind="presentation" identifier="editDelayHourSegue" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="S7o-d1-BDU"/>
+                        <segue destination="ixT-l1-TfV" kind="presentation" identifier="editDelayHourSegue" modalPresentationStyle="formSheet" modalTransitionStyle="coverVertical" id="S7o-d1-BDU"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KHP-QG-haF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -589,27 +589,87 @@
                                 <rect key="frame" x="285" y="416" width="30" height="30"/>
                                 <state key="normal" title="确定"/>
                                 <connections>
-                                    <segue destination="eUZ-ve-Ze4" kind="unwind" unwindAction="backToEquipmentDetailTable:" id="Bvr-4a-ZDG"/>
+                                    <segue destination="eUZ-ve-Ze4" kind="unwind" identifier="delayHourSetDone" unwindAction="backToEquipmentDetailTable:" id="Bvr-4a-ZDG"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="巡检周期：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oJC-Vy-lqt">
+                                <rect key="frame" x="20" y="134" width="85" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="推迟时间：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Luv-Aw-x1S">
+                                <rect key="frame" x="20" y="163" width="85" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NGb-tD-QaH">
+                                <rect key="frame" x="113" y="163" width="425" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MAr-dI-Q8y">
+                                <rect key="frame" x="113" y="134" width="425" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="天" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPA-tW-ug7">
+                                <rect key="frame" x="563" y="134" width="17" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="小时" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r7M-Vr-qwC">
+                                <rect key="frame" x="546" y="163" width="34" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="r7M-Vr-qwC" firstAttribute="centerY" secondItem="NGb-tD-QaH" secondAttribute="centerY" id="093-2G-Pfn"/>
+                            <constraint firstItem="MAr-dI-Q8y" firstAttribute="trailing" secondItem="NGb-tD-QaH" secondAttribute="trailing" id="1ZY-f4-cDn"/>
                             <constraint firstItem="bqm-kh-Gbt" firstAttribute="centerX" secondItem="elv-Cw-MCe" secondAttribute="centerX" id="2HE-Yh-DGT"/>
+                            <constraint firstItem="NGb-tD-QaH" firstAttribute="centerY" secondItem="Luv-Aw-x1S" secondAttribute="centerY" id="7HC-27-oQP"/>
+                            <constraint firstItem="MAr-dI-Q8y" firstAttribute="leading" secondItem="NGb-tD-QaH" secondAttribute="leading" id="AR3-3g-iUZ"/>
                             <constraint firstItem="elv-Cw-MCe" firstAttribute="centerY" secondItem="M9r-bg-I06" secondAttribute="centerY" id="BKB-YO-RDk"/>
+                            <constraint firstItem="oJC-Vy-lqt" firstAttribute="leading" secondItem="Luv-Aw-x1S" secondAttribute="leading" id="HTh-dB-nkj"/>
+                            <constraint firstItem="Luv-Aw-x1S" firstAttribute="top" secondItem="oJC-Vy-lqt" secondAttribute="bottom" constant="8" id="KBm-ck-hdq"/>
                             <constraint firstAttribute="trailing" secondItem="elv-Cw-MCe" secondAttribute="trailing" id="LYJ-WX-lii"/>
+                            <constraint firstItem="NGb-tD-QaH" firstAttribute="leading" secondItem="Luv-Aw-x1S" secondAttribute="trailing" constant="8" id="MQk-BS-hOk"/>
+                            <constraint firstItem="elv-Cw-MCe" firstAttribute="top" secondItem="Luv-Aw-x1S" secondAttribute="bottom" constant="8" id="Tgz-RR-Ldz"/>
+                            <constraint firstItem="lPA-tW-ug7" firstAttribute="centerY" secondItem="MAr-dI-Q8y" secondAttribute="centerY" id="Tqy-XZ-MWp"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="Luv-Aw-x1S" secondAttribute="leading" id="Y17-bZ-blh"/>
                             <constraint firstItem="bqm-kh-Gbt" firstAttribute="top" secondItem="elv-Cw-MCe" secondAttribute="bottom" constant="8" symbolic="YES" id="dB1-dd-VYh"/>
+                            <constraint firstItem="r7M-Vr-qwC" firstAttribute="leading" secondItem="NGb-tD-QaH" secondAttribute="trailing" constant="8" symbolic="YES" id="gRU-Hm-YDK"/>
                             <constraint firstItem="elv-Cw-MCe" firstAttribute="leading" secondItem="M9r-bg-I06" secondAttribute="leading" id="kPB-wo-c3j"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lPA-tW-ug7" secondAttribute="trailing" id="l2g-5b-c3H"/>
+                            <constraint firstItem="MAr-dI-Q8y" firstAttribute="centerY" secondItem="oJC-Vy-lqt" secondAttribute="centerY" id="ofq-Nj-yzP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="r7M-Vr-qwC" secondAttribute="trailing" id="q8i-qd-tdi"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="ngb-CV-Kiw">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="W8l-du-fwI">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="eUZ-ve-Ze4" kind="unwind" identifier="delayHourSetCancel" unwindAction="backToEquipmentDetailTable:" id="NkL-Pc-jbq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="datePicker" destination="elv-Cw-MCe" id="1Le-cl-Idm"/>
+                        <outlet property="delayHourLabel" destination="NGb-tD-QaH" id="Kek-rL-ZVj"/>
+                        <outlet property="timeCycleLabel" destination="MAr-dI-Q8y" id="hjW-F8-O59"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rvn-pb-D7L" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="eUZ-ve-Ze4" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4852" y="712"/>
+            <point key="canvasLocation" x="5664" y="712"/>
         </scene>
         <!--设备图片-->
         <scene sceneID="xCu-jI-Ydr">
@@ -715,6 +775,9 @@
                             <connections>
                                 <segue destination="Aol-54-MyH" kind="unwind" animates="NO" unwindAction="backToEquipmentDetailTable:" id="PwL-gi-D0W"/>
                             </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="m5E-sz-yFD">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
@@ -968,9 +1031,27 @@
             </objects>
             <point key="canvasLocation" x="4852" y="4"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="yW8-Nj-Ohv">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ixT-l1-TfV" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3BX-hi-ad2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="LdE-Yq-9Js" kind="relationship" relationship="rootViewController" id="mr6-L5-N4c"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PrS-qp-SMR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4852" y="712"/>
+        </scene>
     </scenes>
     <resources>
         <image name="9febd5448b793109750ad48cd4f29fe9" width="220" height="220"/>
-        <image name="check" width="58" height="58"/>
+        <image name="check" width="450" height="450"/>
     </resources>
 </document>

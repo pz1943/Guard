@@ -10,6 +10,6 @@ import Foundation
 import UIKit
 
 struct Constants {
-    static var NavColor = UIColor(red: 50/255, green: 50/255, blue: 51/255, alpha: 1)
-    static var GrayColor = UIColor.groupTableViewBackgroundColor()//(red: 242, green: 242, blue: 242, alpha: 1.0)
+    static var NavColor = UIColor(red: 0/255, green: 101/255, blue: 105/255, alpha: 1)
+    static var GrayColor = UIColor.groupTableViewBackgroundColor()
 }

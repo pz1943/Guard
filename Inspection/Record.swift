@@ -48,7 +48,7 @@ class RecordsForEquipment {
     private var info: EquipmentInfo
     private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
     private var inspectionTaskArray: [InspectionTask]
-
+    
     private let DB = RecordDB()
     init(info: EquipmentInfo, taskArray: [InspectionTask]) {
         self.info = info
@@ -138,6 +138,14 @@ class RecordsForEquipment {
         return DB.countForEQ(info.ID)
     }
     
+    func getTimeCycleForTask(task: String) -> Double? {
+        return inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task)
+    }
+    
+    func getDelayHourForTask(task: String) -> Double? {
+        return delayHourDir[task]
+    }
+    
     func isCompletedForTask(inspectionTask: InspectionTask) -> Bool {
         return self.CompletedForTask(inspectionTask)
     }
@@ -157,6 +165,7 @@ class RecordsForEquipment {
     func delRecord(record: Record) {
         completedFlagNeedRefresh = true
         recentNeedRefresh = true
+        self.delayHourDir.setDefault(record.taskType)
         DB.delRecord(record.ID)
     }
     
@@ -164,14 +173,15 @@ class RecordsForEquipment {
         completedFlagNeedRefresh = true
         if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task){
             if let recentInspectionTime = recentRecoredsDir[task] {
-                let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double
+                let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double - timeCycle * 86400
                 let delayHour = timeInterval / 3600
                 delayHourDir.editDelayHour(delayHour , task: task)
                 print(delayHour )
             } else {
                 if let delayHour = delayHourDir[task] {
-                    print(delayHour)
-                    print(timeCycle)
+                    print(task)
+                    print("delayHour = \(delayHour)")
+                    print("timeCycle = \(timeCycle)")
                     
                     let delaySeconds = Double(delayHour) * 3600.0
                     print(-timeCycle * 86400 - delaySeconds)
@@ -185,7 +195,8 @@ class RecordsForEquipment {
     func getExpectInspectionTime(task: String) -> NSDate?{
         if let recentInspectionTime = recentRecoredsDir[task] {
             if let delayHour = delayHourDir[task] {
-                return NSDate(timeInterval: Double(delayHour) * 3600 , sinceDate: recentInspectionTime)
+                let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task) ?? 0
+                return NSDate(timeInterval: Double(delayHour) * 3600 + timeCycle * 86400 , sinceDate: recentInspectionTime)
             }
         }
         return nil

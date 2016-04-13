@@ -25,7 +25,7 @@ class EquipmentEditTableViewController: UITableViewController {
     var equipmentDetail: [EquipmentDetail] {
         get {
             if equipment != nil {
-                return equipment!.detailArray.allDetailArray
+                return equipment!.detailArray.editableDetailArray
             } else {
                 return []
             }

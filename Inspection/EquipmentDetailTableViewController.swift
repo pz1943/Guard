@@ -43,7 +43,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
             tableView.reloadData()
         }
     }
-    
+
     override func viewWillDisappear(animated: Bool) {
         if observer != nil {
             center.removeObserver(observer!)
@@ -231,12 +231,16 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
                     DVC.equipment = self.equipment
             }
         } else if segue.identifier == "editDelayHourSegue" {
-            if let DVC = segue.destinationViewController as? DelayHourEditViewController {
-                if indexPathForlongPressed != nil {
-                    if let task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row] {
-                        DVC.task = task
-                        DVC.equipment = self.equipment
-                        DVC.defaultTime = self.equipment?.records.getExpectInspectionTime(task.inspectionTaskName)
+            if let NVC = segue.destinationViewController as? UINavigationController {
+                if let DVC = NVC.viewControllers[0] as? DelayHourEditViewController {
+                    if indexPathForlongPressed != nil {
+                        if let task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row] {
+                            DVC.task = task
+                            DVC.equipment = self.equipment
+                            DVC.defaultTime = self.equipment?.records.getExpectInspectionTime(task.inspectionTaskName)
+                            DVC.delayHour = self.equipment?.records.getDelayHourForTask(task.inspectionTaskName)
+                            DVC.timeCycle = self.equipment?.records.getTimeCycleForTask(task.inspectionTaskName)
+                        }
                     }
                 }
             }
