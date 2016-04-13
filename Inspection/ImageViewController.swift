@@ -13,7 +13,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.automaticallyAdjustsScrollViewInsets = false
         self.navigationController?.navigationBar.barStyle = .Black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         scrollView.addSubview(imageView)
@@ -86,8 +86,8 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     }
     
     override func viewWillLayoutSubviews() {
-        scrollView.contentOffset.x = scrollViewContentOffsetX
-        scrollView.contentOffset.y = scrollViewContentOffsetY
+//        scrollView.contentOffset.x = 0
+//        scrollView.contentOffset.y = 0
     }
     
     var scrollViewContentOffsetX :CGFloat{
@@ -96,7 +96,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
     
     var scrollViewContentOffsetY:CGFloat{
         if self.navigationController != nil{
-            return (600 - UIScreen.mainScreen().bounds.height + self.navigationController!.toolbar.frame.height) / 2
+            return (600 - UIScreen.mainScreen().bounds.height ) / 2
         } else {return 0}
     }
     @IBOutlet weak var scrollView: UIScrollView!{

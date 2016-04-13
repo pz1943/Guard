@@ -220,15 +220,13 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showEquipmentView" {
-            if let NVC = segue.destinationViewController as? UINavigationController {
-                if let DVC = NVC.viewControllers[0] as? ImageViewController {
-                    DVC.imageURL = equipment?.imageAbsoluteFilePath
-                    DVC.equipment = equipment
-                }
+            if let DVC = segue.destinationViewController as? ImageViewController {
+                DVC.imageURL = equipment?.imageAbsoluteFilePath
+                DVC.equipment = equipment
             }
         } else if segue.identifier == "equipmentEditSegue" {
             if let DVC = segue.destinationViewController as?  EquipmentEditTableViewController {
-                    DVC.equipment = self.equipment
+                DVC.equipment = self.equipment
             }
         } else if segue.identifier == "editDelayHourSegue" {
             if let NVC = segue.destinationViewController as? UINavigationController {

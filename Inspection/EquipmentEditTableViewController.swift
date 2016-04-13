@@ -31,6 +31,13 @@ class EquipmentEditTableViewController: UITableViewController {
             }
         }
     }
+    @IBAction func segueBack(sender: UIBarButtonItem) {
+        self.tableView.reloadData()
+        self.performSegueWithIdentifier("backToDetail", sender: self)
+    }
+    @IBAction func editDone(sender: UIBarButtonItem) {
+        self.tableView.reloadData()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

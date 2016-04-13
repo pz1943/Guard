@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxG-0b-97y">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxG-0b-97y">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
@@ -380,7 +380,7 @@
                                 <connections>
                                     <outlet property="equipmentImageView" destination="JBj-RM-wag" id="ELo-fS-ch0"/>
                                     <outlet property="imageHeightConstraint" destination="aq5-bY-0qp" id="uu5-oh-CgM"/>
-                                    <segue destination="mhD-m5-M8Q" kind="presentation" identifier="showEquipmentView" id="4H2-9N-xok"/>
+                                    <segue destination="QrD-Ek-Ylt" kind="show" identifier="showEquipmentView" id="lVT-eD-ER4"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="equipmentRecordCell" rowHeight="114" id="uvu-EK-WUG" customClass="EquipmentDetailTableViewCell" customModule="Inspection" customModuleProvider="target">
@@ -716,7 +716,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3D4-Q3-5Zh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="75R-nD-PTo" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5664" y="4"/>
+            <point key="canvasLocation" x="4941" y="7"/>
         </scene>
         <!--编辑设备-->
         <scene sceneID="ta2-SH-oPb">
@@ -743,7 +743,7 @@
                                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B9b-3B-vFa">
                                             <rect key="frame" x="84" y="16" width="508" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <textInputTraits key="textInputTraits"/>
+                                            <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                             <connections>
                                                 <outlet property="delegate" destination="zfi-Km-S4M" id="g1k-km-Q7I"/>
                                             </connections>
@@ -773,13 +773,19 @@
                         <barButtonItem key="leftBarButtonItem" title="返回" id="nsp-IK-cUd">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="Aol-54-MyH" kind="unwind" animates="NO" unwindAction="backToEquipmentDetailTable:" id="PwL-gi-D0W"/>
+                                <action selector="segueBack:" destination="YmE-Yu-Bim" id="sob-Lw-Chr"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="m5E-sz-yFD">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="editDone:" destination="YmE-Yu-Bim" id="q9x-3C-gpe"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="Aol-54-MyH" kind="unwind" identifier="backToDetail" unwindAction="backToEquipmentDetailTable:" id="1cE-im-0Z3"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tl7-9T-M8A" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Aol-54-MyH" userLabel="Exit" sceneMemberID="exit"/>
@@ -1012,24 +1018,6 @@
                 <exit id="xko-Za-a2w" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2691" y="-837"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="BP9-5f-cpD">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mhD-m5-M8Q" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ynp-ev-trD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="QrD-Ek-Ylt" kind="relationship" relationship="rootViewController" id="HqQ-Zx-Y5v"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9x8-w6-IbL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4852" y="4"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="yW8-Nj-Ohv">
