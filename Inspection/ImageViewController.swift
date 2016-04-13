@@ -18,6 +18,7 @@ class ImageViewController: UIViewController , UIScrollViewDelegate, UIImagePicke
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         scrollView.addSubview(imageView)
     }
+
     override func viewWillAppear(animated: Bool) {
         fetchImage()
     }

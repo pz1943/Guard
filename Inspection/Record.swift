@@ -57,10 +57,6 @@ class RecordsForEquipment {
         self.recentRecoredsDir = getRecentRecords()
     }
     
-    deinit {
-        print("deinit record \(info.ID)")
-    }
-    
     private var recentRecoredsDir: [String: NSDate] = [: ]
     private var recentNeedRefresh: Bool = true
     var mostRecentRecordsDir: [String: NSDate] {
@@ -176,15 +172,9 @@ class RecordsForEquipment {
                 let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double - timeCycle * 86400
                 let delayHour = timeInterval / 3600
                 delayHourDir.editDelayHour(delayHour , task: task)
-                print(delayHour )
             } else {
                 if let delayHour = delayHourDir[task] {
-                    print(task)
-                    print("delayHour = \(delayHour)")
-                    print("timeCycle = \(timeCycle)")
-                    
                     let delaySeconds = Double(delayHour) * 3600.0
-                    print(-timeCycle * 86400 - delaySeconds)
                     let record = Record(equipmentID: self.info.ID, task: task, recorder: "system", recordData: "推迟巡检记录", recordDate: NSDate(timeInterval: -timeCycle * 86400 - delaySeconds, sinceDate: toTime))
                     addRecord(record)
                 }

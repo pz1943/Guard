@@ -15,9 +15,10 @@ class EquipmentTableViewController: UITableViewController {
         DB = EquipmentDB()
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    
+
     override func viewWillAppear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+        observer = NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) {
+            [unowned self](notification) -> Void in
             self.selectRoom?.equipmentsArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID).map({ (info) -> Equipment in
                 Equipment(info: info)
             })
@@ -27,7 +28,9 @@ class EquipmentTableViewController: UITableViewController {
         }
     }
     override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        if observer != nil {
+            NSNotificationCenter.defaultCenter().removeObserver(observer!)
+        }
     }
 
     func refresh() {
@@ -53,6 +56,7 @@ class EquipmentTableViewController: UITableViewController {
     var selectRoom: Room?
     var rightBarButtonItems: UIBarButtonItem?
     var canEditFlag = true
+    var observer: NSObjectProtocol?
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections

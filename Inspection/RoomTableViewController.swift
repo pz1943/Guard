@@ -15,6 +15,32 @@ class RoomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let rootVC = self.tabBarController as? RootViewController {
+            self.user = rootVC.user
+            self.rooms = rootVC.rooms
+        }
+        setNavigationBar()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        observer = NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) {
+            [weak self]  (notification) -> Void in
+            self?.DB.reload()
+            if let roomArray = self?.loadRoomArray() {
+                self?.rooms = roomArray
+            }
+        }
+        loadForUser(user)
+        tableView.reloadData()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        if observer != nil {
+            NSNotificationCenter.defaultCenter().removeObserver(observer!)
+        }
+    }
+
+    func setNavigationBar() {
         self.navigationController?.navigationBar.barStyle = .Black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
@@ -22,23 +48,8 @@ class RoomTableViewController: UITableViewController {
         editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
         loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
-        refresh()
-        self.user = (self.navigationController?.tabBarController as? RootViewController)?.user
-//        initDelayDB()
-
     }
-    deinit {
-        print("RoomTableViewController deinit")
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-            self.DB.reload()
-            self.rooms = self.loadRoomArray()
-        }
-        loadForUser(user)
-        tableView.reloadData()
-    }
+    
     @IBAction func refresh(sender: UIRefreshControl) {
         refresh()
         sender.endRefreshing()
@@ -48,27 +59,11 @@ class RoomTableViewController: UITableViewController {
         return DB.loadRoomTable()
     }
     
-    func initDelayDB() {
-        let DB = DelayDB()
-        let defaultDelayHours = 10.0
-        for room in rooms {
-            for equipment in room.equipmentsArray {
-                for task in equipment.inspectionTaskArray {
-                    DB.addDelayForEquipment(equipment.info.ID, inspectionTask: task.inspectionTaskName, hours: defaultDelayHours)
-                }
-            }
-        }
-    }
-    
     func refresh() {
         DB.reload()
         rooms = loadRoomArray()
         loadForUser(user)
         tableView.reloadData()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     @IBAction func backToRoomTable(segue: UIStoryboardSegue) {
@@ -94,10 +89,6 @@ class RoomTableViewController: UITableViewController {
         }
     }
     
-    func adminExit() {
-        user = UserCenter.defaultUser
-        refresh()
-    }
     // MARK: - Table view data source
     var editBarButtonItemCopy: UIBarButtonItem?
     var addBarButtonItemCopy: UIBarButtonItem?
@@ -106,6 +97,7 @@ class RoomTableViewController: UITableViewController {
     var user: User? 
     var rooms: [Room] = [ ]
     var DB = RoomDB()
+    var observer: NSObjectProtocol?
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -190,4 +182,17 @@ class RoomTableViewController: UITableViewController {
             }
         }
     }
+    //
+    //    func initDelayDB() {
+    //        let DB = DelayDB()
+    //        let defaultDelayHours = 10.0
+    //        for room in rooms {
+    //            for equipment in room.equipmentsArray {
+    //                for task in equipment.inspectionTaskArray {
+    //                    DB.addDelayForEquipment(equipment.info.ID, inspectionTask: task.inspectionTaskName, hours: defaultDelayHours)
+    //                }
+    //            }
+    //        }
+    //    }
+
 }

@@ -21,7 +21,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
             }
         }
     }
-    
+
     func setDelayHourSegue(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.Began {
             let point = sender.locationInView(self.tableView)

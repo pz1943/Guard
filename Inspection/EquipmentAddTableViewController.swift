@@ -16,7 +16,7 @@ class EquipmentAddTableViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         EQDB = EquipmentDB()
     }
-    
+
     @IBAction func equipmentAddDone(sender: UIBarButtonItem) {
         if let equipmentName = equipmentNameTextField.text {
             if equipmentName != "" && equipmentType != nil {

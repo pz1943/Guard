@@ -23,6 +23,7 @@ class EquipmentArray {
 }
 
 class EquipmentInfo {
+
     var ID: Int
     var name: String
     var type: EquipmentType
@@ -98,11 +99,7 @@ class Equipment {
             self.info = info
             self.detailArray = EquipmentDetailArrayWithTitle(info: info)
         }
-    }
-    
-    deinit {
-        print("deinit equipment \(info.ID)")
-    }
+    }    
 
     var brief: EquipmentBrief {
         get {
