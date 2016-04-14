@@ -543,7 +543,6 @@
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="4Bm-kY-yI9" id="AHD-A3-xUZ"/>
-                            <outlet property="delegate" destination="4Bm-kY-yI9" id="1AO-4p-VZU"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="UAt-Fc-eEt">
@@ -563,6 +562,7 @@
                 </tableViewController>
                 <exit id="gLe-mK-xE8" userLabel="Exit" sceneMemberID="exit"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="htO-5W-5Jn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="gPf-J4-KWJ"/>
             </objects>
             <point key="canvasLocation" x="4115" y="606"/>
         </scene>

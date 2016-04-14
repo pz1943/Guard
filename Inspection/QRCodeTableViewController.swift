@@ -23,22 +23,33 @@ class QRCodeRecordTableViewController: UITableViewController {
         self.navigationItem.title = equipment!.info.name
         self.navigationController?.navigationBar.barStyle = .Black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
-
+        let tapGr = UITapGestureRecognizer(target: self, action: "backGroundPressed:")
+        tapGr.cancelsTouchesInView = false
+        self.tableView.addGestureRecognizer(tapGr)
     }
     
     override func viewWillAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeRecordType:", name: "changeRecordTypeNotification", object: nil)
 
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    @IBAction func backGroundPressed(sender: UITapGestureRecognizer) {
+        message = textFieldCell?.recordTextField.text
+        textFieldCell?.recordTextField.resignFirstResponder()
     }
 
     var equipment: Equipment?
     var record: Record?
     var taskArray: [InspectionTask] = []
     var user: User!
+    var message: String? {
+        didSet {
+            record?.message = message
+        }
+    }
+    var textFieldCell: QRCodeTableViewCell?
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -58,27 +69,24 @@ class QRCodeRecordTableViewController: UITableViewController {
             }
         }
     }
+    
     func selectFirst() {
-        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: false, scrollPosition: UITableViewScrollPosition.None)
+        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 1), animated: false, scrollPosition: UITableViewScrollPosition.None)
     }
     func getNewMessage(notification: NSNotification) {
         if let recordMessage = notification.userInfo?["recordMessage"] {
-            record?.message = recordMessage as? String
+            message = recordMessage as? String
         }
     }
     
-    func changeRecordType(notification: NSNotification) {
-        if let newType = notification.userInfo?["recordType"] as? String {
-            record?.taskType = newType
-        }
-        reloadTableView()
-    }
     func reloadTableView() {
         NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "timerReloadTableView", userInfo: nil, repeats: false)
     }
     func timerReloadTableView() {
         tableView.reloadData()
     }
+    
+    
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -88,28 +96,30 @@ class QRCodeRecordTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if section == 0 {
+        if section == 1 {
             return taskArray.count
         } else { return 1 }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("InspectionTypeCell", forIndexPath: indexPath)
+        if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("InspectionTypeCell", forIndexPath: indexPath) as! QRCodeTableViewCell
             cell.textLabel?.text = taskArray[indexPath.row].inspectionTaskName
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("RecordCell", forIndexPath: indexPath) as! QRCodeTableViewCell
             cell.recordType.text = record?.taskType
+            cell.recordTextField.text = record?.message
+            textFieldCell = cell
             return cell
         }
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0:
-            return "  巡检类型"
         case 1:
+            return "  巡检类型"
+        case 0:
             return "  巡检记录"
         default:
             return nil
@@ -121,14 +131,16 @@ class QRCodeRecordTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 {
+        if indexPath.section == 0 {
             return 100
         } else { return tableView.rowHeight }
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        record?.taskType = taskArray[indexPath.row].inspectionTaskName
-        reloadTableView()
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {        
+        if indexPath.section == 1 {
+            record?.taskType = taskArray[indexPath.row].inspectionTaskName
+            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Top)
+        }
     }
     
     /*
