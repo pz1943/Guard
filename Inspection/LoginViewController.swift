@@ -29,10 +29,7 @@ class LoginViewController: UIViewController {
     var DB = RoomDB()
     
     @IBAction func login(sender: UIButton) {
-        if var nameText = userNameTextField.text {
-            if nameText == "" {
-                nameText = "test"
-            }
+        if let nameText = userNameTextField.text {
             if  let pswText = passWordTextField.text {
                 user = UserCenter.login(nameText, loginUserPSD: pswText)
                 if user != nil {
