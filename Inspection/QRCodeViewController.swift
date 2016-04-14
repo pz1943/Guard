@@ -15,7 +15,7 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
         super.viewDidLoad()
         self.navigationItem.title = "请对准设备的二维码"
     }
-    
+
     var equipment: Equipment?
     
     override func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
@@ -115,6 +115,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         // Do any additional setup after loading the view.
     }
     

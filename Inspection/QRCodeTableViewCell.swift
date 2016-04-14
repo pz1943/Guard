@@ -12,7 +12,6 @@ class QRCodeTableViewCell: UITableViewCell, UITextFieldDelegate{
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
     }
     @IBOutlet weak var recordTextField: UITextField!
     @IBOutlet weak var recordType: UILabel!

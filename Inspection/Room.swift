@@ -10,6 +10,7 @@ import Foundation
 import SQLite
 
 class Room {
+
     var name: String
     var ID: Int
     lazy var equipmentsArray: [Equipment] = {

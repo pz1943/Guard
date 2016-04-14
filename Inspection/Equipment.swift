@@ -23,6 +23,7 @@ class EquipmentArray {
 }
 
 class EquipmentInfo {
+
     var ID: Int
     var name: String
     var type: EquipmentType
@@ -96,12 +97,9 @@ class Equipment {
     func reloadInfo() {
         if let info = EquipmentDB().loadEquipmentInfo(self.info.ID) {
             self.info = info
+            self.detailArray = EquipmentDetailArrayWithTitle(info: info)
         }
-    }
-    
-    deinit {
-        print("deinit equipment \(info.ID)")
-    }
+    }    
 
     var brief: EquipmentBrief {
         get {

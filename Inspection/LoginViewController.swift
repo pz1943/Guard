@@ -15,19 +15,21 @@ class LoginViewController: UIViewController {
         self.navigationController?.navigationItem.title = "用户登录"
         self.navigationController?.navigationBar.barStyle = .Black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
-
+        self.rooms = DB.loadRoomTable()
+        for room in rooms {
+            let _ = room.isInspectionDone
+        }
     }
-    
+
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passWordTextField: UITextField!
     
     var user: User?
+    var rooms: [Room] = [ ]
+    var DB = RoomDB()
     
     @IBAction func login(sender: UIButton) {
-        if var nameText = userNameTextField.text {
-            if nameText == "" {
-                nameText = "test"
-            }
+        if let nameText = userNameTextField.text {
             if  let pswText = passWordTextField.text {
                 user = UserCenter.login(nameText, loginUserPSD: pswText)
                 if user != nil {
@@ -39,8 +41,9 @@ class LoginViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let DVC = segue.destinationViewController as? RootViewController {
-                DVC.user = self.user
-            }
+            DVC.user = self.user
+            DVC.rooms = self.rooms
+        }
     }
     
     @IBAction func logout(segue: UIStoryboardSegue) {

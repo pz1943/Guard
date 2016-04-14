@@ -15,8 +15,13 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "setDelayHourSegue:"))
+        if let roomVC = self.navigationController?.viewControllers[0] as? RoomTableViewController {
+            if let rootVC = roomVC.tabBarController as? RootViewController {
+                self.user = rootVC.user
+            }
+        }
     }
-    
+
     func setDelayHourSegue(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.Began {
             let point = sender.locationInView(self.tableView)
@@ -38,12 +43,14 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
             tableView.reloadData()
         }
     }
-    
+
     override func viewWillDisappear(animated: Bool) {
         if observer != nil {
             center.removeObserver(observer!)
         }
     }
+    
+    var user: User?
     var observer: NSObjectProtocol?
     var center: NSNotificationCenter = NSNotificationCenter.defaultCenter()
     var equipment: Equipment?
@@ -148,6 +155,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
                 }
                 cell.recordTimeLabel.text = record.date.datatypeValue
                 cell.recordTypeLabel.text = record.taskType
+                cell.recorderLabel.text = record.recorder
             }
             return cell
         default:
@@ -218,15 +226,19 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
             }
         } else if segue.identifier == "equipmentEditSegue" {
             if let DVC = segue.destinationViewController as?  EquipmentEditTableViewController {
-                    DVC.equipment = self.equipment
+                DVC.equipment = self.equipment
             }
         } else if segue.identifier == "editDelayHourSegue" {
-            if let DVC = segue.destinationViewController as? DelayHourEditViewController {
-                if indexPathForlongPressed != nil {
-                    if let task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row] {
-                        DVC.task = task
-                        DVC.equipment = self.equipment
-                        DVC.defaultTime = self.equipment?.records.getExpectInspectionTime(task.inspectionTaskName)
+            if let NVC = segue.destinationViewController as? UINavigationController {
+                if let DVC = NVC.viewControllers[0] as? DelayHourEditViewController {
+                    if indexPathForlongPressed != nil {
+                        if let task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row] {
+                            DVC.task = task
+                            DVC.equipment = self.equipment
+                            DVC.defaultTime = self.equipment?.records.getExpectInspectionTime(task.inspectionTaskName)
+                            DVC.delayHour = self.equipment?.records.getDelayHourForTask(task.inspectionTaskName)
+                            DVC.timeCycle = self.equipment?.records.getTimeCycleForTask(task.inspectionTaskName)
+                        }
                     }
                 }
             }

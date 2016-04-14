@@ -20,9 +20,6 @@ class SettingTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
-    deinit {
-        print("SettingTableViewController deinit")
-    }
 
     var user: User? {
         return (self.tabBarController as? RootViewController)?.user

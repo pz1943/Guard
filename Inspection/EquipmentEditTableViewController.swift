@@ -21,15 +21,23 @@ class EquipmentEditTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
+
     var equipment: Equipment?
     var equipmentDetail: [EquipmentDetail] {
         get {
             if equipment != nil {
-                return equipment!.detailArray.allDetailArray
+                return equipment!.detailArray.editableDetailArray
             } else {
                 return []
             }
         }
+    }
+    @IBAction func segueBack(sender: UIBarButtonItem) {
+        self.tableView.reloadData()
+        self.performSegueWithIdentifier("backToDetail", sender: self)
+    }
+    @IBAction func editDone(sender: UIBarButtonItem) {
+        self.tableView.reloadData()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

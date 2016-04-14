@@ -19,12 +19,14 @@ struct Record {
     var equipmentID: Int
     var date: NSDate
     var taskType: String
+    var recorder: String
     var message: String?
     //add a new Record
-    init(equipmentID: Int, task: String, recordData: String?, recordDate: NSDate?) {
+    init(equipmentID: Int, task: String, recorder: String, recordData: String?, recordDate: NSDate?) {
         self.equipmentID = equipmentID
         self.taskType = task
         self.message = recordData
+        self.recorder = recorder
         if recordDate == nil {
             self.date = NSDate()
         } else {
@@ -32,11 +34,12 @@ struct Record {
         }
     }
     //load a exist record
-    init(recordID: Int, equipmentID: Int, date: NSDate, task: String, recordData: String?) {
+    init(recordID: Int, equipmentID: Int, date: NSDate, task: String, recorder: String, recordData: String?) {
         self.recordID = recordID
         self.equipmentID = equipmentID
         self.date = date
         self.taskType = task
+        self.recorder = recorder
         self.message = recordData
     }
 }
@@ -45,17 +48,13 @@ class RecordsForEquipment {
     private var info: EquipmentInfo
     private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
     private var inspectionTaskArray: [InspectionTask]
-
+    
     private let DB = RecordDB()
     init(info: EquipmentInfo, taskArray: [InspectionTask]) {
         self.info = info
         self.inspectionTaskArray = taskArray
         self.delayHourDirCache = DelayHourDir(info: self.info, taskArray: self.inspectionTaskArray)
         self.recentRecoredsDir = getRecentRecords()
-    }
-    
-    deinit {
-        print("deinit record \(info.ID)")
     }
     
     private var recentRecoredsDir: [String: NSDate] = [: ]
@@ -135,6 +134,14 @@ class RecordsForEquipment {
         return DB.countForEQ(info.ID)
     }
     
+    func getTimeCycleForTask(task: String) -> Double? {
+        return inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task)
+    }
+    
+    func getDelayHourForTask(task: String) -> Double? {
+        return delayHourDir[task]
+    }
+    
     func isCompletedForTask(inspectionTask: InspectionTask) -> Bool {
         return self.CompletedForTask(inspectionTask)
     }
@@ -154,23 +161,22 @@ class RecordsForEquipment {
     func delRecord(record: Record) {
         completedFlagNeedRefresh = true
         recentNeedRefresh = true
+        self.delayHourDir.setDefault(record.taskType)
         DB.delRecord(record.ID)
     }
     
     func taskDelayToTime(toTime: NSDate, task: String) {
         completedFlagNeedRefresh = true
         if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task){
-            
             if let recentInspectionTime = recentRecoredsDir[task] {
-                let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double
-                let delayHour = Int(timeInterval) / 3600
+                let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double - timeCycle * 86400
+                let delayHour = timeInterval / 3600
                 delayHourDir.editDelayHour(delayHour , task: task)
-                print(delayHour )
             } else {
                 if let delayHour = delayHourDir[task] {
                     let delaySeconds = Double(delayHour) * 3600.0
-                let record = Record(equipmentID: self.info.ID, task: task, recordData: "推迟巡检记录", recordDate: NSDate(timeInterval: -timeCycle * 86400 - delaySeconds, sinceDate: toTime))
-                addRecord(record)
+                    let record = Record(equipmentID: self.info.ID, task: task, recorder: "system", recordData: "推迟巡检记录", recordDate: NSDate(timeInterval: -timeCycle * 86400 - delaySeconds, sinceDate: toTime))
+                    addRecord(record)
                 }
             }
         }
@@ -179,7 +185,8 @@ class RecordsForEquipment {
     func getExpectInspectionTime(task: String) -> NSDate?{
         if let recentInspectionTime = recentRecoredsDir[task] {
             if let delayHour = delayHourDir[task] {
-                return NSDate(timeInterval: Double(delayHour) * 3600 , sinceDate: recentInspectionTime)
+                let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task) ?? 0
+                return NSDate(timeInterval: Double(delayHour) * 3600 + timeCycle * 86400 , sinceDate: recentInspectionTime)
             }
         }
         return nil
@@ -193,6 +200,7 @@ class RecordDB {
     private let recordIDExpression = Expression<Int>(ExpressionTitle.RecordID.description)
     private let recordMessageExpression = Expression<String?>(ExpressionTitle.RecordMessage.description)
     private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    private let recorderExpression = Expression<String>(ExpressionTitle.Recorder.description)
     private let recordDateExpression = Expression<NSDate>(ExpressionTitle.RecordDate.description)
     
     func countForEQ(equipmentID: Int) -> Int {
@@ -208,6 +216,7 @@ class RecordDB {
             t.column(equipmentIDExpression)
             t.column(inspectionTaskNameExpression)
             t.column(recordMessageExpression)
+            t.column(recorderExpression)
             t.column(recordDateExpression)
             })
     }
@@ -216,6 +225,7 @@ class RecordDB {
         let insert = recordTable.insert(self.recordMessageExpression <- record.message,
             self.inspectionTaskNameExpression <- record.taskType,
             self.equipmentIDExpression <- record.equipmentID,
+            self.recorderExpression <- record.recorder,
             self.recordDateExpression <- record.date)
         do {
             try db.run(insert)
@@ -236,13 +246,13 @@ class RecordDB {
     func loadRecordFromIndex(equipmentID: Int, index: Int) -> Record? {
         let alice = recordTable.filter(self.equipmentIDExpression == equipmentID).limit(1, offset: index)
         if let row = db.pluck(alice) {
-            return Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
+            return Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recorder: row[recorderExpression], recordData: row[recordMessageExpression])
         } else { return nil }
     }
     func loadRecordFromRecordID(recordID: Int) -> Record {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
         let row = Array(try! db.prepare(alice)).first!
-        let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recordData: row[recordMessageExpression])
+        let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recorder: row[recorderExpression], recordData: row[recordMessageExpression])
         return record
         
     }
