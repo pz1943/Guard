@@ -84,6 +84,11 @@ class Equipment {
 
     }
     
+    func removeFromDB() {
+        EquipmentDB().delEquipment(info.ID)
+        DelayDB().delDelayForEquipment(info.ID)
+    }
+    
     var imageAbsoluteFilePath: NSURL? {
         get {
             if info.imageName != nil {
@@ -190,6 +195,20 @@ class EquipmentDB {
     init() {
         self.db = DBModel.sharedInstance().getDB()
         self.equipmentTable = Table("equipmentTable")
+        
+        try! db.run(equipmentTable.create(ifNotExists: true) { t in
+            t.column(equipmentIDExpression, primaryKey: true)
+            t.column(equipmentNameExpression)
+            t.column(equipmentTypeExpression)
+            t.column(roomIDExpression)
+            t.column(roomNameExpression)
+            t.column(equipmentBrandExpression)
+            t.column(equipmentModelExpression)
+            t.column(equipmentCapacityExpression)
+            t.column(equipmentCommissionTimeExpression)
+            t.column(equipmentSNExpression)
+            t.column(equipmentImageNameExpression)
+            })
     }
     
     func addEquipment(equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {

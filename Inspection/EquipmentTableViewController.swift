@@ -17,11 +17,13 @@ class EquipmentTableViewController: UITableViewController {
     }
 
     override func viewWillAppear(animated: Bool) {
-        observer = NSNotificationCenter.defaultCenter().addObserverForName("EquipmentTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) {
-            [unowned self](notification) -> Void in
+
+        if needRefreshDataFlag == true {
             self.selectRoom?.equipmentsArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID).map({ (info) -> Equipment in
                 Equipment(info: info)
             })
+            self.tableView.reloadData()
+            needRefreshDataFlag = false
         }
         if selectRoom != nil {
             refresh()
@@ -57,6 +59,7 @@ class EquipmentTableViewController: UITableViewController {
     var rightBarButtonItems: UIBarButtonItem?
     var canEditFlag = true
     var observer: NSObjectProtocol?
+    var needRefreshDataFlag = false
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections

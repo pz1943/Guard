@@ -21,7 +21,6 @@ class EquipmentAddTableViewController: UITableViewController {
         if let equipmentName = equipmentNameTextField.text {
             if equipmentName != "" && equipmentType != nil {
                 EQDB?.addEquipment(equipmentName,equipmentType: equipmentType!, roomID: self.room!.ID, roomName: self.room!.name)
-                NSNotificationCenter.defaultCenter().postNotificationName("EquipmentTableNeedRefreshNotification", object: nil)
                 self.performSegueWithIdentifier("newEquipmentGotSegue", sender: self)
             }
         }
@@ -106,17 +105,19 @@ class EquipmentAddTableViewController: UITableViewController {
     return true
     }
     */
-    /*
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "newEquipmentGotSegue" {
+            if let DVC = segue.destinationViewController as? EquipmentTableViewController {
+                DVC.needRefreshDataFlag = true
+            }
+        }
     }
-*/
     @IBAction func backToEquipmentAddTable(segue: UIStoryboardSegue) {
         if segue.identifier == "backToEquipmentAddSegue" {
             self.equipmentTypeLabel.text = self.equipmentType
-        }
+        } 
     }
-    
 }

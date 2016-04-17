@@ -19,10 +19,6 @@ class DelayHourDir {
         self.delayDir = DB.loadDelayHourDir(info,taskArray: taskArray)
     }
     
-    struct Constants {
-        static let defaultDelayHour: Double = 10
-    }
-    
     subscript(key: String) -> Double? {
         get {
             return delayDir[key]
@@ -83,6 +79,15 @@ class DelayDB {
         }
     }
     
+    func delDelayForEquipment(equipmentID: Int) {
+        let alice = DelayTable.filter(self.equipmentIDExpression == equipmentID)
+        do {
+            try db.run(alice.delete())
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
     func loadDelayHourDir(info: EquipmentInfo, taskArray: [InspectionTask]) -> [String: Double] {
         let filter = DelayTable.filter(self.equipmentIDExpression == info.ID)
         let rows = Array(try! db.prepare(filter))
@@ -93,8 +98,8 @@ class DelayDB {
             }
         } else {
             for task in taskArray {
-                addDelayForEquipment(info.ID, inspectionTask: task.inspectionTaskName, hours: 8)
-                delayDir[task.inspectionTaskName] = 8
+                addDelayForEquipment(info.ID, inspectionTask: task.inspectionTaskName, hours: Constants.defaultDelayHour)
+                delayDir[task.inspectionTaskName] = Constants.defaultDelayHour
             }
         }
         return delayDir

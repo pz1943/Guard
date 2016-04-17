@@ -171,7 +171,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         case 1:
             return "  设备图片"
         case 2:
-            return "  维护周期"
+            return "  维护时限"
         case 3:
             return "  工作记录"
         default:
