@@ -31,6 +31,12 @@ class Room {
         self.ID = roomID
     }
     
+    func deleteFromDB() {
+        for equipment in equipmentsArray {
+            equipment.removeFromDB()
+        }
+        RoomDB().delRoom(self.ID)
+    }
 }
 
 class RoomDB {

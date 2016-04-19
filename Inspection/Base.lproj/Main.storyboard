@@ -208,7 +208,7 @@
                                                 <constraint firstAttribute="width" constant="95" id="rOh-UF-N9J"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                            <color key="textColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -348,12 +348,6 @@
                                     <action selector="login:" destination="8LQ-ws-zDV" eventType="touchUpInside" id="NyJ-xL-VIm"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="直接点击登录获取测试权限" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GCA-91-3mW">
-                                <rect key="frame" x="198" y="559" width="204" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -369,8 +363,6 @@
                             <constraint firstItem="trJ-B3-xHc" firstAttribute="leading" secondItem="dPp-LX-0xt" secondAttribute="leading" id="cQW-zv-0tu"/>
                             <constraint firstItem="brM-QW-5Qy" firstAttribute="centerY" secondItem="trJ-B3-xHc" secondAttribute="centerY" id="dSV-3H-N1A"/>
                             <constraint firstItem="brM-QW-5Qy" firstAttribute="leading" secondItem="A9m-zH-Hmm" secondAttribute="leading" id="gc4-uc-QyH"/>
-                            <constraint firstAttribute="bottom" secondItem="GCA-91-3mW" secondAttribute="bottom" constant="20" symbolic="YES" id="n2g-CO-Sry"/>
-                            <constraint firstItem="GCA-91-3mW" firstAttribute="centerX" secondItem="0YU-ci-8Am" secondAttribute="centerX" id="oUd-mr-14a"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="请登录" id="0Qi-VY-2Wc"/>

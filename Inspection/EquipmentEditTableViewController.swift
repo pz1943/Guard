@@ -33,11 +33,13 @@ class EquipmentEditTableViewController: UITableViewController {
         }
     }
     @IBAction func segueBack(sender: UIBarButtonItem) {
+        //TODO: shouldn't save edit when cancel
         self.tableView.reloadData()
         self.performSegueWithIdentifier("backToDetail", sender: self)
     }
     @IBAction func editDone(sender: UIBarButtonItem) {
         self.tableView.reloadData()
+        self.performSegueWithIdentifier("backToDetail", sender: self)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -19,6 +19,19 @@ class LoginViewController: UIViewController {
         for room in rooms {
             let _ = room.isInspectionDone
         }
+        initDelayDB()
+    }
+    
+    func initDelayDB() {
+        let DB = DelayDB()
+        let defaultDelayHours = 10.0
+        for room in rooms {
+            for equipment in room.equipmentsArray {
+                for task in equipment.inspectionTaskArray {
+                    DB.addDelayForEquipment(equipment.info.ID, inspectionTask: task.inspectionTaskName, hours: defaultDelayHours)
+                }
+            }
+        }
     }
 
     @IBOutlet weak var userNameTextField: UITextField!

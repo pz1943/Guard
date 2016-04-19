@@ -103,8 +103,19 @@ class InspectionTaskDB {
             t.column(equipmentTypeExpression)
             t.column(inspectionCycleExpression)
             })
+        
+        if db.scalar(inspectionTaskTable.count) == 0 {
+            initTaskDBData()
+        }
     }
     
+    
+    func initTaskDBData() {
+        for taskInArray in Constants.InspectionTaskDataArray {
+            let task = InspectionTask(equipmentType: taskInArray[1] as! String, inspectionTaskName: taskInArray[0] as! String, inspectionCycle: taskInArray[2] as! Double)
+            addInspectionTask(task)
+        }
+    }
     func loadInspectionTaskDir() -> [String: [InspectionTask]] {
         let rows = Array(try! db.prepare(inspectionTaskTable))
         var inspectionTaskDir: [String: [InspectionTask]] = [: ]
@@ -122,11 +133,11 @@ class InspectionTaskDB {
         return inspectionTaskDir
     }
     
-    func addInspectionTask(type: InspectionTask) -> Bool {
+    func addInspectionTask(task: InspectionTask) -> Bool {
         let insert = inspectionTaskTable.insert(
-            self.inspectionTaskNameExpression <- type.inspectionTaskName,
-            self.equipmentTypeExpression <- type.equipmentType,
-            self.inspectionCycleExpression <- type.inspectionCycle
+            self.inspectionTaskNameExpression <- task.inspectionTaskName,
+            self.equipmentTypeExpression <- task.equipmentType,
+            self.inspectionCycleExpression <- task.inspectionCycle
         )
         do {
             try db.run(insert)

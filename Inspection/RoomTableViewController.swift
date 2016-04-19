@@ -24,11 +24,11 @@ class RoomTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         observer = NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) {
-            [weak self]  (notification) -> Void in
-            self?.DB.reload()
-            if let roomArray = self?.loadRoomArray() {
-                self?.rooms = roomArray
-            }
+            [unowned self]  (notification) -> Void in
+            self.DB.reload()
+            let roomArray = self.loadRoomArray()
+            self.rooms = roomArray
+            self.tableView.reloadData()
         }
         loadForUser(user)
         tableView.reloadData()
@@ -143,7 +143,7 @@ class RoomTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            DB.delRoom(rooms[indexPath.row].ID)
+            rooms[indexPath.row].deleteFromDB()
             rooms.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
