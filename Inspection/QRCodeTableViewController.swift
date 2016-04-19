@@ -32,9 +32,7 @@ class QRCodeRecordTableViewController: UITableViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "getNewMessage:", name: "newRecordGotNotification", object: nil)
 
     }
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
+
     @IBAction func backGroundPressed(sender: UITapGestureRecognizer) {
         message = textFieldCell?.recordTextField.text
         textFieldCell?.recordTextField.resignFirstResponder()
@@ -183,6 +181,8 @@ class QRCodeRecordTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "QRDone" {
+            message = textFieldCell?.recordTextField.text
+            textFieldCell?.recordTextField.resignFirstResponder()
             equipment?.records.addRecord(record!)
         }
     }
