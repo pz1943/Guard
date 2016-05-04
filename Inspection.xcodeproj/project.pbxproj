@@ -11,7 +11,6 @@
 		1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843F2571C49EFB4002BB69A /* Equipment.swift */; };
 		184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184616871C49DEE00047E3EE /* ImageViewController.swift */; };
 		186659501CB3D9BB0077F8E4 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1866594F1CB3D9BB0077F8E4 /* LICENSE */; };
-		1867AEAD1CC33BA400D19C54 /* InspectionTaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1867AEAC1CC33BA400D19C54 /* InspectionTaskData.swift */; };
 		187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */; };
 		187BA6A31C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */; };
 		187C699F1CB93B2800D69375 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187C699E1CB93B2800D69375 /* SettingTableViewController.swift */; };
@@ -31,6 +30,7 @@
 		18933E6D1C47DA5200357F74 /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E641C47DA5200357F74 /* RoomTableViewCell.swift */; };
 		18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E651C47DA5200357F74 /* RoomTableViewController.swift */; };
 		18933E741C47F0B500357F74 /* EquipmentDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */; };
+		189941561CD8ECE400AF6C8E /* AccountTypeSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189941551CD8ECE400AF6C8E /* AccountTypeSelectViewController.swift */; };
 		18B2F32B1C88669C00BAF776 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B2F32A1C88669C00BAF776 /* RootViewController.swift */; };
 		18C59C771C8C79C000CA1428 /* RoomAddTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C761C8C79C000CA1428 /* RoomAddTableViewController.swift */; };
 		18C59C791C8C7A9900CA1428 /* RoomAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C781C8C7A9900CA1428 /* RoomAddTableViewCell.swift */; };
@@ -39,10 +39,12 @@
 		18C59C811C8F05DC00CA1428 /* EquipmentAddTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */; };
 		18C59C831C8F15E300CA1428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C821C8F15E300CA1428 /* User.swift */; };
 		18C59C8B1C8F249B00CA1428 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */; };
+		18D4AA421CDA3FB8001A956F /* AccountRegistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D4AA411CDA3FB8001A956F /* AccountRegistViewController.swift */; };
 		18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E42D631C512BDA004A9015 /* QRCodeViewController.swift */; };
 		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
 		18F89F721C96EE1900F0F054 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F89F711C96EE1900F0F054 /* Room.swift */; };
 		18F89F741C99B57D00F0F054 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F89F731C99B57D00F0F054 /* Record.swift */; };
+		18FB39821CCC613A0059C1B6 /* Regist.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18FB39811CCC613A0059C1B6 /* Regist.storyboard */; };
 		4904247C1CBE20C300F78155 /* 加载图片.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4904247B1CBE20C300F78155 /* 加载图片.jpg */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
@@ -76,7 +78,6 @@
 		1843F2571C49EFB4002BB69A /* Equipment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Equipment.swift; sourceTree = "<group>"; };
 		184616871C49DEE00047E3EE /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		1866594F1CB3D9BB0077F8E4 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		1867AEAC1CC33BA400D19C54 /* InspectionTaskData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionTaskData.swift; sourceTree = "<group>"; };
 		187BA6A01C4BD858000D1729 /* EquipmentEditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentEditTableViewController.swift; sourceTree = "<group>"; };
 		187BA6A21C4BDDB0000D1729 /* EquipmentEditTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentEditTableViewCell.swift; sourceTree = "<group>"; };
 		187C699E1CB93B2800D69375 /* SettingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +103,7 @@
 		18933E641C47DA5200357F74 /* RoomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
 		18933E651C47DA5200357F74 /* RoomTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTableViewController.swift; sourceTree = "<group>"; };
 		18933E731C47F0B500357F74 /* EquipmentDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentDetailTableViewController.swift; sourceTree = "<group>"; };
+		189941551CD8ECE400AF6C8E /* AccountTypeSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTypeSelectViewController.swift; sourceTree = "<group>"; };
 		189F5E161CB6B0F500AE4BED /* db.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = db.sqlite3; sourceTree = "<group>"; };
 		18B2F32A1C88669C00BAF776 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		18C59C761C8C79C000CA1428 /* RoomAddTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomAddTableViewController.swift; sourceTree = "<group>"; };
@@ -111,10 +113,12 @@
 		18C59C801C8F05DC00CA1428 /* EquipmentAddTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentAddTableViewController.swift; sourceTree = "<group>"; };
 		18C59C821C8F15E300CA1428 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		18D4AA411CDA3FB8001A956F /* AccountRegistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountRegistViewController.swift; sourceTree = "<group>"; };
 		18E42D631C512BDA004A9015 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectionCycleTableViewController.swift; sourceTree = "<group>"; };
 		18F89F711C96EE1900F0F054 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		18F89F731C99B57D00F0F054 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		18FB39811CCC613A0059C1B6 /* Regist.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Regist.storyboard; sourceTree = "<group>"; };
 		4904247B1CBE20C300F78155 /* 加载图片.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "加载图片.jpg"; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 		18933E2B1C47D8E100357F74 /* Inspection */ = {
 			isa = PBXGroup;
 			children = (
+				18FB39811CCC613A0059C1B6 /* Regist.storyboard */,
 				18933E301C47D8E100357F74 /* Main.storyboard */,
 				187C69A01CB93C9A00D69375 /* Equipment.storyboard */,
 				18933E6F1C47DAC200357F74 /* Model */,
@@ -217,7 +222,6 @@
 				18F89F711C96EE1900F0F054 /* Room.swift */,
 				18C59C821C8F15E300CA1428 /* User.swift */,
 				188D0F081CBD39A6006F93D6 /* Constants.swift */,
-				1867AEAC1CC33BA400D19C54 /* InspectionTaskData.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -240,6 +244,7 @@
 		18933E711C47DAED00357F74 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				189941571CD8ECF100AF6C8E /* Regist */,
 				18B2F32A1C88669C00BAF776 /* RootViewController.swift */,
 				49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */,
 				18E42D631C512BDA004A9015 /* QRCodeViewController.swift */,
@@ -272,6 +277,15 @@
 				18933E331C47D8E100357F74 /* Inspection.xcdatamodeld */,
 			);
 			name = "Support Files";
+			sourceTree = "<group>";
+		};
+		189941571CD8ECF100AF6C8E /* Regist */ = {
+			isa = PBXGroup;
+			children = (
+				189941551CD8ECE400AF6C8E /* AccountTypeSelectViewController.swift */,
+				18D4AA411CDA3FB8001A956F /* AccountRegistViewController.swift */,
+			);
+			name = Regist;
 			sourceTree = "<group>";
 		};
 		57A0A0FEC17C57A658810F2F /* Frameworks */ = {
@@ -407,6 +421,7 @@
 				49AB8C7E1CA4DCC500D93EA5 /* .gitignore in Resources */,
 				181483681CBA679F006714AD /* LS.storyboard in Resources */,
 				18933E371C47D8E100357F74 /* Assets.xcassets in Resources */,
+				18FB39821CCC613A0059C1B6 /* Regist.storyboard in Resources */,
 				18933E321C47D8E100357F74 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -486,11 +501,11 @@
 				18F89F721C96EE1900F0F054 /* Room.swift in Sources */,
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
 				18F89F741C99B57D00F0F054 /* Record.swift in Sources */,
-				1867AEAD1CC33BA400D19C54 /* InspectionTaskData.swift in Sources */,
 				492D1C9B1CB3A3750061C2A3 /* InspectionDelay.swift in Sources */,
 				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
 				18E42D641C512BDA004A9015 /* QRCodeViewController.swift in Sources */,
 				18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */,
+				189941561CD8ECE400AF6C8E /* AccountTypeSelectViewController.swift in Sources */,
 				18933E351C47D8E100357F74 /* Inspection.xcdatamodeld in Sources */,
 				1843F2581C49EFB4002BB69A /* Equipment.swift in Sources */,
 				18C59C7D1C8DB38900CA1428 /* EquipmentAddTableViewCell.swift in Sources */,
@@ -512,6 +527,7 @@
 				184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */,
 				18933E681C47DA5200357F74 /* EquipmentDetailTableViewCell.swift in Sources */,
 				49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */,
+				18D4AA421CDA3FB8001A956F /* AccountRegistViewController.swift in Sources */,
 				499B40A81C62E08700FD6425 /* Inspection.swift in Sources */,
 				18C59C771C8C79C000CA1428 /* RoomAddTableViewController.swift in Sources */,
 			);
