@@ -11,8 +11,9 @@ import Foundation
 class User {
     
     enum UserPermission {
-        case defaultUser
+        case daily
         case admin
+        case test
     }
     
     var name: String
@@ -29,9 +30,9 @@ class User {
 class UserCenter {
     static var userDB: [User] = [
         User(userName: "test", userPassWord: "test", authorty: .admin),
-        User(userName: "default", userPassWord: "default", authorty: .defaultUser),
-        User(userName: "乔鑫磊", userPassWord: "", authorty: .defaultUser),
-        User(userName: "王建宁", userPassWord: "", authorty: .defaultUser),
+        User(userName: "default", userPassWord: "default", authorty: .daily),
+        User(userName: "乔鑫磊", userPassWord: "", authorty: .daily),
+        User(userName: "王建宁", userPassWord: "", authorty: .daily),
         User(userName: "admin", userPassWord: "admin", authorty: .admin)
     ]
     

@@ -26,6 +26,14 @@
             </objects>
             <point key="canvasLocation" x="1935" y="2418"/>
         </scene>
+        <!--Regist-->
+        <scene sceneID="ZQt-PR-2xP">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Regist" id="4un-1R-Xw2" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ezw-R2-eei" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1111.5" y="1929"/>
+        </scene>
         <!--Equipment-->
         <scene sceneID="slW-dj-HcI">
             <objects>
@@ -34,7 +42,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LK2-MU-26T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1606.5" y="1671"/>
+            <point key="canvasLocation" x="1684" y="1852"/>
         </scene>
         <!--设置-->
         <scene sceneID="ZxT-5X-iau">
@@ -341,8 +349,25 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ff1-Ax-GKY">
+                                <rect key="frame" x="279" y="156" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="94b-4K-eWT"/>
+                                    <constraint firstAttribute="width" constant="42" id="Gr8-zv-Hak"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wKu-vf-dVd">
+                                <rect key="frame" x="219" y="156" width="45" height="30"/>
+                                <state key="normal" title="新用户"/>
+                                <connections>
+                                    <segue destination="4un-1R-Xw2" kind="show" id="eb9-Wd-L1G"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0YU-ci-8Am">
-                                <rect key="frame" x="285" y="156" width="30" height="30"/>
+                                <rect key="frame" x="336" y="156" width="30" height="30"/>
                                 <state key="normal" title="登录"/>
                                 <connections>
                                     <action selector="login:" destination="8LQ-ws-zDV" eventType="touchUpInside" id="NyJ-xL-VIm"/>
@@ -353,16 +378,20 @@
                         <constraints>
                             <constraint firstItem="trJ-B3-xHc" firstAttribute="top" secondItem="dPp-LX-0xt" secondAttribute="bottom" constant="8" id="6Qw-UU-BJy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dPp-LX-0xt" secondAttribute="trailing" id="7RZ-cy-jfZ"/>
-                            <constraint firstItem="0YU-ci-8Am" firstAttribute="top" secondItem="trJ-B3-xHc" secondAttribute="bottom" constant="8" id="D7T-be-7BY"/>
                             <constraint firstItem="trJ-B3-xHc" firstAttribute="trailing" secondItem="dPp-LX-0xt" secondAttribute="trailing" id="GoS-KM-7m0"/>
                             <constraint firstItem="dPp-LX-0xt" firstAttribute="centerY" secondItem="A9m-zH-Hmm" secondAttribute="centerY" id="Kih-DL-yq0"/>
                             <constraint firstItem="dPp-LX-0xt" firstAttribute="top" secondItem="Umr-U5-AXD" secondAttribute="bottom" constant="16" id="KsT-JH-jLi"/>
+                            <constraint firstItem="wKu-vf-dVd" firstAttribute="top" secondItem="trJ-B3-xHc" secondAttribute="bottom" constant="8" id="MF1-LK-D4D"/>
+                            <constraint firstItem="0YU-ci-8Am" firstAttribute="leading" secondItem="Ff1-Ax-GKY" secondAttribute="trailing" constant="15" id="OcS-RZ-BKt"/>
                             <constraint firstAttribute="leadingMargin" secondItem="A9m-zH-Hmm" secondAttribute="leading" id="QYu-Jt-ets"/>
-                            <constraint firstItem="0YU-ci-8Am" firstAttribute="centerX" secondItem="NIl-5c-Z8V" secondAttribute="centerX" id="V69-Xc-gDO"/>
+                            <constraint firstItem="0YU-ci-8Am" firstAttribute="top" secondItem="trJ-B3-xHc" secondAttribute="bottom" constant="8" id="UBM-jC-sSY"/>
+                            <constraint firstItem="Ff1-Ax-GKY" firstAttribute="top" secondItem="trJ-B3-xHc" secondAttribute="bottom" constant="8" id="Uxu-to-mnG"/>
+                            <constraint firstItem="Ff1-Ax-GKY" firstAttribute="leading" secondItem="wKu-vf-dVd" secondAttribute="trailing" constant="15" id="V6K-q1-Mri"/>
                             <constraint firstItem="dPp-LX-0xt" firstAttribute="leading" secondItem="A9m-zH-Hmm" secondAttribute="trailing" constant="8" id="Z0I-6K-Y3x"/>
                             <constraint firstItem="trJ-B3-xHc" firstAttribute="leading" secondItem="dPp-LX-0xt" secondAttribute="leading" id="cQW-zv-0tu"/>
                             <constraint firstItem="brM-QW-5Qy" firstAttribute="centerY" secondItem="trJ-B3-xHc" secondAttribute="centerY" id="dSV-3H-N1A"/>
                             <constraint firstItem="brM-QW-5Qy" firstAttribute="leading" secondItem="A9m-zH-Hmm" secondAttribute="leading" id="gc4-uc-QyH"/>
+                            <constraint firstItem="Ff1-Ax-GKY" firstAttribute="centerX" secondItem="NIl-5c-Z8V" secondAttribute="centerX" id="lOE-Yu-fIe"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="请登录" id="0Qi-VY-2Wc"/>
