@@ -9,9 +9,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-
-
- //
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,7 +24,7 @@
 
 public protocol ExpressionType : Expressible { // extensions cannot have inheritance clauses
 
-    typealias UnderlyingType = Void
+    associatedtype UnderlyingType = Void
 
     var template: String { get }
     var bindings: [Binding?] { get }
@@ -77,7 +78,15 @@ extension Expressible {
         let expressed = expression
         var idx = 0
         return expressed.template.characters.reduce("") { template, character in
-            return template + (character == "?" ? transcode(expressed.bindings[idx++]) : String(character))
+            let transcoded: String
+            
+            if character == "?" {
+                transcoded = transcode(expressed.bindings[idx])
+                idx += 1
+            } else {
+                transcoded = String(character)
+            }
+            return template + transcoded
         }
     }
 
@@ -129,10 +138,10 @@ extension Value {
 
 public let rowid = Expression<Int64>("ROWID")
 
-public func cast<T: Value, U: Value>(expression: Expression<T>) -> Expression<U> {
+public func cast<T: Value, U: Value>(_ expression: Expression<T>) -> Expression<U> {
     return Expression("CAST (\(expression.template) AS \(U.declaredDatatype))", expression.bindings)
 }
 
-public func cast<T: Value, U: Value>(expression: Expression<T?>) -> Expression<U?> {
+public func cast<T: Value, U: Value>(_ expression: Expression<T?>) -> Expression<U?> {
     return Expression("CAST (\(expression.template) AS \(U.declaredDatatype))", expression.bindings)
 }

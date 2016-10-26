@@ -1,5 +1,5 @@
-source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
-
-pod 'SQLite.swift',git: 'https://github.com/stephencelis/SQLite.swift.git'
+target 'Inspection' do
+pod 'SQLite.swift', '~> 0.11.0'
+end
