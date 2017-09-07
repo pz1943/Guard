@@ -11,7 +11,7 @@ class DelayHourEditViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         if defaultTime != nil {
             datePicker.setDate(defaultTime!, animated: true)
@@ -34,7 +34,7 @@ class DelayHourEditViewController: UIViewController {
 //    var dateFormatter: NSDateFormatter?
     var equipment: Equipment?
     var task: InspectionTask?
-    var defaultTime: NSDate?
+    var defaultTime: Date?
     var timeCycle: Double?
     var delayHour: Double?
 
@@ -42,7 +42,7 @@ class DelayHourEditViewController: UIViewController {
     @IBOutlet weak var delayHourLabel: UILabel!
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "delayHourSetDone" {
             if task != nil {
                 equipment?.records.taskDelayToTime(datePicker.date, task: task!.inspectionTaskName)

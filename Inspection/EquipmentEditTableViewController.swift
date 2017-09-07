@@ -32,14 +32,14 @@ class EquipmentEditTableViewController: UITableViewController {
             }
         }
     }
-    @IBAction func segueBack(sender: UIBarButtonItem) {
+    @IBAction func segueBack(_ sender: UIBarButtonItem) {
         //TODO: shouldn't save edit when cancel
         self.tableView.reloadData()
-        self.performSegueWithIdentifier("backToDetail", sender: self)
+        self.performSegue(withIdentifier: "backToDetail", sender: self)
     }
-    @IBAction func editDone(sender: UIBarButtonItem) {
+    @IBAction func editDone(_ sender: UIBarButtonItem) {
         self.tableView.reloadData()
-        self.performSegueWithIdentifier("backToDetail", sender: self)
+        self.performSegue(withIdentifier: "backToDetail", sender: self)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -48,26 +48,26 @@ class EquipmentEditTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return equipmentDetail.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("equipmentEditCell", forIndexPath: indexPath) as! EquipmentEditTableViewCell
-        cell.titleLabel.text = equipmentDetail[indexPath.row].title
-        cell.infoTextField.text = equipmentDetail[indexPath.row].info
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "equipmentEditCell", for: indexPath) as! EquipmentEditTableViewCell
+        cell.titleLabel.text = equipmentDetail[(indexPath as NSIndexPath).row].title
+        cell.infoTextField.text = equipmentDetail[(indexPath as NSIndexPath).row].info
         cell.equipment = self.equipment
         return cell
     }
     
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
             return "  设备信息"
@@ -76,11 +76,11 @@ class EquipmentEditTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
 
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
     }
     

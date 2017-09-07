@@ -12,7 +12,7 @@ class InspectionCycleTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
 
         // Uncomment the following line to preserve selection between presentations
@@ -27,36 +27,40 @@ class InspectionCycleTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
     }
     
+    
+    @IBAction func backToInspectionCycleTable(_ segue: UIStoryboardSegue) {
+    
+    }
     var timeCycleDir = InspectionTaskDir()
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return timeCycleDir.equipmentTypeCount
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return timeCycleDir[section].count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("timeCycleCell", forIndexPath: indexPath) as! InspectionCycleTableViewCell
-        cell.typeLabel.text = timeCycleDir[indexPath.section][indexPath.row].inspectionTaskName
-        cell.timeCycelLabel.text = Int(timeCycleDir[indexPath.section][indexPath.row].inspectionCycle).description
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "timeCycleCell", for: indexPath) as! InspectionCycleTableViewCell
+        cell.typeLabel.text = timeCycleDir[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row].inspectionTaskName
+        cell.timeCycelLabel.text = Int(timeCycleDir[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row].inspectionCycle).description
         // Configure the cell...
 
         return cell
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return timeCycleDir.equipmentTypeArray[section]
     }
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
 
@@ -95,14 +99,13 @@ class InspectionCycleTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "equipment type edit" {
+            if let DVC = segue.destination as? EquipmentTypeEditTableViewController {
+                DVC.equipmentTypes = timeCycleDir.equipmentTypeArray
+            }
+        }
     }
-    */
 
 }

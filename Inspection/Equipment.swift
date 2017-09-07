@@ -89,10 +89,10 @@ class Equipment {
         DelayDB().delDelayForEquipment(info.ID)
     }
     
-    var imageAbsoluteFilePath: NSURL? {
+    var imageAbsoluteFilePath: URL? {
         get {
             if info.imageName != nil {
-                return NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(info.imageName!)
+                return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(info.imageName!)
             } else {
                 return nil
             }
@@ -133,9 +133,9 @@ struct EquipmentDetailArrayWithTitle {
         editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQCommissionTime, info: info.commissionTime))
         editableDetailArray.append(EquipmentDetail(title: ExpressionTitle.EQSN, info: info.SN))
         allDetailArray = editableDetailArray
-        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.RoomName, info: "\(info.roomName)"), atIndex: 1)
-        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.EQType, info: "\(info.type)"), atIndex: 1)
-        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.EQID, info: "\(info.ID)"), atIndex: 1)
+        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.RoomName, info: "\(info.roomName)"), at: 1)
+        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.EQType, info: "\(info.type)"), at: 1)
+        allDetailArray.insert(EquipmentDetail(title: ExpressionTitle.EQID, info: "\(info.ID)"), at: 1)
     }
     var count: Int {
         get {
@@ -177,23 +177,23 @@ struct EquipmentBrief {
 }
 
 class EquipmentDB {
-    private var db: Connection
-    private var equipmentTable: Table
+    fileprivate var db: Connection
+    fileprivate var equipmentTable: Table
     
-    private let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
-    private let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
-    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
-    private let equipmentNameExpression = Expression<String>(ExpressionTitle.EQName.description)
-    private let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
-    private let equipmentBrandExpression = Expression<String?>(ExpressionTitle.EQBrand.description)
-    private let equipmentModelExpression = Expression<String?>(ExpressionTitle.EQModel.description)
-    private let equipmentCapacityExpression = Expression<String?>(ExpressionTitle.EQCapacity.description)
-    private let equipmentCommissionTimeExpression = Expression<String?>(ExpressionTitle.EQCommissionTime.description)
-    private let equipmentSNExpression = Expression<String?>(ExpressionTitle.EQSN.description)
-    private let equipmentImageNameExpression = Expression<String?>(ExpressionTitle.EQImageName.description)
+    fileprivate let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
+    fileprivate let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
+    fileprivate let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    fileprivate let equipmentNameExpression = Expression<String>(ExpressionTitle.EQName.description)
+    fileprivate let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
+    fileprivate let equipmentBrandExpression = Expression<String?>(ExpressionTitle.EQBrand.description)
+    fileprivate let equipmentModelExpression = Expression<String?>(ExpressionTitle.EQModel.description)
+    fileprivate let equipmentCapacityExpression = Expression<String?>(ExpressionTitle.EQCapacity.description)
+    fileprivate let equipmentCommissionTimeExpression = Expression<String?>(ExpressionTitle.EQCommissionTime.description)
+    fileprivate let equipmentSNExpression = Expression<String?>(ExpressionTitle.EQSN.description)
+    fileprivate let equipmentImageNameExpression = Expression<String?>(ExpressionTitle.EQImageName.description)
     
     init() {
-        self.db = DBModel.sharedInstance().getDB()
+        self.db = DBModel.sharedInstance.getDB()
         self.equipmentTable = Table("equipmentTable")
         
         try! db.run(equipmentTable.create(ifNotExists: true) { t in
@@ -211,28 +211,28 @@ class EquipmentDB {
             })
     }
     
-    func addEquipment(equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {
+    func addEquipment(_ equipmentName: String, equipmentType: String, roomID: Int, roomName: String) {
         let insert = equipmentTable.insert(
             self.equipmentNameExpression <- equipmentName,
             self.equipmentTypeExpression <- equipmentType,
             self.roomIDExpression <- roomID,
             self.roomNameExpression <- roomName)
         do {
-            try db.run(insert)
+            _ = try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func delEquipment(equipmentToDel: Int) {
+    func delEquipment(_ equipmentToDel: Int) {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentToDel)
         do {
-            try db.run(alice.delete())
+            _ = try db.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
     }
-    func loadEquipmentTable(roomID: Int) -> [EquipmentInfo]{
+    func loadEquipmentTable(_ roomID: Int) -> [EquipmentInfo]{
         let rows = Array(try! db.prepare(equipmentTable.filter(self.roomIDExpression == roomID)))
         var info: [EquipmentInfo] = [ ]
         for row in rows {
@@ -253,7 +253,7 @@ class EquipmentDB {
         return info
     }
     
-    func loadEquipmentInfo(equipmentID: Int) -> EquipmentInfo? {
+    func loadEquipmentInfo(_ equipmentID: Int) -> EquipmentInfo? {
         let row = Array(try! db.prepare(equipmentTable.filter(self.equipmentIDExpression == equipmentID))).first
         if let name =  row?[equipmentNameExpression] {
             let EQType = row?[equipmentTypeExpression]
@@ -272,24 +272,24 @@ class EquipmentDB {
         }
     }
     
-    func editEquipment(equipment: Equipment) {
+    func editEquipment(_ equipment: Equipment) {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipment.info.ID)
         for equipmentDetail in equipment.detailArray.editableDetailArray {
             do {
-                try db.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
+                _ = try db.run(alice.update(Expression<String>("\(equipmentDetail.title)") <- equipmentDetail.info))
             } catch let error as NSError {
                 print(error)
             }
         }
     }
     // to edit one singel Detail
-    func editEquipment(equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
+    func editEquipment(_ equipmentID: Int, equipmentDetailTitleString: String, newValue: String) {
         let alice = equipmentTable.filter(self.equipmentIDExpression == equipmentID)
         do {
             if equipmentDetailTitleString != ExpressionTitle.EQName.description {
-                try db.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
+                _ = try db.run(alice.update(Expression<String?>(equipmentDetailTitleString) <- newValue))
             } else {
-                try db.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
+                _ = try db.run(alice.update(Expression<String>(equipmentDetailTitleString) <- newValue))
             }
         } catch let error as NSError {
             print(error)

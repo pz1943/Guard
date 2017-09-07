@@ -28,10 +28,10 @@ class User {
 
 class UserCenter {
     static var userDB: [User] = [
-        User(userName: "test", userPassWord: "test", authorty: .admin),
+        User(userName: "", userPassWord: "", authorty: .admin),
         User(userName: "default", userPassWord: "default", authorty: .defaultUser),
         User(userName: "乔鑫磊", userPassWord: "", authorty: .defaultUser),
-        User(userName: "王建宁", userPassWord: "", authorty: .defaultUser),
+        User(userName: "王建宁", userPassWord: "0000", authorty: .defaultUser),
         User(userName: "admin", userPassWord: "admin", authorty: .admin)
     ]
     
@@ -48,7 +48,7 @@ class UserCenter {
 //    }
 //    
     
-    class func login(loginUserName: String, loginUserPSD: String) -> User? {
+    class func login(_ loginUserName: String, loginUserPSD: String) -> User? {
         for user in UserCenter.userDB {
             if loginUserName == user.name && loginUserPSD == user.passWord {
                 return user

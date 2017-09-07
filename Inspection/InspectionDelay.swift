@@ -11,9 +11,9 @@ import UIKit
 import SQLite
 
 class DelayHourDir {
-    private var delayDir: [String: Double] = [: ]
-    private var info: EquipmentInfo
-    private let DB = DelayDB()
+    fileprivate var delayDir: [String: Double] = [: ]
+    fileprivate var info: EquipmentInfo
+    fileprivate let DB = DelayDB()
     init(info: EquipmentInfo, taskArray: [InspectionTask]) {
         self.info = info
         self.delayDir = DB.loadDelayHourDir(info,taskArray: taskArray)
@@ -25,27 +25,27 @@ class DelayHourDir {
         }
     }
     
-    func editDelayHour(hours: Double, task: String) {
+    func editDelayHour(_ hours: Double, task: String) {
         DB.editDelayHourForEquipment(self.info.ID, inspectionTask: task, hours: hours)
         delayDir[task] = hours
     }
     
-    func setDefault(task: String) {
+    func setDefault(_ task: String) {
         editDelayHour(Constants.defaultDelayHour, task: task)
     }
 }
 
 class DelayDB {
-    private var db: Connection
-    private var DelayTable: Table
+    fileprivate var db: Connection
+    fileprivate var DelayTable: Table
     
-    private let delayIDExpression = Expression<Int>("DelayID")
-    private let delayHourExpression = Expression<Double>("DelayHour")
-    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
-    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    fileprivate let delayIDExpression = Expression<Int>("DelayID")
+    fileprivate let delayHourExpression = Expression<Double>("DelayHour")
+    fileprivate let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    fileprivate let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
     
     init() {
-        self.db = DBModel.sharedInstance().getDB()
+        self.db = DBModel.sharedInstance.getDB()
         self.DelayTable = Table("DelayTable")
         
         try! db.run(DelayTable.create(ifNotExists: true) { t in
@@ -56,39 +56,39 @@ class DelayDB {
             })
     }
     
-    func editDelayHourForEquipment(equipmentID: Int, inspectionTask: String, hours: Double) {
+    func editDelayHourForEquipment(_ equipmentID: Int, inspectionTask: String, hours: Double) {
         
         let alice = DelayTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
         do {
-            try db.run(alice.update(Expression<Double>(delayHourExpression) <- hours))
+            _ = try db.run(alice.update(Expression<Double>(delayHourExpression) <- hours))
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func addDelayForEquipment(equipmentID: Int, inspectionTask: String, hours: Double) {
+    func addDelayForEquipment(_ equipmentID: Int, inspectionTask: String, hours: Double) {
         let insert = DelayTable.insert(self.inspectionTaskNameExpression <- inspectionTask,
             self.equipmentIDExpression <- equipmentID,
             self.inspectionTaskNameExpression <- inspectionTask,
             self.delayHourExpression <- hours
         )
         do {
-            try db.run(insert)
+            _ = try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func delDelayForEquipment(equipmentID: Int) {
+    func delDelayForEquipment(_ equipmentID: Int) {
         let alice = DelayTable.filter(self.equipmentIDExpression == equipmentID)
         do {
-            try db.run(alice.delete())
+            _ = try db.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func loadDelayHourDir(info: EquipmentInfo, taskArray: [InspectionTask]) -> [String: Double] {
+    func loadDelayHourDir(_ info: EquipmentInfo, taskArray: [InspectionTask]) -> [String: Double] {
         let filter = DelayTable.filter(self.equipmentIDExpression == info.ID)
         let rows = Array(try! db.prepare(filter))
         var delayDir: [String: Double] = [: ]

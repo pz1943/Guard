@@ -15,26 +15,26 @@ struct Record {
             return recordID!
         }
     }
-    private var recordID: Int?
+    fileprivate var recordID: Int?
     var equipmentID: Int
-    var date: NSDate
+    var date: Date
     var taskType: String
     var recorder: String
     var message: String?
     //add a new Record
-    init(equipmentID: Int, task: String, recorder: String, recordData: String?, recordDate: NSDate?) {
+    init(equipmentID: Int, task: String, recorder: String, recordData: String?, recordDate: Date?) {
         self.equipmentID = equipmentID
         self.taskType = task
         self.message = recordData
         self.recorder = recorder
         if recordDate == nil {
-            self.date = NSDate()
+            self.date = Date()
         } else {
             self.date = recordDate!
         }
     }
     //load a exist record
-    init(recordID: Int, equipmentID: Int, date: NSDate, task: String, recorder: String, recordData: String?) {
+    init(recordID: Int, equipmentID: Int, date: Date, task: String, recorder: String, recordData: String?) {
         self.recordID = recordID
         self.equipmentID = equipmentID
         self.date = date
@@ -45,11 +45,11 @@ struct Record {
 }
 
 class RecordsForEquipment {
-    private var info: EquipmentInfo
-    private let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
-    private var inspectionTaskArray: [InspectionTask]
+    fileprivate var info: EquipmentInfo
+    fileprivate let inspectionTaskDir: InspectionTaskDir = InspectionTaskDir()
+    fileprivate var inspectionTaskArray: [InspectionTask]
     
-    private let DB = RecordDB()
+    fileprivate let DB = RecordDB()
     init(info: EquipmentInfo, taskArray: [InspectionTask]) {
         self.info = info
         self.inspectionTaskArray = taskArray
@@ -57,9 +57,9 @@ class RecordsForEquipment {
         self.recentRecoredsDir = getRecentRecords()
     }
     
-    private var recentRecoredsDir: [String: NSDate] = [: ]
-    private var recentNeedRefresh: Bool = true
-    var mostRecentRecordsDir: [String: NSDate] {
+    fileprivate var recentRecoredsDir: [String: Date] = [: ]
+    fileprivate var recentNeedRefresh: Bool = true
+    var mostRecentRecordsDir: [String: Date] {
         get {
             if recentNeedRefresh == true {
                 recentRecoredsDir = getRecentRecords()
@@ -69,8 +69,8 @@ class RecordsForEquipment {
         }
     }
     
-    private var completedFlagNeedRefresh: Bool = true
-    private var completedFlagCache: Bool = false
+    fileprivate var completedFlagNeedRefresh: Bool = true
+    fileprivate var completedFlagCache: Bool = false
     var completedFlag: Bool {
         if completedFlagNeedRefresh == true {
             completedFlagCache = isEquipmentCompleted()
@@ -81,9 +81,9 @@ class RecordsForEquipment {
         }
     }
 
-    private var delayHourDirCache: DelayHourDir
-    private var delayHourNeedRefreshFlag: Bool = false
-    private var delayHourDir: DelayHourDir {
+    fileprivate var delayHourDirCache: DelayHourDir
+    fileprivate var delayHourNeedRefreshFlag: Bool = false
+    fileprivate var delayHourDir: DelayHourDir {
         get {
             if delayHourNeedRefreshFlag == false {
                 return delayHourDirCache
@@ -95,8 +95,8 @@ class RecordsForEquipment {
         }
     }
     
-    private func getRecentRecords() -> [String: NSDate]{
-        var recent: [String: NSDate] = [: ]
+    fileprivate func getRecentRecords() -> [String: Date]{
+        var recent: [String: Date] = [: ]
         for type in inspectionTaskArray {
             if let record = DB.loadRecentTimeForType(info.ID, inspectionTask: type.inspectionTaskName) {
                 recent[type.inspectionTaskName] = record.date
@@ -105,7 +105,7 @@ class RecordsForEquipment {
         return recent
     }       
     
-    private func isEquipmentCompleted() -> Bool{
+    fileprivate func isEquipmentCompleted() -> Bool{
         for task in inspectionTaskArray {
             if CompletedForTask(task) == false {
                 return false
@@ -114,7 +114,7 @@ class RecordsForEquipment {
         return true
     }
     
-    private func CompletedForTask(inspectionTask: InspectionTask) -> Bool {
+    fileprivate func CompletedForTask(_ inspectionTask: InspectionTask) -> Bool {
         if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: inspectionTask.inspectionTaskName){
             if let date = mostRecentRecordsDir[inspectionTask.inspectionTaskName] {
                 if let delayHour = delayHourDir[inspectionTask.inspectionTaskName] {
@@ -134,81 +134,81 @@ class RecordsForEquipment {
         return DB.countForEQ(info.ID)
     }
     
-    func getTimeCycleForTask(task: String) -> Double? {
+    func getTimeCycleForTask(_ task: String) -> Double? {
         return inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task)
     }
     
-    func getDelayHourForTask(task: String) -> Double? {
+    func getDelayHourForTask(_ task: String) -> Double? {
         return delayHourDir[task]
     }
     
-    func isCompletedForTask(inspectionTask: InspectionTask) -> Bool {
+    func isCompletedForTask(_ inspectionTask: InspectionTask) -> Bool {
         return self.CompletedForTask(inspectionTask)
     }
     //new record comes first
-    func getRecord(index: Int) -> Record? {
-        print(index)
+    func getRecord(_ index: Int) -> Record? {
+//        print(index)
         return DB.loadRecordFromIndex(info.ID, index: count - 1 - index)
     }
     
-    func addRecord(record: Record) {
+    func addRecord(_ record: Record) {
         completedFlagNeedRefresh = true
         recentNeedRefresh = true
         delayHourDir.setDefault(record.taskType)
         DB.addRecord(record)
     }
     
-    func delRecord(record: Record) {
+    func delRecord(_ record: Record) {
         completedFlagNeedRefresh = true
         recentNeedRefresh = true
         self.delayHourDir.setDefault(record.taskType)
         DB.delRecord(record.ID)
     }
     
-    func taskDelayToTime(toTime: NSDate, task: String) {
+    func taskDelayToTime(_ toTime: Date, task: String) {
         completedFlagNeedRefresh = true
         if let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task){
             if let recentInspectionTime = recentRecoredsDir[task] {
-                let timeInterval = toTime.timeIntervalSinceDate(recentInspectionTime) as Double - timeCycle * 86400
+                let timeInterval = toTime.timeIntervalSince(recentInspectionTime) as Double - timeCycle * 86400
                 let delayHour = timeInterval / 3600
                 delayHourDir.editDelayHour(delayHour , task: task)
             } else {
                 if let delayHour = delayHourDir[task] {
                     let delaySeconds = Double(delayHour) * 3600.0
-                    let record = Record(equipmentID: self.info.ID, task: task, recorder: "system", recordData: "推迟巡检记录", recordDate: NSDate(timeInterval: -timeCycle * 86400 - delaySeconds, sinceDate: toTime))
+                    let record = Record(equipmentID: self.info.ID, task: task, recorder: "system", recordData: "推迟巡检记录", recordDate: Date(timeInterval: -timeCycle * 86400 - delaySeconds, since: toTime))
                     addRecord(record)
                 }
             }
         }
     }
     
-    func getExpectInspectionTime(task: String) -> NSDate?{
+    func getExpectInspectionTime(_ task: String) -> Date?{
         if let recentInspectionTime = recentRecoredsDir[task] {
             if let delayHour = delayHourDir[task] {
                 let timeCycle = inspectionTaskDir.getTimeCycleForEquipment(info.type, taskName: task) ?? 0
-                return NSDate(timeInterval: Double(delayHour) * 3600 + timeCycle * 86400 , sinceDate: recentInspectionTime)
+                return Date(timeInterval: Double(delayHour) * 3600 + timeCycle * 86400 , since: recentInspectionTime)
             }
         }
         return nil
     }
 }
 class RecordDB {
-    private var db: Connection
-    private var recordTable: Table
+    fileprivate var db: Connection
+    fileprivate var recordTable: Table
     
-    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
-    private let recordIDExpression = Expression<Int>(ExpressionTitle.RecordID.description)
-    private let recordMessageExpression = Expression<String?>(ExpressionTitle.RecordMessage.description)
-    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
-    private let recorderExpression = Expression<String>(ExpressionTitle.Recorder.description)
-    private let recordDateExpression = Expression<NSDate>(ExpressionTitle.RecordDate.description)
+    fileprivate let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    fileprivate let recordIDExpression = Expression<Int>(ExpressionTitle.RecordID.description)
+    fileprivate let recordMessageExpression = Expression<String?>(ExpressionTitle.RecordMessage.description)
+    fileprivate let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    fileprivate let recorderExpression = Expression<String>(ExpressionTitle.Recorder.description)
+    fileprivate let recordDateExpression = Expression<Date>(ExpressionTitle.RecordDate.description)
     
-    func countForEQ(equipmentID: Int) -> Int {
-        return self.db.scalar(recordTable.filter(self.equipmentIDExpression == equipmentID).count)
+    func countForEQ(_ equipmentID: Int) -> Int {
+        return try! self.db.scalar(recordTable.filter(self.equipmentIDExpression == equipmentID).count)
     }
     
     init() {
-        self.db = DBModel.sharedInstance().getDB()
+        self.db = DBModel.sharedInstance.getDB()
         self.recordTable = Table("recordTable")
         
         try! db.run(recordTable.create(ifNotExists: true) { t in
@@ -221,35 +221,35 @@ class RecordDB {
             })
     }
     
-    func addRecord(record: Record) {
+    func addRecord(_ record: Record) {
         let insert = recordTable.insert(self.recordMessageExpression <- record.message,
             self.inspectionTaskNameExpression <- record.taskType,
             self.equipmentIDExpression <- record.equipmentID,
             self.recorderExpression <- record.recorder,
             self.recordDateExpression <- record.date)
         do {
-            try db.run(insert)
+            _ = try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func delRecord(recordID: Int) {
+    func delRecord(_ recordID: Int) {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
         do {
-            try db.run(alice.delete())
+            _ = try db.run(alice.delete())
         } catch let error as NSError {
             print(error)
         }
     }
     //MARK: - low efficiency when records became more.
-    func loadRecordFromIndex(equipmentID: Int, index: Int) -> Record? {
+    func loadRecordFromIndex(_ equipmentID: Int, index: Int) -> Record? {
         let alice = recordTable.filter(self.equipmentIDExpression == equipmentID).limit(1, offset: index)
-        if let row = db.pluck(alice) {
+        if let row = try! db.pluck(alice) {
             return Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recorder: row[recorderExpression], recordData: row[recordMessageExpression])
         } else { return nil }
     }
-    func loadRecordFromRecordID(recordID: Int) -> Record {
+    func loadRecordFromRecordID(_ recordID: Int) -> Record {
         let alice = recordTable.filter(self.recordIDExpression == recordID)
         let row = Array(try! db.prepare(alice)).first!
         let record = Record(recordID: row[self.recordIDExpression], equipmentID: row[self.equipmentIDExpression], date: row[recordDateExpression], task: row[inspectionTaskNameExpression], recorder: row[recorderExpression], recordData: row[recordMessageExpression])
@@ -257,9 +257,9 @@ class RecordDB {
         
     }
     
-    func loadRecentTimeForType(equipmentID: Int, inspectionTask: String) -> Record? {
+    func loadRecentTimeForType(_ equipmentID: Int, inspectionTask: String) -> Record? {
         let alice = recordTable.filter(self.equipmentIDExpression == equipmentID && self.inspectionTaskNameExpression == inspectionTask)
-        if let lastRecordID = db.scalar(alice.select(recordIDExpression.max)) {
+        if let lastRecordID = try! db.scalar(alice.select(recordIDExpression.max)) {
             let record = loadRecordFromRecordID(lastRecordID)
             return record
         } else {

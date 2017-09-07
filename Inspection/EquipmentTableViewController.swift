@@ -13,10 +13,10 @@ class EquipmentTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         DB = EquipmentDB()
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
 
         if needRefreshDataFlag == true {
             self.selectRoom?.equipmentsArray = self.DB!.loadEquipmentTable(self.selectRoom!.ID).map({ (info) -> Equipment in
@@ -29,9 +29,9 @@ class EquipmentTableViewController: UITableViewController {
             refresh()
         }
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         if observer != nil {
-            NSNotificationCenter.defaultCenter().removeObserver(observer!)
+            NotificationCenter.default.removeObserver(observer!)
         }
     }
 
@@ -61,22 +61,22 @@ class EquipmentTableViewController: UITableViewController {
     var observer: NSObjectProtocol?
     var needRefreshDataFlag = false
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return equipmentArray.count
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("equipmentCell", forIndexPath: indexPath) as! EquipmentTableViewCell
-        cell.equipmentTitle.text = equipmentArray[indexPath.row].info.name
-        cell.equipment = equipmentArray[indexPath.row]
-        if equipmentArray[indexPath.row].inspectionDoneFlag == false {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "equipmentCell", for: indexPath) as! EquipmentTableViewCell
+        cell.equipmentTitle.text = equipmentArray[(indexPath as NSIndexPath).row].info.name
+        cell.equipment = equipmentArray[(indexPath as NSIndexPath).row]
+        if equipmentArray[(indexPath as NSIndexPath).row].inspectionDoneFlag == false {
             cell.DoneFlagImageView.alpha = 0.1
         } else {
             cell.DoneFlagImageView.alpha = 1
@@ -85,9 +85,9 @@ class EquipmentTableViewController: UITableViewController {
     }
     
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
-        if indexPath.section == 0 {
+        if (indexPath as NSIndexPath).section == 0 {
             return canEditFlag
         } else {
             return false
@@ -95,44 +95,44 @@ class EquipmentTableViewController: UITableViewController {
     }
     
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
             if selectRoom != nil {
-                DB?.delEquipment(equipmentArray[indexPath.row].info.ID)
-                self.selectRoom?.equipmentsArray.removeAtIndex(indexPath.row)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                DB?.delEquipment(equipmentArray[(indexPath as NSIndexPath).row].info.ID)
+                self.selectRoom?.equipmentsArray.remove(at: (indexPath as NSIndexPath).row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
             }
             //MARK: TODO add notification to del
         }
     }
     
-    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
     }
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "equipmentDetail" {
-            if let DVC = segue.destinationViewController as? EquipmentDetailTableViewController {
+            if let DVC = segue.destination as? EquipmentDetailTableViewController {
                 if let cell = sender as? EquipmentTableViewCell {
                     DVC.equipment = cell.equipment
                 }
             }
         } else if segue.identifier == "ToQRCodeSegue" {
-            if let DVC = segue.destinationViewController as? QRCodeForOneEquipmentViewController {
+            if let DVC = segue.destination as? QRCodeForOneEquipmentViewController {
                 if let equipment = (sender as? EquipmentTableViewCell)?.equipment {
                     DVC.equipment = equipment
                 }
             }
         } else if segue.identifier == "AddEquipmentSegue" {
-            if let DVC = segue.destinationViewController as? EquipmentAddTableViewController {
+            if let DVC = segue.destination as? EquipmentAddTableViewController {
                 DVC.room = self.selectRoom
             }
         }
     }
     
-    @IBAction func backToEquipmentTable(segue: UIStoryboardSegue) {
+    @IBAction func backToEquipmentTable(_ segue: UIStoryboardSegue) {
 
     }
 }

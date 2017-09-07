@@ -11,7 +11,7 @@ import UIKit
 
 struct Constants {
     static var NavColor = UIColor(red: 0/255, green: 101/255, blue: 105/255, alpha: 1)
-    static var GrayColor = UIColor.groupTableViewBackgroundColor()    
+    static var GrayColor = UIColor.groupTableViewBackground    
     static let defaultDelayHour: Double = 10
 
     static let InspectionTaskDataArray = [

@@ -15,21 +15,20 @@ class EquipmentAddTableViewCell: UITableViewCell, UITextFieldDelegate {
         // Initialization code
     }
 
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoTextField: UITextField!
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         infoTextField.resignFirstResponder()
         return true
     }
-    
-    func textFieldDidEndEditing(textField: UITextField) {
-        if let newText = textField.text {
-            NSNotificationCenter.defaultCenter().postNotificationName("newEquipmentInfoGotNotification", object: nil, userInfo: [titleLabel.text!: newText])
-        }
-    }
+//    
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        if let newText = textField.text {
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "newEquipmentInfoGotNotification"), object: nil, userInfo: [titleLabel.text!: newText])
+//        }
+//    }
 }

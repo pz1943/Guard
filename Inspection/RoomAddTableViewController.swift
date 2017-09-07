@@ -18,51 +18,37 @@ class RoomAddTableViewController: UITableViewController {
         
     }
 
-    func newNameGot(notification: NSNotification) {
-        if let newRoomName = notification.userInfo?["newRoomName"] as? String {
-            for room in roomsArray {
-                if room.name == newRoomName {
-                    return
-                }
-            }
-            roomDB?.addRoom(newRoomName)
-            NSNotificationCenter.defaultCenter().postNotificationName("RoomTableNeedRefreshNotification", object: nil)
-        }
-    }
+    @IBOutlet weak var roomNameTextField: UITextField!
     
-
-    override func viewDidDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-
-    }
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "newNameGot:", name: "newRoomNameGotNotification", object: nil)
+    @IBAction func roomAddDone(_ sender: UIBarButtonItem) {
+        if let roomName = roomNameTextField.text {
+            if roomName != "" {
+                roomDB?.addRoom(roomName)
+                self.performSegue(withIdentifier: "newRoomGotSegue", sender: self)
+            }
+        }
     }
 
     var roomDB: RoomDB?
     var roomsArray: [Room] = []
+
     // MARK: - Table view data source
     
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return nil
+    }    
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+/*    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 1
     }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("roomAddCell", forIndexPath: indexPath) as! RoomAddTableViewCell
-        cell.titleLabel.text = "新机房名称"
-        return cell
-    }    
 
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        return nil
-    }
+
     
     /*
     // Override to support rearranging the table view.
@@ -78,12 +64,17 @@ class RoomAddTableViewController: UITableViewController {
         return true
     }
     */
+ */
 
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-            
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "newRoomGotSegue" {
+            if let DVC = segue.destination as? RoomTableViewController {
+                DVC.roomTableNeedRefreshFlag = true
+            }
+        }
     }
 
 }

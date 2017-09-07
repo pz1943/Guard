@@ -14,7 +14,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "setDelayHourSegue:"))
+        self.tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(EquipmentDetailTableViewController.setDelayHourSegue(_:))))
         if let roomVC = self.navigationController?.viewControllers[0] as? RoomTableViewController {
             if let rootVC = roomVC.tabBarController as? RootViewController {
                 self.user = rootVC.user
@@ -22,18 +22,18 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         }
     }
 
-    func setDelayHourSegue(sender: UILongPressGestureRecognizer) {
-        if sender.state == UIGestureRecognizerState.Began {
-            let point = sender.locationInView(self.tableView)
-            indexPathForlongPressed = self.tableView.indexPathForRowAtPoint(point)
-            if indexPathForlongPressed?.section == 2 {
-                self.performSegueWithIdentifier("editDelayHourSegue", sender: self)
+    func setDelayHourSegue(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.began {
+            let point = sender.location(in: self.tableView)
+            indexPathForlongPressed = self.tableView.indexPathForRow(at: point)
+            if (indexPathForlongPressed as IndexPath?)?.section == 2 {
+                self.performSegue(withIdentifier: "editDelayHourSegue", sender: self)
             }
         }
     }
 
-    override func viewWillAppear(animated: Bool) {
-        observer = center.addObserverForName("needANewPhotoNotification", object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+    override func viewWillAppear(_ animated: Bool) {
+        observer = center.addObserver(forName: Notification.Name(rawValue: "needANewPhotoNotification"), object: nil, queue: OperationQueue.main) { (notification) -> Void in
             self.takeANewPhoto()
         }
         if equipment != nil {
@@ -44,7 +44,7 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         }
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         if observer != nil {
             center.removeObserver(observer!)
         }
@@ -52,32 +52,32 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
     
     var user: User?
     var observer: NSObjectProtocol?
-    var center: NSNotificationCenter = NSNotificationCenter.defaultCenter()
+    var center: NotificationCenter = NotificationCenter.default
     var equipment: Equipment?
     var equipmentDetail: EquipmentDetailArrayWithTitle?
     var inspectionTaskArray: [InspectionTask] = []
-    var indexPathForlongPressed: NSIndexPath?
+    var indexPathForlongPressed: IndexPath?
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        picker.dismiss(animated: true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            let fileName = "/\(equipment?.info.roomName)\(equipment?.info.name)(room\(equipment?.info.roomID)ID\(equipment?.info.ID))"
-            if let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent(fileName).path {
-                let jpg = UIImageJPEGRepresentation(image, 0.5)
-                jpg?.writeToFile(path, atomically: true)
-                EquipmentDB().editEquipment(self.equipment!.info.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
-            }
+            let fileName = "/\(String(describing: equipment?.info.roomName))\(String(describing: equipment?.info.name))(room\(String(describing: equipment?.info.roomID))ID\(String(describing: equipment?.info.ID)))"
+            let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName).path
+            let jpg = UIImageJPEGRepresentation(image, 0.5)
+            try? jpg?.write(to: URL(fileURLWithPath: path), options: [.atomic])
+            EquipmentDB().editEquipment(self.equipment!.info.ID, equipmentDetailTitleString: "图片名称", newValue: fileName)
+            
         }
     }
 
     func takeANewPhoto() {
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
-            if let _ = UIImagePickerController.availableMediaTypesForSourceType(UIImagePickerControllerSourceType.Camera)?.contains("public.image") {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            if let _ = UIImagePickerController.availableMediaTypes(for: UIImagePickerControllerSourceType.camera)?.contains("public.image") {
                 let imagePicker = UIImagePickerController()
-                imagePicker.sourceType = .Camera
+                imagePicker.sourceType = .camera
                 imagePicker.mediaTypes = ["public.image"]
                 imagePicker.delegate = self
-                self.presentViewController(imagePicker, animated: false, completion: nil)
+                self.present(imagePicker, animated: false, completion: nil)
             }
         }
     }
@@ -85,11 +85,11 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if equipment != nil {
             switch section {
             case 0:
@@ -106,50 +106,50 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         } else { return 0}
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        switch indexPath.section {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            cell.equipmentInfoTitleLabel.text = equipmentDetail![indexPath.row].title
-            cell.equipmentInfoContentLabel.text = equipmentDetail![indexPath.row].info ?? "暂无"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "equipmentInfoCell", for: indexPath) as! EquipmentDetailTableViewCell
+            cell.equipmentInfoTitleLabel.text = equipmentDetail![(indexPath as NSIndexPath).row].title
+            cell.equipmentInfoContentLabel.text = equipmentDetail![(indexPath as NSIndexPath).row].info
             return cell
             
         case 1:
-            var cell = tableView.dequeueReusableCellWithIdentifier("equipmentImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+            var cell = tableView.dequeueReusableCell(withIdentifier: "equipmentImageCell", for: indexPath) as! EquipmentDetailTableViewCell
             if equipment?.info.imageName != nil {
-                if let data = NSData(contentsOfURL: equipment!.imageAbsoluteFilePath!) {
+                if let data = try? Data(contentsOf: equipment!.imageAbsoluteFilePath! as URL) {
                     if let image = UIImage(data: data) {
                         cell.imageView?.image = image
-                        cell.imageHeightConstraint.constant = (UIScreen.mainScreen().bounds.width - 44) / image.size.width * image.size.height
+                        cell.imageHeightConstraint.constant = (UIScreen.main.bounds.width - 44) / image.size.width * image.size.height
                     }
                 } else {
-                    cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+                    cell = tableView.dequeueReusableCell(withIdentifier: "equipmentAddImageCell", for: indexPath) as! EquipmentDetailTableViewCell
                 }
             } else {
-                cell = tableView.dequeueReusableCellWithIdentifier("equipmentAddImageCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: "equipmentAddImageCell", for: indexPath) as! EquipmentDetailTableViewCell
             }
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentTimeCycleCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            let task = inspectionTaskArray[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "equipmentTimeCycleCell", for: indexPath) as! EquipmentDetailTableViewCell
+            let task = inspectionTaskArray[(indexPath as NSIndexPath).row]
                 cell.equipmentInfoTitleLabel.text = task.inspectionTaskName
                 if let date = equipment?.records.mostRecentRecordsDir[task.inspectionTaskName] {
                     if equipment?.records.isCompletedForTask(task) == false{
-                        cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
+                        cell.equipmentInfoTitleLabel.textColor = UIColor.red
                     } else {
-                        cell.equipmentInfoTitleLabel.textColor = UIColor.blackColor()
+                        cell.equipmentInfoTitleLabel.textColor = UIColor.black
                     }
                     cell.equipmentInfoContentLabel.text = date.datatypeValue
                 } else {
                     cell.equipmentInfoContentLabel.text = nil
-                    cell.equipmentInfoTitleLabel.textColor = UIColor.redColor()
+                    cell.equipmentInfoTitleLabel.textColor = UIColor.red
                 }
             
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentRecordCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
-            if let record = equipment?.records.getRecord(indexPath.row) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "equipmentRecordCell", for: indexPath) as! EquipmentDetailTableViewCell
+            if let record = equipment?.records.getRecord((indexPath as NSIndexPath).row) {
                 if record.message != nil {
                     cell.recordMessageLabel.text = record.message
                 }
@@ -159,12 +159,12 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
             }
             return cell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("equipmentInfoCell", forIndexPath: indexPath) as! EquipmentDetailTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "equipmentInfoCell", for: indexPath) as! EquipmentDetailTableViewCell
             return cell
         }
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
             return "  设备信息"
@@ -180,12 +180,12 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
     }
     
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
     
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        switch indexPath.section{ //应该分别定义0，1，2，3，懒了
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        switch (indexPath as NSIndexPath).section{ //应该分别定义0，1，2，3，懒了
         case 1 :
             return indexPath
         default :
@@ -193,9 +193,9 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
         }
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
-        if indexPath.section == 3 {
+        if (indexPath as NSIndexPath).section == 3 {
             return true
         } else {
             return false
@@ -203,36 +203,36 @@ class EquipmentDetailTableViewController: UITableViewController, UINavigationCon
     }
     
     //MARK:- TODO
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            if let record = equipment?.records.getRecord(indexPath.row) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if let record = equipment?.records.getRecord((indexPath as NSIndexPath).row) {
                 equipment?.records.delRecord(record)
             }
             self.tableView.reloadData()
         }
     }
 
-    @IBAction func backToEquipmentDetailTable(segue: UIStoryboardSegue) {
+    @IBAction func backToEquipmentDetailTable(_ segue: UIStoryboardSegue) {
         
     }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showEquipmentView" {
-            if let DVC = segue.destinationViewController as? ImageViewController {
+            if let DVC = segue.destination as? ImageViewController {
                 DVC.imageURL = equipment?.imageAbsoluteFilePath
                 DVC.equipment = equipment
             }
         } else if segue.identifier == "equipmentEditSegue" {
-            if let DVC = segue.destinationViewController as?  EquipmentEditTableViewController {
+            if let DVC = segue.destination as?  EquipmentEditTableViewController {
                 DVC.equipment = self.equipment
             }
         } else if segue.identifier == "editDelayHourSegue" {
-            if let NVC = segue.destinationViewController as? UINavigationController {
+            if let NVC = segue.destination as? UINavigationController {
                 if let DVC = NVC.viewControllers[0] as? DelayHourEditViewController {
                     if indexPathForlongPressed != nil {
-                        if let task = self.equipment?.inspectionTaskArray[indexPathForlongPressed!.row] {
+                        if let task = self.equipment?.inspectionTaskArray[(indexPathForlongPressed! as NSIndexPath).row] {
                             DVC.task = task
                             DVC.equipment = self.equipment
                             DVC.defaultTime = self.equipment?.records.getExpectInspectionTime(task.inspectionTaskName)

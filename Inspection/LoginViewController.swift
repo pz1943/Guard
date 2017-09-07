@@ -13,7 +13,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationItem.title = "用户登录"
-        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         self.rooms = DB.loadRoomTable()
         for room in rooms {
@@ -41,25 +41,25 @@ class LoginViewController: UIViewController {
     var rooms: [Room] = [ ]
     var DB = RoomDB()
     
-    @IBAction func login(sender: UIButton) {
+    @IBAction func login(_ sender: UIButton) {
         if let nameText = userNameTextField.text {
             if  let pswText = passWordTextField.text {
                 user = UserCenter.login(nameText, loginUserPSD: pswText)
                 if user != nil {
-                    self.performSegueWithIdentifier("loginSegue", sender: nil)
+                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 }
             }
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let DVC = segue.destinationViewController as? RootViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let DVC = segue.destination as? RootViewController {
             DVC.user = self.user
             DVC.rooms = self.rooms
         }
     }
     
-    @IBAction func logout(segue: UIStoryboardSegue) {
+    @IBAction func logout(_ segue: UIStoryboardSegue) {
         
     }
 }

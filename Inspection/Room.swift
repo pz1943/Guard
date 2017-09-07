@@ -40,13 +40,13 @@ class Room {
 }
 
 class RoomDB {
-    private var db: Connection
-    private var roomTable: Table
+    fileprivate var db: Connection
+    fileprivate var roomTable: Table
     
-    private let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
-    private let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
+    fileprivate let roomIDExpression = Expression<Int>(ExpressionTitle.RoomID.description)
+    fileprivate let roomNameExpression = Expression<String>(ExpressionTitle.RoomName.description)
     init() {
-        self.db = DBModel.sharedInstance().getDB()
+        self.db = DBModel.sharedInstance.getDB()
         
         self.roomTable = Table("roomTable")
         
@@ -57,8 +57,8 @@ class RoomDB {
     }
     
     func reload() {
-        DBModel.sharedInstance().reload()
-        db = DBModel.sharedInstance().getDB()
+        DBModel.sharedInstance.reload()
+        db = DBModel.sharedInstance.getDB()
     }
     
     func loadRoomTable() -> [Room]{
@@ -70,19 +70,19 @@ class RoomDB {
         return rooms
     }
     
-    func addRoom(roomName: String) {
+    func addRoom(_ roomName: String) {
         let insert = roomTable.insert(self.roomNameExpression <- roomName)
         do {
-            try db.run(insert)
+            _ = try db.run(insert)
         } catch let error as NSError {
             print(error)
         }
     }
     
-    func delRoom(roomID: Int) {
+    func delRoom(_ roomID: Int) {
         let roomTableAlice = roomTable.filter(self.roomIDExpression == roomID)
         do {
-            try db.run(roomTableAlice.delete())
+            _ = try db.run(roomTableAlice.delete())
         } catch let error as NSError {
             print(error)
         }

@@ -43,6 +43,10 @@
 		18E8B6811C5929A500CE2325 /* InspectionCycleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */; };
 		18F89F721C96EE1900F0F054 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F89F711C96EE1900F0F054 /* Room.swift */; };
 		18F89F741C99B57D00F0F054 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F89F731C99B57D00F0F054 /* Record.swift */; };
+		2C4730741F5FE82B00C4438A /* TypeAddTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4730731F5FE82B00C4438A /* TypeAddTableViewController.swift */; };
+		2C4730761F5FE87000C4438A /* TypeAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4730751F5FE87000C4438A /* TypeAddTableViewCell.swift */; };
+		2C695E321F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C695E311F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift */; };
+		2C695E341F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C695E331F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift */; };
 		4904247C1CBE20C300F78155 /* 加载图片.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4904247B1CBE20C300F78155 /* 加载图片.jpg */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
@@ -117,6 +121,10 @@
 		18F89F711C96EE1900F0F054 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		18F89F731C99B57D00F0F054 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		22790585726575E46E77839F /* Pods-Inspection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inspection.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Inspection/Pods-Inspection.debug.xcconfig"; sourceTree = "<group>"; };
+		2C4730731F5FE82B00C4438A /* TypeAddTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeAddTableViewController.swift; sourceTree = "<group>"; };
+		2C4730751F5FE87000C4438A /* TypeAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeAddTableViewCell.swift; sourceTree = "<group>"; };
+		2C695E311F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTypeEditTableViewController.swift; sourceTree = "<group>"; };
+		2C695E331F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTypeEditTableViewCell.swift; sourceTree = "<group>"; };
 		4904247B1CBE20C300F78155 /* 加载图片.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "加载图片.jpg"; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
@@ -234,6 +242,8 @@
 				18933E641C47DA5200357F74 /* RoomTableViewCell.swift */,
 				49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */,
 				188AE13E1C592D97005A99C8 /* InspectionCycleTableViewCell.swift */,
+				2C695E331F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift */,
+				2C4730751F5FE87000C4438A /* TypeAddTableViewCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -256,6 +266,8 @@
 				18E8B6801C5929A500CE2325 /* InspectionCycleTableViewController.swift */,
 				18C59C8A1C8F249B00CA1428 /* LoginViewController.swift */,
 				187C699E1CB93B2800D69375 /* SettingTableViewController.swift */,
+				2C695E311F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift */,
+				2C4730731F5FE82B00C4438A /* TypeAddTableViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -359,21 +371,24 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = pz1943;
 				TargetAttributes = {
 					18933E281C47D8E100357F74 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = N84TL62Z6P;
+						LastSwiftMigration = 0800;
 					};
 					18933E3F1C47D8E100357F74 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = UU98GL3RUD;
+						LastSwiftMigration = 0800;
 						TestTargetID = 18933E281C47D8E100357F74;
 					};
 					18933E4A1C47D8E100357F74 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = UU98GL3RUD;
+						LastSwiftMigration = 0800;
 						TestTargetID = 18933E281C47D8E100357F74;
 					};
 				};
@@ -488,6 +503,7 @@
 				18F89F721C96EE1900F0F054 /* Room.swift in Sources */,
 				18933E6E1C47DA5200357F74 /* RoomTableViewController.swift in Sources */,
 				18F89F741C99B57D00F0F054 /* Record.swift in Sources */,
+				2C4730741F5FE82B00C4438A /* TypeAddTableViewController.swift in Sources */,
 				1867AEAD1CC33BA400D19C54 /* InspectionTaskData.swift in Sources */,
 				492D1C9B1CB3A3750061C2A3 /* InspectionDelay.swift in Sources */,
 				187BA6A11C4BD858000D1729 /* EquipmentEditTableViewController.swift in Sources */,
@@ -504,14 +520,17 @@
 				49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */,
 				18C59C791C8C7A9900CA1428 /* RoomAddTableViewCell.swift in Sources */,
 				18B2F32B1C88669C00BAF776 /* RootViewController.swift in Sources */,
+				2C695E341F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift in Sources */,
 				18C59C7F1C8DBCF900CA1428 /* EquipmentTypeSelectTableViewController.swift in Sources */,
 				18933E661C47DA5200357F74 /* DBModel.swift in Sources */,
 				188D0F091CBD39A6006F93D6 /* Constants.swift in Sources */,
 				188AE13F1C592D97005A99C8 /* InspectionCycleTableViewCell.swift in Sources */,
 				18933E6D1C47DA5200357F74 /* RoomTableViewCell.swift in Sources */,
 				18933E741C47F0B500357F74 /* EquipmentDetailTableViewController.swift in Sources */,
+				2C695E321F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift in Sources */,
 				18933E691C47DA5200357F74 /* EquipmentTableViewCell.swift in Sources */,
 				184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */,
+				2C4730761F5FE87000C4438A /* TypeAddTableViewCell.swift in Sources */,
 				18933E681C47DA5200357F74 /* EquipmentDetailTableViewCell.swift in Sources */,
 				49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */,
 				499B40A81C62E08700FD6425 /* Inspection.swift in Sources */,
@@ -575,8 +594,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: fusheng wang (34Y9NMQMM8)";
@@ -599,7 +620,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
@@ -622,8 +643,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: fusheng wang (N84TL62Z6P)";
@@ -640,10 +663,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -653,14 +677,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22790585726575E46E77839F /* Pods-Inspection.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = N84TL62Z6P;
 				INFOPLIST_FILE = Inspection/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fusheng.Inspection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -669,14 +696,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FD7784DA28D2D81DAA9D4516 /* Pods-Inspection.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = N84TL62Z6P;
 				INFOPLIST_FILE = Inspection/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fusheng.Inspection;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -689,6 +719,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pz1943.InspectionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Inspection.app/Inspection";
 			};
 			name = Debug;
@@ -701,6 +732,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pz1943.InspectionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Inspection.app/Inspection";
 			};
 			name = Release;
@@ -712,6 +744,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pz1943.InspectionUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Inspection;
 				USES_XCTRUNNER = YES;
 			};
@@ -724,6 +757,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pz1943.InspectionUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Inspection;
 				USES_XCTRUNNER = YES;
 			};

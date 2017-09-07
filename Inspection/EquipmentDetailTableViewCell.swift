@@ -20,7 +20,7 @@ class EquipmentDetailTableViewCell: UITableViewCell {
     
     @IBOutlet weak var equipmentImageView: UIImageView!
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
@@ -35,8 +35,8 @@ class EquipmentDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var recorderLabel: UILabel!
 
     @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
-    @IBAction func photo(sender: UIButton) {
-        NSNotificationCenter.defaultCenter().postNotificationName("needANewPhotoNotification", object: nil)
+    @IBAction func photo(_ sender: UIButton) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "needANewPhotoNotification"), object: nil)
 
     }
 }

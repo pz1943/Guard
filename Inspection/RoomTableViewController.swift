@@ -22,10 +22,15 @@ class RoomTableViewController: UITableViewController {
         setNavigationBar()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        observer = NSNotificationCenter.defaultCenter().addObserverForName("RoomTableNeedRefreshNotification", object: nil, queue: NSOperationQueue.mainQueue()) {
+    override func viewWillAppear(_ animated: Bool) {
+        observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "RoomTableNeedRefreshNotification"), object: nil, queue: OperationQueue.main) {
             [unowned self]  (notification) -> Void in
-            self.DB.reload()
+            self.DB.reload()             //db Init
+            let roomArray = self.loadRoomArray()
+            self.rooms = roomArray
+            self.tableView.reloadData()
+        }
+        if roomTableNeedRefreshFlag {
             let roomArray = self.loadRoomArray()
             self.rooms = roomArray
             self.tableView.reloadData()
@@ -34,23 +39,23 @@ class RoomTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         if observer != nil {
-            NSNotificationCenter.defaultCenter().removeObserver(observer!)
+            NotificationCenter.default.removeObserver(observer!)
         }
     }
 
     func setNavigationBar() {
-        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         editBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[0]
         addBarButtonItemCopy = self.navigationItem.rightBarButtonItems?[1]
         loginBarButtonItemCopy = self.navigationItem.leftBarButtonItem
     }
     
-    @IBAction func refresh(sender: UIRefreshControl) {
+    @IBAction func refresh(_ sender: UIRefreshControl) {
         refresh()
         sender.endRefreshing()
     }
@@ -66,11 +71,11 @@ class RoomTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
-    @IBAction func backToRoomTable(segue: UIStoryboardSegue) {
+    @IBAction func backToRoomTable(_ segue: UIStoryboardSegue) {
 
     }
     
-    func loadForUser(user: User?) {
+    func loadForUser(_ user: User?) {
         if user?.authorty != User.UserPermission.admin {
             if canEditFlag == true {
                 self.navigationItem.rightBarButtonItems?.removeAll()
@@ -83,7 +88,9 @@ class RoomTableViewController: UITableViewController {
                     self.navigationItem.rightBarButtonItems?.append(editBarButtonItemCopy!)
                     self.navigationItem.rightBarButtonItems?.append(addBarButtonItemCopy!)
                     canEditFlag = true
-                    self.navigationItem.leftBarButtonItem? = UIBarButtonItem(title: "管理员退出", style: UIBarButtonItemStyle.Plain, target: self, action: "adminExit")
+                    
+                    //TODO: without adminExit?
+                    self.navigationItem.leftBarButtonItem? = UIBarButtonItem(title: "管理员退出", style: UIBarButtonItemStyle.plain, target: self, action: Selector(("adminExit")))
                 }
             }
         }
@@ -93,18 +100,19 @@ class RoomTableViewController: UITableViewController {
     var editBarButtonItemCopy: UIBarButtonItem?
     var addBarButtonItemCopy: UIBarButtonItem?
     var loginBarButtonItemCopy: UIBarButtonItem?
+    var roomTableNeedRefreshFlag: Bool = false
     var canEditFlag: Bool = true
     var user: User? 
     var rooms: [Room] = [ ]
     var DB = RoomDB()
     var observer: NSObjectProtocol?
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return  rooms.count
         } else {
@@ -113,39 +121,38 @@ class RoomTableViewController: UITableViewController {
     }
 
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
-            cell.roomTitle.text = rooms[indexPath.row].name
-            cell.room = rooms[indexPath.row]
-            if rooms[indexPath.row].isInspectionDone == false {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "roomCell", for: indexPath) as! RoomTableViewCell
+            cell.roomTitle.text = rooms[(indexPath as NSIndexPath).row].name
+            cell.room = rooms[(indexPath as NSIndexPath).row]
+            if rooms[(indexPath as NSIndexPath).row].isInspectionDone == false {
                 cell.DoneFlagImageView.alpha = 0.1
             } else {
                 cell.DoneFlagImageView.alpha = 1
             }
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("roomAddCell", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "roomAddCell", for: indexPath)
             return cell
         }
 
     }
 
 
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if (indexPath as NSIndexPath).section == 0 {
             return canEditFlag
         } else {
             return false
         }
     }
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
-            rooms[indexPath.row].deleteFromDB()
-            rooms.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            rooms[(indexPath as NSIndexPath).row].deleteFromDB()
+            rooms.remove(at: (indexPath as NSIndexPath).row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
 
@@ -168,16 +175,16 @@ class RoomTableViewController: UITableViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showEquipment" {
-            if let DVC = segue.destinationViewController as? EquipmentTableViewController{
+            if let DVC = segue.destination as? EquipmentTableViewController{
                 if let cell = sender as? RoomTableViewCell {
                     DVC.selectRoom = cell.room
                     DVC.user = self.user
                 }
             }
         } else if segue.identifier == "newRoomSegue" {
-            if let DVC = segue.destinationViewController as? RoomAddTableViewController {
+            if let DVC = segue.destination as? RoomAddTableViewController {
                 DVC.roomsArray = self.rooms
             }
         }

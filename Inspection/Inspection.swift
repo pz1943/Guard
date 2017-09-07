@@ -16,8 +16,8 @@ struct InspectionTask {
 }
 
 struct InspectionTaskDir {
-    private var dir: [String: [InspectionTask]] = [: ]
-    private let DB = InspectionTaskDB()
+    fileprivate var dir: [String: [InspectionTask]] = [: ]
+    fileprivate let DB = InspectionTaskDB()
     init() {
         self.dir = DB.loadInspectionTaskDir()
     }
@@ -34,7 +34,7 @@ struct InspectionTaskDir {
         }
     }
     
-    func getTaskArray(equipmentType: String?) -> [InspectionTask]{
+    func getTaskArray(_ equipmentType: String?) -> [InspectionTask]{
         if equipmentType != nil {
             if let arr = dir[equipmentType!] {
                 return arr
@@ -58,7 +58,7 @@ struct InspectionTaskDir {
         }
     }
     
-    func getTimeCycleForEquipment(equipmentType: String, taskName: String) -> Double? {
+    func getTimeCycleForEquipment(_ equipmentType: String, taskName: String) -> Double? {
         var cycle: Double = 0.0
         
         if let typeArray = dir[equipmentType] {
@@ -84,17 +84,17 @@ struct InspectionTaskDir {
 //}
 
 class InspectionTaskDB {
-    private var db: Connection
-    private var inspectionTaskTable: Table
+    fileprivate var db: Connection
+    fileprivate var inspectionTaskTable: Table
     
-    private let inspectionTaskIDExpression = Expression<Int>(ExpressionTitle.InspectionTaskID.description)
-    private let inspectionCycleExpression = Expression<Double>(ExpressionTitle.InspectionCycle.description)
-    private let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
-    private let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
-    private let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
+    fileprivate let inspectionTaskIDExpression = Expression<Int>(ExpressionTitle.InspectionTaskID.description)
+    fileprivate let inspectionCycleExpression = Expression<Double>(ExpressionTitle.InspectionCycle.description)
+    fileprivate let equipmentIDExpression = Expression<Int>(ExpressionTitle.EQID.description)
+    fileprivate let equipmentTypeExpression = Expression<String>(ExpressionTitle.EQType.description)
+    fileprivate let inspectionTaskNameExpression = Expression<String>(ExpressionTitle.InspectionTaskName.description)
     
     init() {
-        self.db = DBModel.sharedInstance().getDB()
+        self.db = DBModel.sharedInstance.getDB()
         self.inspectionTaskTable = Table("inspectionTaskTable")
         
         try! db.run(inspectionTaskTable.create(ifNotExists: true) { t in
@@ -104,7 +104,7 @@ class InspectionTaskDB {
             t.column(inspectionCycleExpression)
             })
         
-        if db.scalar(inspectionTaskTable.count) == 0 {
+        if try! db.scalar(inspectionTaskTable.count) == 0 {
             initTaskDBData()
         }
     }
@@ -112,8 +112,8 @@ class InspectionTaskDB {
     
     func initTaskDBData() {
         for taskInArray in Constants.InspectionTaskDataArray {
-            let task = InspectionTask(equipmentType: taskInArray[1] as! String, inspectionTaskName: taskInArray[0] as! String, inspectionCycle: taskInArray[2] as! Double)
-            addInspectionTask(task)
+            let task = InspectionTask(equipmentType: taskInArray[1] as! String, inspectionTaskName: taskInArray[0] as! String, inspectionCycle: Double(taskInArray[2] as! Int))
+            _ = addInspectionTask(task)
         }
     }
     func loadInspectionTaskDir() -> [String: [InspectionTask]] {
@@ -128,19 +128,20 @@ class InspectionTaskDB {
                 inspectionTaskDir[type.equipmentType]?.append(type)
             } else {
                 inspectionTaskDir[type.equipmentType] = [type]
+                inspectionTaskDir[type.equipmentType]?.append(type)
             }
         }
         return inspectionTaskDir
     }
     
-    func addInspectionTask(task: InspectionTask) -> Bool {
+    func addInspectionTask(_ task: InspectionTask) -> Bool {
         let insert = inspectionTaskTable.insert(
             self.inspectionTaskNameExpression <- task.inspectionTaskName,
             self.equipmentTypeExpression <- task.equipmentType,
             self.inspectionCycleExpression <- task.inspectionCycle
         )
         do {
-            try db.run(insert)
+            _ = try db.run(insert)
             return true
         } catch let error as NSError {
             print(error)

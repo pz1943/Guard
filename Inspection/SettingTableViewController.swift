@@ -12,7 +12,7 @@ class SettingTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.barStyle = .Black
+        self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.backgroundColor = Constants.NavColor
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -26,15 +26,15 @@ class SettingTableViewController: UITableViewController {
     }
 
     
-    private func shareDataBase() {
+    func shareDataBase() {
         let path = NSSearchPathForDirectoriesInDomains(
-            .DocumentDirectory, .UserDomainMask, true
+            .documentDirectory, .userDomainMask, true
             ).first!
         let fullPath = "\(path)/db.sqlite3"
-        let url = NSURL(fileURLWithPath: fullPath)
+        let url = URL(fileURLWithPath: fullPath)
         
         let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        self.presentViewController(controller, animated: true, completion: nil)
+        self.present(controller, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -44,30 +44,30 @@ class SettingTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 3
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 1
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
     }
     
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 2 {
             return 100
         } else { return 0 }
     }
-    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 2 {
             let view = UITextView()
             view.text = "直接打开手机中后缀为 .sqlite3的数据库文件完成导入"
-            view.editable = false
+            view.isEditable = false
             view.backgroundColor = Constants.GrayColor
             view.sizeToFit()
             return view
@@ -76,11 +76,11 @@ class SettingTableViewController: UITableViewController {
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("settingsCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "settingsCell", for: indexPath)
 
         // Configure the cell...
-        switch indexPath.section {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             if user != nil {
                 cell.textLabel?.text = "\(user!.name) 登出"
@@ -90,7 +90,7 @@ class SettingTableViewController: UITableViewController {
             cell.textLabel?.text = "数据库导出"
             break
         case 2:
-            if indexPath.row == 0 {
+            if (indexPath as NSIndexPath).row == 0 {
                 cell.textLabel?.text = "数据库导入"
             }
             break
@@ -99,22 +99,22 @@ class SettingTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             if user != nil {
-                self.performSegueWithIdentifier("logoutSegue", sender: self)
+                self.performSegue(withIdentifier: "logoutSegue", sender: self)
             }
             break
         case 1:
             self.shareDataBase()
-            self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+            self.tableView.deselectRow(at: indexPath, animated: false)
             break
         case 2:
             break
         default: break
         }
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        self.tableView.deselectRow(at: indexPath, animated: false)
     }
 
     /*

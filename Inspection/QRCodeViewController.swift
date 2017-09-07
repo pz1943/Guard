@@ -18,35 +18,35 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
 
     var equipment: Equipment?
     
-    override func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
-        if let metadataObj = QRLayer?.transformedMetadataObjectForMetadataObject(
-            metadataObjects.first! as! AVMetadataMachineReadableCodeObject)
+    override func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+        if let metadataObj = QRLayer?.transformedMetadataObject(
+            for: metadataObjects.first! as! AVMetadataMachineReadableCodeObject)
             as? AVMetadataMachineReadableCodeObject
         {
             qrCodeFrameView?.frame = metadataObj.bounds;
             let QRResult = metadataObj.stringValue
             session?.stopRunning()
             qrCodeFrameView?.frame = metadataObj.bounds
-            let QREquipmentID = NSString(string: QRResult).integerValue
+            let QREquipmentID = NSString(string: QRResult!).integerValue
             equipment = Equipment(ID: QREquipmentID)
             if equipment != nil {  //扫描结果是设备 ID，进入记录页面。
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.performSegueWithIdentifier("AnyEQRecordSegue", sender: self)
+                DispatchQueue.main.async(execute: { () -> Void in
+                    self.performSegue(withIdentifier: "AnyEQRecordSegue", sender: self)
                 })
             } else {  // 不是设备 ID，提示后返回
-                let alertController = UIAlertController(title: "错误的二维码", message: "扫描的二维码不是管理的设备，请确认后重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，重新开始搜索
-                let alert = UIAlertAction(title: "重试", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
+                let alertController = UIAlertController(title: "错误的二维码", message: "扫描的二维码不是管理的设备，请确认后重试", preferredStyle: UIAlertControllerStyle.alert) //有设备，不符合，重新开始搜索
+                let alert = UIAlertAction(title: "重试", style: UIAlertActionStyle.cancel, handler: { (alert) -> Void in
                     self.session?.startRunning()
                 })
                 alertController.addAction(alert)
-                self.presentViewController(alertController, animated: false, completion: nil)
+                self.present(alertController, animated: false, completion: nil)
             }
         }
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "AnyEQRecordSegue" {
-            if let DVC = segue.destinationViewController.contentViewController as? QRCodeForAnyEquipmentTableViewController{
+            if let DVC = segue.destination.contentViewController as? QRCodeForAnyEquipmentTableViewController{
                 DVC.equipment = self.equipment
                 DVC.taskArray = InspectionTaskDir().getTaskArray(equipment!.info.type)
             }
@@ -54,7 +54,7 @@ class QRCodeForAnyEquipmentViewController: QRCodeViewController {
         }
     }
 
-    @IBAction func backToQRCodeForAnyEquipmentViewController(segue: UIStoryboardSegue) {
+    @IBAction func backToQRCodeForAnyEquipmentViewController(_ segue: UIStoryboardSegue) {
         
     }
 }
@@ -71,9 +71,9 @@ class QRCodeForOneEquipmentViewController: QRCodeViewController {
     
     var equipment: Equipment?
     
-    override func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
-        if let metadataObj = QRLayer?.transformedMetadataObjectForMetadataObject(
-            metadataObjects.first! as! AVMetadataMachineReadableCodeObject)
+    override func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+        if let metadataObj = QRLayer?.transformedMetadataObject(
+            for: metadataObjects.first! as! AVMetadataMachineReadableCodeObject)
             as? AVMetadataMachineReadableCodeObject
         {
             qrCodeFrameView?.frame = metadataObj.bounds;
@@ -81,31 +81,31 @@ class QRCodeForOneEquipmentViewController: QRCodeViewController {
             session?.stopRunning()
             qrCodeFrameView?.frame = metadataObj.bounds
             if "\(equipment!.info.ID)" != QRResult {
-                let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.Alert) //有设备，不符合，提示后返回
-                let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: { (alert) -> Void in
+                let alertController = UIAlertController(title: "错误的设备", message: "扫描的二维码同设备名称不符，请重试", preferredStyle: UIAlertControllerStyle.alert) //有设备，不符合，提示后返回
+                let alert = UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: { (alert) -> Void in
                     self.session?.startRunning()
-                    self.qrCodeFrameView?.bounds = CGRectZero
+                    self.qrCodeFrameView?.bounds = CGRect.zero
                 })
                 alertController.addAction(alert)
-                self.presentViewController(alertController, animated: false, completion: nil)
+                self.present(alertController, animated: false, completion: nil)
             } else {
-                dispatch_after(DISPATCH_TIME_NOW, dispatch_get_main_queue(), { () -> Void in
-                    self.performSegueWithIdentifier("OneEQRecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now(), execute: { () -> Void in
+                    self.performSegue(withIdentifier: "OneEQRecordSegue", sender: self)     //有指定设备且扫描结果符合，进入记录页面。
                 })
             }
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "OneEQRecordSegue" {
-            if let DVC = segue.destinationViewController.contentViewController as? QRCodeRecordTableViewController{
+            if let DVC = segue.destination.contentViewController as? QRCodeRecordTableViewController{
                 DVC.equipment = self.equipment
                 DVC.taskArray = equipment!.inspectionTaskArray
             }
         }
     }
     
-    @IBAction func backToQRCodeForOneEquipmentViewController(segue: UIStoryboardSegue) {
+    @IBAction func backToQRCodeForOneEquipmentViewController(_ segue: UIStoryboardSegue) {
         
     }
 
@@ -119,11 +119,11 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         loadQRCode()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         QRLayer?.removeFromSuperlayer()
         qrCodeFrameView?.removeFromSuperview()
         session = nil
@@ -141,11 +141,11 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
 
     
     func loadQRCode() {
-        let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         let input = try! AVCaptureDeviceInput.init(device: device)
         let output = AVCaptureMetadataOutput.init()
         output.rectOfInterest = CGRect(x: 0.25, y: 0.2, width: 0.5, height: 0.6)
-        output.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+        output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
         session = AVCaptureSession()
         session?.sessionPreset = AVCaptureSessionPresetHigh
         session?.addInput(input)
@@ -157,21 +157,21 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         QRLayer = AVCaptureVideoPreviewLayer(session: session)
         QRLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         QRLayer!.frame = self.view.layer.bounds
-        self.view.layer.insertSublayer(QRLayer!, atIndex: 0)
+        self.view.layer.insertSublayer(QRLayer!, at: 0)
         qrCodeFrameView = UIView()
-        qrCodeFrameView?.layer.borderColor = UIColor.greenColor().CGColor
+        qrCodeFrameView?.layer.borderColor = UIColor.green.cgColor
         qrCodeFrameView?.layer.borderWidth = 2
         view.addSubview(qrCodeFrameView!)
-        view.bringSubviewToFront(qrCodeFrameView!)
+        view.bringSubview(toFront: qrCodeFrameView!)
         
         session?.startRunning()
-        qrCodeFrameView?.frame=CGRectZero
+        qrCodeFrameView?.frame=CGRect.zero
     }
     
     
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         if metadataObjects == nil || metadataObjects.count == 0{
-            qrCodeFrameView?.frame=CGRectZero
+            qrCodeFrameView?.frame=CGRect.zero
             return
         }
     }

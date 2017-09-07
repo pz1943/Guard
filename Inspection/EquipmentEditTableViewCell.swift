@@ -20,18 +20,18 @@ class EquipmentEditTableViewCell: UITableViewCell, UITextFieldDelegate {
     var equipment: Equipment?
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoTextField: UITextField!
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         infoTextField.resignFirstResponder()
         return true
     }
     
-    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         infoTextField.resignFirstResponder()
         if let newText = textField.text {
             if  let title = titleLabel.text {

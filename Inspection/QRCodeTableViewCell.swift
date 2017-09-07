@@ -16,14 +16,14 @@ class QRCodeTableViewCell: UITableViewCell, UITextFieldDelegate{
     @IBOutlet weak var recordTextField: UITextField!
     @IBOutlet weak var recordType: UILabel!
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         recordTextField.resignFirstResponder()
         if textField.text != nil {
-            NSNotificationCenter.defaultCenter().postNotificationName("newRecordGotNotification", object: nil, userInfo: ["recordMessage": textField.text!])
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "newRecordGotNotification"), object: nil, userInfo: ["recordMessage": textField.text!])
         }
         return true
     }
