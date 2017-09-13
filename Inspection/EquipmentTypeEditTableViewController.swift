@@ -89,7 +89,7 @@ class EquipmentTypeEditTableViewController: UITableViewController, UINavigationC
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "InspectionTypeEdit" {
-            if let DVC = segue.destination as? TypeAddTableViewController {
+            if let DVC = segue.destination as? CycleEditTableViewController {
                 if timeCycleDir != nil {
                     DVC.timeCycleArr = timeCycleDir!.getTaskArray(selectedEquipmentType)
                 }

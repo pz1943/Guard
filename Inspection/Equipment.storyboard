@@ -832,7 +832,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="infoTextField" destination="xEP-tf-Uld" id="4EZ-oP-c37"/>
-                                            <outlet property="titleLabel" destination="6Ix-Pk-aBH" id="n78-cc-Tq4"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="equipmentAddTypeCell" rowHeight="54" id="kqK-Jp-fZX" customClass="EquipmentAddTableViewCell" customModule="Inspection" customModuleProvider="target">
@@ -864,7 +863,6 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="titleLabel" destination="jxu-cX-qF3" id="xMp-3g-ebv"/>
                                             <segue destination="ALH-pl-Bp4" kind="show" identifier="selectEQType" id="HBc-YQ-p97">
                                                 <nil key="action"/>
                                             </segue>

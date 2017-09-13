@@ -47,6 +47,8 @@
 		2C4730761F5FE87000C4438A /* TypeAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4730751F5FE87000C4438A /* TypeAddTableViewCell.swift */; };
 		2C695E321F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C695E311F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift */; };
 		2C695E341F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C695E331F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift */; };
+		2C94C0D81F68C74C00C45A37 /* CycleEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94C0D71F68C74C00C45A37 /* CycleEditTableViewController.swift */; };
+		2C94C0DA1F68CAFE00C45A37 /* CycleEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94C0D91F68CAFE00C45A37 /* CycleEditTableViewCell.swift */; };
 		4904247C1CBE20C300F78155 /* 加载图片.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4904247B1CBE20C300F78155 /* 加载图片.jpg */; };
 		49145A511C50C54D0077AB8C /* QRCodeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */; };
 		49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */; };
@@ -125,6 +127,8 @@
 		2C4730751F5FE87000C4438A /* TypeAddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeAddTableViewCell.swift; sourceTree = "<group>"; };
 		2C695E311F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTypeEditTableViewController.swift; sourceTree = "<group>"; };
 		2C695E331F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EquipmentTypeEditTableViewCell.swift; sourceTree = "<group>"; };
+		2C94C0D71F68C74C00C45A37 /* CycleEditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CycleEditTableViewController.swift; sourceTree = "<group>"; };
+		2C94C0D91F68CAFE00C45A37 /* CycleEditTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CycleEditTableViewCell.swift; sourceTree = "<group>"; };
 		4904247B1CBE20C300F78155 /* 加载图片.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "加载图片.jpg"; sourceTree = "<group>"; };
 		49145A501C50C54D0077AB8C /* QRCodeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewController.swift; sourceTree = "<group>"; };
 		49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeTableViewCell.swift; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 				18933E641C47DA5200357F74 /* RoomTableViewCell.swift */,
 				49145A521C50D7910077AB8C /* QRCodeTableViewCell.swift */,
 				188AE13E1C592D97005A99C8 /* InspectionCycleTableViewCell.swift */,
+				2C94C0D91F68CAFE00C45A37 /* CycleEditTableViewCell.swift */,
 				2C695E331F5FA76000FEA19A /* EquipmentTypeEditTableViewCell.swift */,
 				2C4730751F5FE87000C4438A /* TypeAddTableViewCell.swift */,
 			);
@@ -268,6 +273,7 @@
 				187C699E1CB93B2800D69375 /* SettingTableViewController.swift */,
 				2C695E311F5F841800FEA19A /* EquipmentTypeEditTableViewController.swift */,
 				2C4730731F5FE82B00C4438A /* TypeAddTableViewController.swift */,
+				2C94C0D71F68C74C00C45A37 /* CycleEditTableViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -497,6 +503,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C94C0DA1F68CAFE00C45A37 /* CycleEditTableViewCell.swift in Sources */,
 				187C699F1CB93B2800D69375 /* SettingTableViewController.swift in Sources */,
 				18C59C8B1C8F249B00CA1428 /* LoginViewController.swift in Sources */,
 				18C59C831C8F15E300CA1428 /* User.swift in Sources */,
@@ -532,6 +539,7 @@
 				184616881C49DEE00047E3EE /* ImageViewController.swift in Sources */,
 				2C4730761F5FE87000C4438A /* TypeAddTableViewCell.swift in Sources */,
 				18933E681C47DA5200357F74 /* EquipmentDetailTableViewCell.swift in Sources */,
+				2C94C0D81F68C74C00C45A37 /* CycleEditTableViewController.swift in Sources */,
 				49145A531C50D7910077AB8C /* QRCodeTableViewCell.swift in Sources */,
 				499B40A81C62E08700FD6425 /* Inspection.swift in Sources */,
 				18C59C771C8C79C000CA1428 /* RoomAddTableViewController.swift in Sources */,

@@ -1,14 +1,14 @@
 //
-//  TypeAddTableViewController.swift
+//  CycleEditTableViewController.swift
 //  Inspection
 //
-//  Created by pz1943 on 2017/9/6.
+//  Created by pz1943 on 2017/9/13.
 //  Copyright © 2017年 pz1943. All rights reserved.
 //
 
 import UIKit
 
-class TypeAddTableViewController: UITableViewController {
+class CycleEditTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,15 +24,9 @@ class TypeAddTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     var timeCycleArr: [InspectionTask] = []
 
     // MARK: - Table view data source
-    
-    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        return nil
-    }
-    
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -43,17 +37,15 @@ class TypeAddTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return timeCycleArr.count
     }
-
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TypeAddCell", for: indexPath) as! TypeAddTableViewCell
-
-        // Configure the cell...
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CycleEditCell", for: indexPath) as! CycleEditTableViewCell
+        cell.typeLabel.text = self.timeCycleArr[indexPath.row].inspectionTaskName
+        cell.CycleTextField.text = "\(self.timeCycleArr[indexPath.row].inspectionCycle)"
 
         return cell
     }
-
-
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

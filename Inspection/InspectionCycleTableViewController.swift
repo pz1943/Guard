@@ -103,7 +103,7 @@ class InspectionCycleTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "equipment type edit" {
             if let DVC = segue.destination as? EquipmentTypeEditTableViewController {
-                DVC.equipmentTypes = timeCycleDir.equipmentTypeArray
+                DVC.timeCycleDir = timeCycleDir
             }
         }
     }
